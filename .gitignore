@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Base de datos y logs
+data/*.db
+data/logs/*.log
+data/captures/*
+
+# Configuración sensible
+config/secrets.yaml
+*.key
+*.pem
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+*.swp
