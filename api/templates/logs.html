@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Activity Logs</h1>
+
+<div class="box">
+  <h2 class="title is-5">Recent Events</h2>
+  <ul>
+    {% for log in logs %}
+    <li>{{ log }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

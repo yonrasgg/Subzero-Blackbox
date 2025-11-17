@@ -18,6 +18,7 @@ from fastapi import (
     HTTPException,
     Request,
     status,
+    Form,
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -160,9 +161,23 @@ def list_jobs(db: Session = Depends(get_db)) -> List[JobOut]:
 @app.get("/", response_class=RedirectResponse)
 def root_redirect() -> RedirectResponse:
     """
-    Redirects to /ui/dashboard.
+    Redirects to /ui/home.
     """
-    return RedirectResponse(url="/ui/dashboard")
+    return RedirectResponse(url="/ui/home")
+
+
+@app.get("/ui/home", response_class=HTMLResponse, include_in_schema=False)
+def ui_home(
+    request: Request,
+    username: str = Depends(verify_credentials),
+) -> HTMLResponse:
+    return templates.TemplateResponse(
+        "home.html",
+        {
+            "request": request,
+            "user": username,
+        },
+    )
 
 
 @app.get("/ui/dashboard", response_class=HTMLResponse)
@@ -238,6 +253,7 @@ def ui_config(
     username: str = Depends(verify_credentials),
 ) -> Any:
     info = get_active_profile_info()
+    config = _load_yaml(CONFIG_PATH)
     return templates.TemplateResponse(
         "config.html",
         {
@@ -246,6 +262,127 @@ def ui_config(
             "active_profile": info["active_profile"],
             "internet_via": info["internet_via"],
             "modules_enabled": info["modules_enabled"],
+            "config": config,
+        },
+    )
+
+
+@app.get("/ui/logs", response_class=HTMLResponse, include_in_schema=False)
+def ui_logs(
+    request: Request,
+    username: str = Depends(verify_credentials),
+) -> HTMLResponse:
+    # Placeholder for logs
+    logs = ["Log entry 1", "Log entry 2"]  # Replace with real logs
+    return templates.TemplateResponse(
+        "logs.html",
+        {
+            "request": request,
+            "user": username,
+            "logs": logs,
+        },
+    )
+
+
+@app.post("/ui/config/save", include_in_schema=False)
+def ui_save_config(
+    request: Request,
+    username: str = Depends(verify_credentials),
+    ui_username: str = Form(...),
+    ui_password: str = Form(...),
+    google_api_key: str = Form(...),
+    online_hashcat_api_key: str = Form(...),
+    leakcheck_api_key: str = Form(...),
+    wiggle_api_key: str = Form(...),
+) -> HTMLResponse:
+    config = _load_yaml(CONFIG_PATH)
+    config["ui"] = {"username": ui_username, "password": ui_password}
+    config["apis"] = {
+        "google_api_key": google_api_key,
+        "online_hashcat_api_key": online_hashcat_api_key,
+        "leakcheck_api_key": leakcheck_api_key,
+        "wiggle_api_key": wiggle_api_key,
+    }
+    # Save to file
+    import yaml
+    with open(CONFIG_PATH, 'w') as f:
+        yaml.dump(config, f)
+    # Reload and return
+    info = get_active_profile_info()
+    config = _load_yaml(CONFIG_PATH)
+    return templates.TemplateResponse(
+        "config.html",
+        {
+            "request": request,
+            "user": username,
+            "active_profile": info["active_profile"],
+            "internet_via": info["internet_via"],
+            "modules_enabled": info["modules_enabled"],
+            "config": config,
+            "message": "Configuration saved successfully.",
+        },
+    )
+
+
+@app.get("/ui/jobs/{job_id}", response_class=HTMLResponse, include_in_schema=False)
+def ui_job_detail(
+    request: Request,
+    job_id: int,
+    username: str = Depends(verify_credentials),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    # For now, simple detail
+    return templates.TemplateResponse(
+        "job_detail.html",
+        {
+            "request": request,
+            "user": username,
+            "job": job,
+        },
+    )
+
+
+@app.get("/ui/jobs/{job_id}/report", response_class=HTMLResponse, include_in_schema=False)
+def ui_job_report(
+    request: Request,
+    job_id: int,
+    username: str = Depends(verify_credentials),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    # Placeholder for report with AI
+    return templates.TemplateResponse(
+        "job_report.html",
+        {
+            "request": request,
+            "user": username,
+            "job": job,
+        },
+    )
+
+
+@app.get("/ui/jobs/{job_id}/attack", response_class=HTMLResponse, include_in_schema=False)
+def ui_job_attack(
+    request: Request,
+    job_id: int,
+    username: str = Depends(verify_credentials),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    # Placeholder for attack config
+    return templates.TemplateResponse(
+        "job_attack.html",
+        {
+            "request": request,
+            "user": username,
+            "job": job,
         },
     )
 

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Report for Job {{ job.id }}</h1>
+
+<div class="box">
+  <h2 class="title is-5">AI Analysis</h2>
+  <p>Placeholder: AI interpretation of vulnerabilities, CVEs, exploitation suggestions.</p>
+  <p>Job Type: {{ job.type }}</p>
+  <p>Status: {{ job.status }}</p>
+</div>
+{% endblock %}
