@@ -18,43 +18,43 @@ from modules import wifi_recon, wifi_active, bt_recon, bt_active, hash_ops
 
 logger = logging.getLogger(__name__)
 
-# --- Paths base del proyecto y config/perfiles ---
+# --- Project base paths and config/profiles ---
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 CONFIG_PATH = BASE_DIR / "config" / "config.yaml"
 PROFILES_PATH = BASE_DIR / "config" / "profiles.yaml"
 PROFILE_SWITCHER = BASE_DIR / "scripts" / "profile_switcher.py"
 
-# --- 3.1 Mapa tipo de job → perfil requerido ---
+# --- 3.1 Map job type → required profile ---
 
 JOB_PROFILE_MAP: Dict[str, Optional[str]] = {
-    # Jobs de Wi-Fi usan el perfil wifi_audit
+    # Wi-Fi jobs use the wifi_audit profile
     "wifi_recon": "wifi_audit",
     "wifi_active": "wifi_audit",
 
-    # Jobs de Bluetooth usan el perfil bluetooth_audit
+    # Bluetooth jobs use the bluetooth_audit profile
     "bt_recon": "bluetooth_audit",
     "bt_active": "bluetooth_audit",
 
-    # Jobs de hashing / inteligencia externa NO requieren cambio de perfil
-    # (hash_lookup solo llama servicios remotos/API).
+    # Hashing/external intelligence jobs DO NOT require profile change
+    # (hash_lookup only calls remote services/APIs).
     "hash_lookup": None,
 
-    # Tipos futuros (web / LAN). De momento no se usan en la UI,
-    # pero el mapa ya queda preparado para cuando añadas módulos nuevos.
+    # Future types (web / LAN). Not used in the UI yet,
+    # but the map is ready for when you add new modules.
     "web_recon": "stealth_recon",
     "web_attack": "aggressive_recon",
     "lan_recon": "stealth_recon",
     "lan_attack": "aggressive_recon",
 }
 
-# --- Utilidades para leer config/perfiles ---
+# --- Utilities to read config/profiles ---
 
 
 def _load_yaml(path: Path) -> Dict[str, Any]:
     """
-    Carga un YAML y devuelve siempre un dict (nunca None).
-    Si el archivo no existe o está vacío, devuelve {}.
+    Loads a YAML and always returns a dict (never None).
+    If the file does not exist or is empty, returns {}.
     """
     if not path.is_file():
         logger.debug("YAML file %s not found; returning empty dict", path)
@@ -70,11 +70,11 @@ def _load_yaml(path: Path) -> Dict[str, Any]:
 
 def get_active_profile() -> Optional[str]:
     """
-    Lee el perfil activo desde config.yaml (sección profiles.active_profile).
+    Reads the active profile from config.yaml (section profiles.active_profile).
 
-    Devuelve:
-        - str con el nombre de perfil (ej. "wifi_audit"), o
-        - None si no está definido.
+    Returns:
+        - str with the profile name (e.g. "wifi_audit"), or
+        - None if not defined.
     """
     cfg = _load_yaml(CONFIG_PATH)
     profiles_cfg = cfg.get("profiles", {})
@@ -88,14 +88,14 @@ def get_active_profile() -> Optional[str]:
 
 def get_profile_for_job(job_type: str) -> Optional[str]:
     """
-    Usa JOB_PROFILE_MAP como fuente única de verdad para saber qué perfil
-    debe estar activo para un tipo de job dado.
+    Uses JOB_PROFILE_MAP as the single source of truth to know which profile
+    should be active for a given job type.
 
-    Ejemplos:
+    Examples:
         job_type="wifi_recon"   -> "wifi_audit"
         job_type="bt_recon"     -> "bluetooth_audit"
-        job_type="hash_lookup"  -> None (no requiere cambio de perfil)
-        job_type desconocido    -> None
+        job_type="hash_lookup"  -> None (does not require profile change)
+        unknown job_type        -> None
     """
     profile = JOB_PROFILE_MAP.get(job_type)
     logger.debug("Profile for job type %s -> %s", job_type, profile)
@@ -103,14 +103,14 @@ def get_profile_for_job(job_type: str) -> Optional[str]:
 
 
 def ensure_profile_for_job(job: Job) -> None:
-    """
-    Garantiza que el perfil adecuado esté activo antes de ejecutar un job.
+        """
+        Ensures that the correct profile is active before executing a job.
 
-    - Si JOB_PROFILE_MAP[job.type] es None → no hace nada.
-    - Si tiene un nombre de perfil → invoca profile_switcher.py set <perfil>.
-    - La idempotencia (no cambiar si ya está activo, no cambiar si hay jobs
-      running) la gestiona el propio profile_switcher.
-    """
+        - If JOB_PROFILE_MAP[job.type] is None → does nothing.
+        - If it has a profile name → invokes profile_switcher.py set <profile>.
+        - Idempotency (not changing if already active, not changing if there are running jobs)
+            is handled by profile_switcher itself.
+        """
     required_profile = JOB_PROFILE_MAP.get(job.type)
 
     if not required_profile:
@@ -118,7 +118,7 @@ def ensure_profile_for_job(job: Job) -> None:
         return
 
     env = os.environ.copy()
-    # Permite que profile_switcher sepa quién disparó el cambio
+    # Allows profile_switcher to know who triggered the change
     env.setdefault("BLACKBOX_TRIGGERED_BY", "worker")
 
     cmd = [sys.executable, str(PROFILE_SWITCHER), "set", required_profile]
@@ -126,23 +126,23 @@ def ensure_profile_for_job(job: Job) -> None:
     try:
         subprocess.run(cmd, check=True, env=env)
     except subprocess.CalledProcessError as exc:
-        # Si falla el cambio de perfil, es mejor registrar y propagar el error
-        # para que el job no se ejecute en un contexto incorrecto.
+        # If profile switching fails, it's better to log and propagate the error
+        # so the job does not run in an incorrect context.
         print(f"[WorkerEngine] Failed to switch profile to {required_profile}: {exc}")
         raise
 
 def process_job(session: Session, job: Job) -> None:
-    """
-    Procesa un job desde la cola.
+     """
+     Processes a job from the queue.
 
-    Flujo alto nivel:
-    1. Asegurar perfil correcto según job.type (profile_switcher).
-    2. Marcar job como running.
-    3. Ejecutar módulo asociado (wifi_recon, bt_recon, hash_lookup, etc.)
-       capturando stdout/stderr.
-    4. Crear un registro Run con stdout, stderr, exit_code, started_at, finished_at.
-    5. Actualizar estado del job (finished/error).
-    """
+     High-level flow:
+     1. Ensure correct profile according to job.type (profile_switcher).
+     2. Mark job as running.
+     3. Execute associated module (wifi_recon, bt_recon, hash_lookup, etc.)
+         capturing stdout/stderr.
+     4. Create a Run record with stdout, stderr, exit_code, started_at, finished_at.
+     5. Update job status (finished/error).
+     """
     # 1) Asegurar perfil correcto
     ensure_profile_for_job(job)
 
@@ -182,7 +182,7 @@ def process_job(session: Session, job: Job) -> None:
             else:
                 logger.warning("Unknown job type %s (id=%s)", job.type, job.id)
                 exit_code = 1
-                # Creamos también un Run para el tipo desconocido
+                # Also create a Run for the unknown type
                 finished_at = datetime.now(timezone.utc)
                 run = Run(
                     job_id=job.id,
@@ -237,14 +237,14 @@ def process_job(session: Session, job: Job) -> None:
 
 
 class WorkerEngine:
-    """
-    Core worker loop.
+        """
+        Core worker loop.
 
-    En esta fase el loop sigue siendo simple, pero ya:
-      - Lee jobs en estado 'queued' desde la DB.
-      - Llama a process_job(session, job) para cada job.
-      - Delega el cambio de perfil en ensure_profile_for_job(job).
-    """
+        At this stage the loop is still simple, but already:
+            - Reads jobs in 'queued' state from the DB.
+            - Calls process_job(session, job) for each job.
+            - Delegates profile switching to ensure_profile_for_job(job).
+        """
 
     def __init__(self, poll_interval: int = 30) -> None:
         self.poll_interval = poll_interval
@@ -290,7 +290,7 @@ class WorkerEngine:
 
 
 def main() -> None:
-    # Puedes hacer este valor configurable desde config.yaml si quieres
+    # You can make this value configurable from config.yaml if you want
     engine = WorkerEngine(poll_interval=5)
     engine.start()
 

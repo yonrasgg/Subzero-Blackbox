@@ -1,11 +1,11 @@
-# Blackbox - Auditoría Ética
-Raspberry Pi Zero 2W - Sistema de auditoría Wi-Fi/Bluetooth
+# Subzero-Blackbox - Cyber-security swisskinfe
+Raspberry Pi Zero 2W - Wi-Fi/Bluetooth Auditing System
 
-## Arquitectura
-- API Local (FastAPI)
+## Architecture
+- Local API (FastAPI)
 - Worker Engine (Python)
-- Módulos de auditoría (Wi-Fi/Bluetooth)
-- Tethering dual (BT/WiFi según modo)
+- Auditing Modules (Wi-Fi/Bluetooth)
+- Dual Tethering (BT/WiFi depending on mode)
 
-## Instalación
-Ver `scripts/install.sh`
+## Installation
+See `scripts/install.sh`

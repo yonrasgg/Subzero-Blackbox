@@ -2,17 +2,17 @@
 """
 scripts/profile_switcher.py
 
-Gestiona los perfiles de auditoría / tethering de Blackbox:
+Manages Blackbox audit/tethering profiles:
 
-- Lee config/config.yaml y config/profiles.yaml.
-- Lista perfiles disponibles.
-- Muestra el perfil activo.
-- Cambia de perfil de forma segura:
-  * No cambia si ya está activo.
-  * Se niega a cambiar si hay jobs "running".
-  * Aplica enable/disable de interfaces.
-  * Llama a scripts/tethering_switch.sh según internet_via.
-- Registra cambios en la tabla profiles_log de data/blackbox.db.
+- Reads config/config.yaml and config/profiles.yaml.
+- Lists available profiles.
+- Shows the active profile.
+- Switches profiles safely:
+    * Does not switch if already active.
+    * Refuses to switch if there are jobs "running".
+    * Applies enable/disable to interfaces.
+    * Calls scripts/tethering_switch.sh according to internet_via.
+- Logs changes in the profiles_log table of data/blackbox.db.
 """
 
 from __future__ import annotations
@@ -25,26 +25,29 @@ import subprocess
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+
 # ---------------------------------------------------------------------------
-# Bootstrap de sys.path para poder importar 'worker' cuando se ejecuta
-# como script: python scripts/profile_switcher.py ...
+# sys.path bootstrap to allow importing 'worker' when running as script:
+# python scripts/profile_switcher.py ...
 # ---------------------------------------------------------------------------
 
 BASE_DIR = Path(__file__).resolve().parent.parent  # ~/blackbox-dev
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
+
 IS_ROOT = (os.geteuid() == 0)
 
 import yaml
 from sqlalchemy.orm import Session
 
-# Ahora sí, esto funciona porque BASE_DIR está en sys.path
+# Now this works because BASE_DIR is in sys.path
 from worker.db import SessionLocal, ProfileLog, Job
 
 
+
 # ---------------------------------------------------------------------------
-# Rutas base
+# Base paths
 # ---------------------------------------------------------------------------
 
 CONFIG_PATH = BASE_DIR / "config" / "config.yaml"
@@ -54,8 +57,9 @@ LOG_FILE = LOG_DIR / "blackbox.log"
 TETHERING_SWITCH = BASE_DIR / "scripts" / "tethering_switch.sh"
 
 
+
 # ---------------------------------------------------------------------------
-# Logging básico
+# Basic logging
 # ---------------------------------------------------------------------------
 
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -67,14 +71,16 @@ logging.basicConfig(
 )
 
 
+
 # ---------------------------------------------------------------------------
-# Utilidades YAML
+# YAML utilities
 # ---------------------------------------------------------------------------
+
 
 
 def _load_yaml(path: Path) -> Dict[str, Any]:
     """
-    Carga un YAML y devuelve siempre un dict (vacío en caso de error).
+    Loads a YAML file and always returns a dict (empty in case of error).
     """
     if not path.is_file():
         logging.warning("YAML file %s not found; returning empty dict", path)
@@ -92,9 +98,10 @@ def _load_yaml(path: Path) -> Dict[str, Any]:
     return data
 
 
+
 def _save_yaml(path: Path, data: Dict[str, Any]) -> None:
     """
-    Guarda un dict como YAML (crea directorio si no existe).
+    Saves a dict as YAML (creates directory if it does not exist).
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     yaml.safe_dump(data, path.open("w", encoding="utf-8"), sort_keys=False)
@@ -120,14 +127,16 @@ def set_active_profile_name(cfg: Dict[str, Any], profile_name: str) -> Dict[str,
     return cfg
 
 
+
 # ---------------------------------------------------------------------------
 # DB helpers
 # ---------------------------------------------------------------------------
 
 
+
 def has_running_jobs(session: Session) -> bool:
     """
-    Devuelve True si hay algún job en estado 'running'.
+    Returns True if there is any job with status 'running'.
     """
     return (
         session.query(Job)
@@ -136,6 +145,7 @@ def has_running_jobs(session: Session) -> bool:
         .count()
         > 0
     )
+
 
 
 def insert_profile_log(
@@ -155,18 +165,19 @@ def insert_profile_log(
     session.commit()
 
 
+
 # ---------------------------------------------------------------------------
 # Network helpers
 # ---------------------------------------------------------------------------
 
+
 def run_cmd(cmd: list[str]) -> None:
     """
-    Ejecuta un comando de sistema sin romper el flujo y sin sacar errores
-    por pantalla.
+    Runs a system command without breaking the flow and without printing errors to the screen.
 
-    - Captura stdout/stderr.
-    - Si el retorno es != 0, escribe un log con el mensaje de error.
-    - NO lanza excepción: está pensado para ip/hciconfig/etc.
+    - Captures stdout/stderr.
+    - If return code != 0, logs the error message.
+    - Does NOT raise exception: intended for ip/hciconfig/etc.
     """
     try:
         result = subprocess.run(
@@ -189,13 +200,14 @@ def run_cmd(cmd: list[str]) -> None:
             stderr,
         )
 
+
 def apply_interfaces(disable: list[str], enable: list[str]) -> None:
     """
-    Sube/baja interfaces de red/bt de forma muy simple.
+    Brings network/bt interfaces up or down in a very simple way.
 
-    - Si NO somos root → no toca nada, solo loguea.
-    - Si el nombre empieza por 'hci' se asume interfaz Bluetooth → hciconfig.
-    - En otro caso se usa `ip link set ... up/down`.
+    - If NOT running as root → does nothing, just logs.
+    - If the name starts with 'hci' it is assumed to be a Bluetooth interface → hciconfig.
+    - Otherwise uses `ip link set ... up/down`.
     """
     if not IS_ROOT:
         logging.info(
@@ -223,13 +235,14 @@ def apply_interfaces(disable: list[str], enable: list[str]) -> None:
         else:
             run_cmd(["ip", "link", "set", iface, "up"])
 
+
 def call_tethering_switch(mode: str) -> None:
     """
-    Llama a scripts/tethering_switch.sh con modo 'wifi', 'bluetooth', 'off' o 'status'.
+    Calls scripts/tethering_switch.sh with mode 'wifi', 'bluetooth', 'off' or 'status'.
 
-    - Solo se ejecuta si el proceso corre como root (IS_ROOT).
-    - Si no somos root: se deja constancia en log y se sale sin llamar al script.
-    - Si el script devuelve rc != 0, se registra el error con stderr.
+    - Only runs if the process is running as root (IS_ROOT).
+    - If not root: logs and exits without calling the script.
+    - If the script returns rc != 0, logs the error with stderr.
     """
     if mode not in ("wifi", "bluetooth", "off", "status"):
         logging.warning("call_tethering_switch called with invalid mode: %s", mode)
@@ -268,9 +281,11 @@ def call_tethering_switch(mode: str) -> None:
             (result.stderr or "").strip(),
         )
 
+
 # ---------------------------------------------------------------------------
-# Comandos CLI
+# CLI commands
 # ---------------------------------------------------------------------------
+
 
 
 def cmd_list() -> None:
@@ -283,6 +298,7 @@ def cmd_list() -> None:
     for name, data in profiles.items():
         desc = data.get("description", "")
         print(f"  - {name}: {desc}")
+
 
 
 def cmd_show() -> None:
@@ -299,16 +315,17 @@ def cmd_show() -> None:
         print("  modules_enabled:", data.get("modules_enabled", []))
 
 
+
 def cmd_set(profile_name: str) -> None:
     """
-    Cambia de perfil de forma segura.
+    Safely switches profile.
 
-    - Verifica que el perfil exista en profiles.yaml.
-    - Abre DB, verifica que no haya jobs 'running'.
-    - Si el perfil ya está activo, no hace nada (idempotente).
-    - Aplica enable/disable de interfaces.
-    - Llama a tethering_switch.sh según internet_via.
-    - Actualiza config.yaml y escribe en profiles_log.
+    - Verifies that the profile exists in profiles.yaml.
+    - Opens DB, checks that there are no jobs 'running'.
+    - If the profile is already active, does nothing (idempotent).
+    - Applies enable/disable to interfaces.
+    - Calls tethering_switch.sh according to internet_via.
+    - Updates config.yaml and writes to profiles_log.
     """
     profiles = get_profiles_config()
     if profile_name not in profiles:
@@ -323,13 +340,13 @@ def cmd_set(profile_name: str) -> None:
     cfg = get_config()
     old = get_active_profile_name(cfg)
 
-    # Si ya está activo, salimos sin hacer nada
+    # If already active, exit without doing anything
     if old == profile_name:
         print(f"[INFO] Profile {profile_name} is already active; nothing to do.")
         logging.info("Profile %s already active; nothing to do", profile_name)
         return
 
-    # Abrimos DB para validar que no haya jobs 'running'
+    # Open DB to validate that there are no jobs 'running'
     with SessionLocal() as session:
         if has_running_jobs(session):
             msg = "There are jobs in status 'running'; refusing to switch profile."
@@ -343,20 +360,20 @@ def cmd_set(profile_name: str) -> None:
         print(f"[INFO] Switching profile: {old} -> {profile_name}")
         logging.info("Switching profile: %s -> %s", old, profile_name)
 
-        # Aplicar interfaces
+        # Apply interfaces
         apply_interfaces(disable, enable)
 
-        # Cambiar tethering según internet_via
+        # Switch tethering according to internet_via
         if internet_via in ("wifi", "bluetooth"):
             call_tethering_switch(internet_via)
         elif internet_via:
             logging.warning("Unknown internet_via '%s' for profile %s", internet_via, profile_name)
 
-        # Actualizar config.yaml
+        # Update config.yaml
         cfg = set_active_profile_name(cfg, profile_name)
         _save_yaml(CONFIG_PATH, cfg)
 
-        # Registrar en profiles_log
+        # Log in profiles_log
         insert_profile_log(
             session,
             old_profile=old,
@@ -369,9 +386,11 @@ def cmd_set(profile_name: str) -> None:
         logging.info("Profile switch completed: %s -> %s", old, profile_name)
 
 
+
 # ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
+
 
 
 def build_arg_parser() -> argparse.ArgumentParser:

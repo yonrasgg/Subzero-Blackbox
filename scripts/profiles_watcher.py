@@ -2,10 +2,10 @@
 """
 scripts/profiles_watcher.py
 
-Stub sencillo que:
-- Carga config.yaml y profiles.yaml
-- Muestra el perfil activo y los módulos habilitados
-Pensado para ser lanzado por systemd (blackbox-profiles.service).
+Simple stub that:
+- Loads config.yaml and profiles.yaml
+- Shows the active profile and enabled modules
+Intended to be launched by systemd (blackbox-profiles.service).
 """
 
 from __future__ import annotations

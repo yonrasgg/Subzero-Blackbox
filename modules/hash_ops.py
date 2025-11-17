@@ -2,11 +2,11 @@
 """
 modules/hash_ops.py
 
-Módulo de operaciones de hashes e inteligencia externa para Blackbox.
+Module for hash operations and external intelligence for Blackbox.
 
-- Integra servicios remotos (OnlineHashCrack, LeakCheck, etc.).
-- Registra resultados en la tabla hash_results.
-- Diseñado para ser llamado desde el worker:
+- Integrates remote services (OnlineHashCrack, LeakCheck, etc.).
+- Stores results in the hash_results table.
+- Designed to be called from the worker:
     run_hash_lookup(session, job)
 """
 
@@ -30,20 +30,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 CONFIG_PATH = BASE_DIR / "config" / "config.yaml"
 DOTENV_PATH = BASE_DIR / ".env"
 
-# Cargamos variables de entorno desde .env (si existe)
+
+# Load environment variables from .env (if exists)
 if DOTENV_PATH.is_file():
     load_dotenv(DOTENV_PATH)
 
 
+
 # ---------------------------------------------------------------------------
-# Helpers de configuración y entorno
+# Config and environment helpers
 # ---------------------------------------------------------------------------
 
 def _load_hash_services_config() -> Dict[str, Any]:
     """
-    Carga la sección hash_services de config/config.yaml.
+    Loads the hash_services section from config/config.yaml.
 
-    Devuelve {} si no existe o está vacía.
+    Returns {} if it does not exist or is empty.
     """
     if not CONFIG_PATH.is_file():
         logger.warning("config.yaml not found at %s", CONFIG_PATH)
@@ -64,8 +66,9 @@ def _get_env(name: str) -> Optional[str]:
     return value
 
 
+
 # ---------------------------------------------------------------------------
-# Helper DB: guardar resultados
+# DB Helper: store results
 # ---------------------------------------------------------------------------
 
 def _store_hash_result(
@@ -76,7 +79,7 @@ def _store_hash_result(
     plaintext: Optional[str],
 ) -> HashResult:
     """
-    Crea un HashResult y lo guarda en la DB.
+    Creates a HashResult and saves it in the DB.
     """
     result = HashResult(
         job_id=job.id if job else None,
@@ -98,6 +101,7 @@ def _store_hash_result(
     return result
 
 
+
 # ---------------------------------------------------------------------------
 # OnlineHashCrack (https://api.onlinehashcrack.com/v2)
 # ---------------------------------------------------------------------------
@@ -108,12 +112,12 @@ def _call_onlinehashcrack(
     hash_algo: str,
 ) -> Optional[Dict[str, Any]]:
     """
-    Envía un hash a OnlineHashCrack usando su API v2.
+    Sends a hash to OnlineHashCrack using its API v2.
 
-    NOTA:
-    - Solo usar con hashes que tengas derecho legal de auditar.
-    - Evitar enviar hashes directamente identificables de usuarios reales
-      sin consentimiento explícito.
+    NOTE:
+    - Only use with hashes you have the legal right to audit.
+    - Avoid sending directly identifiable hashes of real users
+      without explicit consent.
     """
     service_name = "onlinehashcrack"
     service_cfg = cfg.get(service_name, {})
@@ -134,7 +138,7 @@ def _call_onlinehashcrack(
     timeout = service_cfg.get("timeout", 20)
     default_algo_mode = service_cfg.get("default_algo_mode", 0)
 
-    # Aquí podrías mapear hash_algo -> algo_mode. De momento usamos el default.
+    # Here you could map hash_algo -> algo_mode. For now, use the default.
     algo_mode = default_algo_mode
 
     url = "https://api.onlinehashcrack.com/v2"
@@ -164,8 +168,9 @@ def _call_onlinehashcrack(
     return data
 
 
+
 # ---------------------------------------------------------------------------
-# LeakCheck público (https://leakcheck.io/api/public)
+# LeakCheck public (https://leakcheck.io/api/public)
 # ---------------------------------------------------------------------------
 
 def _call_leakcheck_public(
@@ -173,14 +178,14 @@ def _call_leakcheck_public(
     value: str,
 ) -> Optional[Dict[str, Any]]:
     """
-    Consulta LeakCheck usando la API pública.
+    Queries LeakCheck using the public API.
 
-    value puede ser:
+    value can be:
     - email
     - username
-    - email hash truncado (según docs de LeakCheck)
+    - truncated email hash (according to LeakCheck docs)
 
-    Devuelve el JSON tal cual, o None si falla.
+    Returns the JSON as is, or None if it fails.
     """
     service_name = "leakcheck"
     service_cfg = cfg.get(service_name, {})
@@ -212,21 +217,22 @@ def _call_leakcheck_public(
     return data
 
 
+
 # ---------------------------------------------------------------------------
-# Orquestador principal: run_hash_lookup
+# Main orchestrator: run_hash_lookup
 # ---------------------------------------------------------------------------
 
 def run_hash_lookup(session: Session, job: Job) -> None:
     """
-    Punto principal llamado desde el worker para jobs tipo 'hash_lookup'.
+    Main entry point called from the worker for 'hash_lookup' jobs.
 
-    Espera que job.params contenga:
-      - mode: "hash" | "leakcheck" | "wpa_capture" (en el futuro)
-      - value: hash/email/username, según el modo
-      - hash_algo (opcional, ej: "md5")
-      - services: lista de servicios a usar
+    Expects job.params to contain:
+      - mode: "hash" | "leakcheck" | "wpa_capture" (in the future)
+      - value: hash/email/username, depending on the mode
+      - hash_algo (optional, e.g.: "md5")
+      - services: list of services to use
 
-    Ejemplos de params:
+    Example params:
 
       {"mode": "hash", "value": "ABCD...", "hash_algo": "md5",
        "services": ["onlinehashcrack", "leakcheck"]}
@@ -258,7 +264,7 @@ def run_hash_lookup(session: Session, job: Job) -> None:
         # OnlineHashCrack
         if "onlinehashcrack" in services:
             data = _call_onlinehashcrack(cfg, hash_value=hash_value, hash_algo=hash_algo)
-            # Normalmente no devuelve plaintext directamente; registramos el intento.
+            # Normally does not return plaintext directly; we log the attempt.
             _store_hash_result(
                 session,
                 job,
@@ -268,7 +274,7 @@ def run_hash_lookup(session: Session, job: Job) -> None:
             )
             logger.debug("OnlineHashCrack data stored (attempt) for job_id=%s", job.id)
 
-        # Podrías añadir aquí otros servicios de cracking tradicionales.
+        # You could add other traditional cracking services here.
 
     elif mode == "leakcheck":
         value = params.get("value")

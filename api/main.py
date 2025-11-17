@@ -1,8 +1,8 @@
 """
 api/main.py
 
-FastAPI app para Blackbox:
-- Endpoints API (JSON): /health, /jobs
+FastAPI app for Blackbox:
+- API Endpoints (JSON): /health, /jobs
 - UI HTML (Jinja2): /ui/dashboard, /ui/jobs, /ui/config
 """
 
@@ -29,7 +29,8 @@ import yaml
 
 from worker.db import SessionLocal, Job  # Usa los modelos del Step 2
 
-# --- Paths y templates ---
+
+# --- Paths and templates ---
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / "api" / "templates"
@@ -45,8 +46,8 @@ app = FastAPI(title="Blackbox API + UI")
 origins = [
     "http://localhost",
     "http://localhost:8010",
-    # Añade aquí "http://IP_DE_TU_PI:8010" si accedes por IP directa
-    # o "http://blackbox.local:8010" si usas mDNS/hostname
+    # Add here "http://YOUR_PI_IP:8010" if you access directly by IP
+    # or "http://blackbox.local:8010" if you use mDNS/hostname
 ]
 
 app.add_middleware(
@@ -66,12 +67,12 @@ def get_db() -> Session:
     finally:
         db.close()
 
-# --- Auth basica para UI ---
+# --- Basic Auth for UI ---
 
 security = HTTPBasic()
 
 UI_USER = "admin"
-UI_PASS = "change-this"  # cambiarlo mas adelante, o lee de config/env
+UI_PASS = "change-this"  # change it later, or read from config/env
 
 
 def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)) -> str:
@@ -85,7 +86,7 @@ def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)) ->
         )
     return credentials.username
 
-# --- Utilidades de config/perfiles ---
+# --- Utilities for config/profiles ---
 
 def _load_yaml(path: Path) -> Dict[str, Any]:
     if not path.is_file():
@@ -108,7 +109,7 @@ def get_active_profile_info() -> Dict[str, Any]:
         "modules_enabled": data.get("modules_enabled", []),
     }
 
-# --- Modelos Pydantic para Jobs ---
+# --- Pydantic Models for Jobs ---
 
 class JobCreate(BaseModel):
     type: str
@@ -123,9 +124,9 @@ class JobOut(BaseModel):
     status: str
 
     class Config:
-        from_attributes = True  # para SQLAlchemy 2.x
+        from_attributes = True  # for SQLAlchemy 2.x
 
-# --- API JSON básica ---
+# --- Basic JSON API ---
 
 @app.get("/health")
 def health() -> Dict[str, str]:
@@ -135,8 +136,8 @@ def health() -> Dict[str, str]:
 @app.post("/jobs", response_model=JobOut)
 def create_job(job_in: JobCreate, db: Session = Depends(get_db)) -> JobOut:
     """
-    Crea un job en estado 'queued'.
-    El worker lo recogerá y actualizará su estado.
+    Creates a job in 'queued' state.
+    The worker will pick it up and update its state.
     """
     job = Job(
         type=job_in.type,
@@ -155,12 +156,12 @@ def list_jobs(db: Session = Depends(get_db)) -> List[JobOut]:
     jobs = db.query(Job).order_by(Job.created_at.desc()).all()
     return jobs
 
-# --- UI: rutas HTML ---
+# --- UI: HTML routes ---
 
 @app.get("/", response_class=RedirectResponse)
 def root_redirect() -> RedirectResponse:
     """
-    Redirige a /ui/dashboard.
+    Redirects to /ui/dashboard.
     """
     return RedirectResponse(url="/ui/dashboard")
 
@@ -172,13 +173,13 @@ def ui_dashboard(
     db: Session = Depends(get_db),
 ) -> Any:
     """
-    Página principal del panel.
-    Muestra:
-    - Stats de jobs
-    - Información del perfil activo
-    - Botones de 'Start Wi-Fi Audit' y 'Start BT Audit'
+    Main dashboard page.
+    Shows:
+    - Job stats
+    - Active profile info
+    - 'Start Wi-Fi Audit' and 'Start BT Audit' buttons
     """
-    # Stats básicos de jobs
+    # Basic job stats
     total_jobs = db.query(Job).count()
     queued = db.query(Job).filter(Job.status == "queued").count()
     running = db.query(Job).filter(Job.status == "running").count()
@@ -219,7 +220,7 @@ def ui_jobs(
     db: Session = Depends(get_db),
 ) -> Any:
     """
-    Vista HTML sólo para ver la cola completa de jobs.
+    HTML view to see the full job queue only.
     """
     jobs = db.query(Job).order_by(Job.created_at.desc()).all()
     return templates.TemplateResponse(
@@ -249,7 +250,7 @@ def ui_config(
         },
     )
 
-# --- Acciones UI que disparan jobs ---
+# --- UI actions that trigger jobs ---
 
 @app.post("/ui/jobs/start/wifi")
 def ui_start_wifi_job(
@@ -258,7 +259,7 @@ def ui_start_wifi_job(
     db: Session = Depends(get_db),
 ) -> HTMLResponse:
     """
-    Crea un job Wi-Fi.
+    Creates a Wi-Fi job.
     type=wifi_recon, profile=wifi_audit.
     """
     job = Job(
@@ -271,7 +272,7 @@ def ui_start_wifi_job(
     db.commit()
     db.refresh(job)
 
-    # Recalcular stats y últimos jobs para volver al dashboard
+    # Recalculate stats and latest jobs to return to dashboard
     total_jobs = db.query(Job).count()
     queued = db.query(Job).filter(Job.status == "queued").count()
     running = db.query(Job).filter(Job.status == "running").count()
@@ -312,7 +313,7 @@ def ui_start_bt_job(
     db: Session = Depends(get_db),
 ) -> HTMLResponse:
     """
-    Crea un job Bluetooth.
+    Creates a Bluetooth job.
     type=bt_recon, profile=bluetooth_audit.
     """
     job = Job(

@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 class JobCreate(BaseModel):
     """
-    Payload de creación de jobs.
+    Job creation payload.
 
     type:
       - wifi_recon
@@ -17,13 +17,13 @@ class JobCreate(BaseModel):
       - etc.
 
     profile:
-      - Nombre del perfil de red (wifi_audit, bluetooth_audit, ...)
-      - Puede ser null si el job no requiere cambio de perfil
-        (por ejemplo, hash_lookup).
+      - Name of the network profile (wifi_audit, bluetooth_audit, ...)
+      - Can be null if the job does not require a profile change
+        (for example, hash_lookup).
 
     params:
-      - Diccionario flexible con parámetros específicos del job.
-      - Para type == "hash_lookup", ejemplos:
+      - Flexible dictionary with job-specific parameters.
+      - For type == "hash_lookup", examples:
 
         {"mode": "hash",
          "value": "8124BC0A5335C27F086F24BA2C7A4810",
@@ -33,7 +33,7 @@ class JobCreate(BaseModel):
         {"mode": "wpa_capture",
          "pcap_path": "/opt/blackbox/data/captures/wpa_handshake_01.pcap",
          "bssid": "AA:BB:CC:DD:EE:FF",
-         "ssid": "MiRed",
+         "ssid": "MyNetwork",
          "services": ["wpa_sec"]}
 
         {"mode": "leakcheck",
@@ -46,12 +46,12 @@ class JobCreate(BaseModel):
 
 
 class JobOut(BaseModel):
-    """
-    Representación pública de un Job.
+  """
+  Public representation of a Job.
 
-    Incluye params para poder inspeccionar qué se pidió exactamente,
-    especialmente útil para jobs tipo hash_lookup.
-    """
+  Includes params to inspect exactly what was requested,
+  especially useful for jobs like hash_lookup.
+  """
     id: int
     type: str
     profile: Optional[str]
@@ -59,4 +59,4 @@ class JobOut(BaseModel):
     params: Optional[Dict[str, Any]] = None
 
     class Config:
-        from_attributes = True  # SQLAlchemy -> Pydantic
+      from_attributes = True  # SQLAlchemy -> Pydantic
