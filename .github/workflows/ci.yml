@@ -37,10 +37,11 @@ jobs:
           bandit -r . || true
         # Ponlo sin '|| true' si quieres que falle el pipeline con vulnerabilidades
 
-      - name: Debug: List files and working directory
+      - name: Debug: List files and working directory (full tree)
         run: |
-          pwd
-          ls -lR
+          echo "Current working directory: $(pwd)"
+          echo "Full directory tree from /home/runner/work:"
+          ls -lR /home/runner/work || true
       - name: Debug: Python and Pytest info
         run: |
           which python
@@ -64,8 +65,13 @@ jobs:
           echo "Running: python -m pytest --collect-only -v"
           python -m pytest --collect-only -v
 
-      - name: Run tests
+      - name: Run tests (handle double-nested checkout)
         run: |
+          echo "Current working directory: $(pwd)"
+          if [ -d Subzero-Blackbox ]; then
+            cd Subzero-Blackbox
+            echo "Moved into Subzero-Blackbox subdirectory. Now in: $(pwd)"
+          fi
           python scripts/init_db.py
           pytest -v --maxfail=1 --disable-warnings
 
