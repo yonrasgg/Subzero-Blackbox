@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blackbox – {{ title or "Dashboard" }}</title>
+  <!-- Bulma CSS (ligero, desde CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="has-background-dark">
+  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/ui/dashboard">
+        <strong>Subzero / Blackbox</strong>
+      </a>
+    </div>
+    <div class="navbar-menu is-active">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/ui/dashboard">Dashboard</a>
+        <a class="navbar-item" href="/ui/jobs">Jobs</a>
+        <a class="navbar-item" href="/ui/config">Config</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      {% if flash %}
+        <div class="notification is-info">
+          {{ flash }}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </div>
+  </section>
+</body>
+</html>

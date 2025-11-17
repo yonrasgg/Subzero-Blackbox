@@ -1,0 +1,37 @@
+{
+  "wifi_recon": {
+    "enabled": true,
+    "type": "passive",
+    "module": "modules.wifi_recon",
+    "entrypoint": "run",
+    "interval_seconds": 60
+  },
+  "wifi_active": {
+    "enabled": false,
+    "type": "active",
+    "module": "modules.wifi_active",
+    "entrypoint": "run",
+    "interval_seconds": 300
+  },
+  "bt_recon": {
+    "enabled": true,
+    "type": "passive",
+    "module": "modules.bt_recon",
+    "entrypoint": "run",
+    "interval_seconds": 120
+  },
+  "bt_active": {
+    "enabled": false,
+    "type": "active",
+    "module": "modules.bt_active",
+    "entrypoint": "run",
+    "interval_seconds": 300
+  },
+  "hash_ops": {
+    "enabled": true,
+    "type": "utility",
+    "module": "modules.hash_ops",
+    "entrypoint": "hash_capture",
+    "interval_seconds": 600
+  }
+}

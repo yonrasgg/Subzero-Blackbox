@@ -16,6 +16,9 @@ data/captures/*
 config/secrets.yaml
 *.key
 *.pem
+.env
+.env.*
+!.env.example
 
 # IDE
 .vscode/

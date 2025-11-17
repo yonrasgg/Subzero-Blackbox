@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Jobs</h1>
+
+<table class="table is-fullwidth is-striped is-hoverable is-narrow">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Profile</th>
+      <th>Status</th>
+      <th>Created</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for job in jobs %}
+    <tr>
+      <td>{{ job.id }}</td>
+      <td>{{ job.type }}</td>
+      <td>{{ job.profile or "-" }}</td>
+      <td>{{ job.status }}</td>
+      <td>{{ job.created_at }}</td>
+      <td>{{ job.updated_at }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6">No jobs in database.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
