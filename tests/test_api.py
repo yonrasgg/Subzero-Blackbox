@@ -4,14 +4,6 @@ tests/test_api.py
 Basic tests for the FastAPI application.
 """
 
-import sys
-from pathlib import Path
-
-# Add the project root to sys.path
-BASE_DIR = Path(__file__).resolve().parent.parent
-if str(BASE_DIR) not in sys.path:
-    sys.path.insert(0, str(BASE_DIR))
-
 import pytest
 from fastapi.testclient import TestClient
 
