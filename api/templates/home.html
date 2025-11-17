@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Welcome to Subzero Blackbox</h1>
+
+<div class="box">
+  <p class="subtitle">Cyber-security swissknife for Raspberry Pi Zero 2W - Wi-Fi/Bluetooth Auditing System</p>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">Site Map</h2>
+  <ul>
+    <li><a href="/ui/dashboard">Dashboard</a> - Overview and quick actions</li>
+    <li><a href="/ui/jobs">Jobs</a> - Job queue and history</li>
+    <li><a href="/ui/config">Config</a> - System configuration</li>
+    <li><a href="/ui/logs">Logs</a> - Activity logs</li>
+  </ul>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">Auditorías Disponibles</h2>
+  <ul>
+    <li>Wi-Fi Recon: Escaneo de redes inalámbricas</li>
+    <li>Bluetooth Recon: Detección de dispositivos BT</li>
+    <li>Próximamente: Web servers, etc.</li>
+  </ul>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">AI Assistant</h2>
+  <p>Placeholder: Sugerencias inteligentes, aprendizaje de experiencia, scripts automáticos.</p>
+</div>
+{% endblock %}

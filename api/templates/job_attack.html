@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Attack Configuration for Job {{ job.id }}</h1>
+
+<div class="box">
+  <h2 class="title is-5">Automated Attacks</h2>
+  <p>Placeholder: Configure attacks based on identified vulnerabilities.</p>
+  <p>Job Type: {{ job.type }}</p>
+  <p>Status: {{ job.status }}</p>
+  <button class="button is-danger">Launch Attack</button>
+</div>
+{% endblock %}

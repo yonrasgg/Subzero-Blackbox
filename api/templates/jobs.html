@@ -11,6 +11,7 @@
       <th>Status</th>
       <th>Created</th>
       <th>Updated</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -22,10 +23,35 @@
       <td>{{ job.status }}</td>
       <td>{{ job.created_at }}</td>
       <td>{{ job.updated_at }}</td>
+      <td>
+        <div class="dropdown is-hoverable">
+          <div class="dropdown-trigger">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu{{ job.id }}">
+              <span>Actions</span>
+              <span class="icon is-small">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu{{ job.id }}" role="menu">
+            <div class="dropdown-content">
+              <a href="/ui/jobs/{{ job.id }}" class="dropdown-item">
+                View Details
+              </a>
+              <a href="/ui/jobs/{{ job.id }}/report" class="dropdown-item">
+                Report
+              </a>
+              <a href="/ui/jobs/{{ job.id }}/attack" class="dropdown-item">
+                Attack
+              </a>
+            </div>
+          </div>
+        </div>
+      </td>
     </tr>
     {% else %}
     <tr>
-      <td colspan="6">No jobs in database.</td>
+      <td colspan="7">No jobs in database.</td>
     </tr>
     {% endfor %}
   </tbody>

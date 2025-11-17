@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Job Detail: {{ job.id }}</h1>
+
+<div class="box">
+  <h2 class="title is-5">Job Information</h2>
+  <p><strong>ID:</strong> {{ job.id }}</p>
+  <p><strong>Type:</strong> {{ job.type }}</p>
+  <p><strong>Profile:</strong> {{ job.profile or "-" }}</p>
+  <p><strong>Status:</strong> {{ job.status }}</p>
+  <p><strong>Created:</strong> {{ job.created_at }}</p>
+  <p><strong>Updated:</strong> {{ job.updated_at }}</p>
+  <p><strong>Params:</strong> {{ job.params }}</p>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">Outputs</h2>
+  <p>Placeholder for stdout/stderr and files.</p>
+</div>
+{% endblock %}
