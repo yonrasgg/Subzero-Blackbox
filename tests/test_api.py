@@ -4,22 +4,11 @@ tests/test_api.py
 Basic tests for the FastAPI application.
 """
 
-def test_dummy():
-    """A dummy test to check if pytest finds tests."""
-    assert True
-
-
 import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
 
-
-"""
-tests/test_api.py
-
-Basic tests for the FastAPI application.
-"""
 
 def test_dummy():
     """A dummy test to check if pytest finds tests."""
@@ -29,8 +18,6 @@ def test_dummy():
 @pytest.fixture
 def client():
     """Test client for FastAPI app."""
-    from api.main import app
-    from fastapi.testclient import TestClient
     return TestClient(app)
 
 

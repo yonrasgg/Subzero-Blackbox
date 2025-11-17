@@ -90,7 +90,6 @@ class Job(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-
     # job type: wifi_recon, bt_recon, wifi_active, bt_active, hash_lookup, etc.
     type = Column(String(50), nullable=False, index=True)
 
@@ -201,7 +200,6 @@ class HashResult(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     job_id = Column(Integer, ForeignKey("jobs.id"), nullable=True, index=True)
-
 
     # Name of the remote service or module that generated the result
     service = Column(String(100), nullable=False, index=True)

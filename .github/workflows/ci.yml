@@ -1,21 +1,3 @@
-      - name: List current directory contents (pre-pytest)
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -l
-
-      - name: List tests directory contents (pre-pytest)
-        run: |
-          if [ -d tests ]; then
-            echo "tests/ directory found. Listing contents:"
-            ls -lR tests
-          else
-            echo "tests/ directory NOT found in $(pwd)"
-          fi
-
-      - name: Check for test files explicitly
-        run: |
-          find . -name 'test_basic.py' -print
-          find . -name 'test_api.py' -print
 name: CI
 
 on:
@@ -60,6 +42,7 @@ jobs:
           echo "Current working directory: $(pwd)"
           echo "Full directory tree from /home/runner/work:"
           ls -lR /home/runner/work || true
+
       - name: Debug: Python and Pytest info
         run: |
           which python
@@ -69,6 +52,25 @@ jobs:
           echo $PYTHONPATH
           python -c "import sys; print(sys.path)"
           ls -lR tests
+
+      - name: List current directory contents (pre-pytest)
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -l
+
+      - name: List tests directory contents (pre-pytest)
+        run: |
+          if [ -d tests ]; then
+            echo "tests/ directory found. Listing contents:"
+            ls -lR tests
+          else
+            echo "tests/ directory NOT found in $(pwd)"
+          fi
+
+      - name: Check for test files explicitly
+        run: |
+          find . -name 'test_basic.py' -print
+          find . -name 'test_api.py' -print
 
       - name: List files in tests directory (pre-pytest)
         run: |

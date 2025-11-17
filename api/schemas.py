@@ -52,7 +52,6 @@ class JobOut(BaseModel):
     Includes params to inspect exactly what was requested,
     especially useful for jobs like hash_lookup.
     """
-
     id: int
     type: str
     profile: Optional[str]
