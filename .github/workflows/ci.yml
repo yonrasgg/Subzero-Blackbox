@@ -37,4 +37,5 @@ jobs:
 
       - name: Run tests
         run: |
+          python scripts/init_db.py
           pytest
