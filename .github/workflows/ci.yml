@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'  # ajusta a la versión que uses en Pi/crlab01
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # deps opcionales de dev:
+          pip install pytest pytest-cov ruff bandit
+
+      - name: Lint (Ruff)
+        run: |
+          ruff check .
+
+      - name: Security scan (Bandit)
+        run: |
+          bandit -r . || true
+        # Ponlo sin '|| true' si quieres que falle el pipeline con vulnerabilidades
+
+      - name: Run tests
+        run: |
+          pytest
