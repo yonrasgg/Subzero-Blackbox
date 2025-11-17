@@ -291,17 +291,19 @@ def ui_save_config(
     ui_username: str = Form(...),
     ui_password: str = Form(...),
     google_api_key: str = Form(...),
-    online_hashcat_api_key: str = Form(...),
-    leakcheck_api_key: str = Form(...),
-    wiggle_api_key: str = Form(...),
+    onlinehashcrack_api_key: str = Form(...),
+    wpasec_api_key: str = Form(...),
+    wigle_api_name: str = Form(...),
+    wigle_api_token: str = Form(...),
 ) -> HTMLResponse:
     config = _load_yaml(CONFIG_PATH)
     config["ui"] = {"username": ui_username, "password": ui_password}
     config["apis"] = {
         "google_api_key": google_api_key,
-        "online_hashcat_api_key": online_hashcat_api_key,
-        "leakcheck_api_key": leakcheck_api_key,
-        "wiggle_api_key": wiggle_api_key,
+        "onlinehashcrack_api_key": onlinehashcrack_api_key,
+        "wpasec_api_key": wpasec_api_key,
+        "wigle_api_name": wigle_api_name,
+        "wigle_api_token": wigle_api_token,
     }
     # Save to file
     import yaml
