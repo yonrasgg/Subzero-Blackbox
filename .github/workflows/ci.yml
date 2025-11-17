@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -19,13 +18,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'  # ajusta a la versión que uses en Pi/crlab01
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # deps opcionales de dev:
           pip install pytest pytest-cov ruff bandit
 
       - name: Lint (Ruff)
@@ -35,67 +33,14 @@ jobs:
       - name: Security scan (Bandit)
         run: |
           bandit -r . || true
-        # Ponlo sin '|| true' si quieres que falle el pipeline con vulnerabilidades
 
-      - name: Debug: List files and working directory (full tree)
-        run: |
-          echo "Current working directory: $(pwd)"
-          echo "Full directory tree from /home/runner/work:"
-          ls -lR /home/runner/work || true
-
-      - name: Debug: Python and Pytest info
-        run: |
-          which python
-          python --version
-          which pytest
-          pytest --version
-          echo $PYTHONPATH
-          python -c "import sys; print(sys.path)"
-          ls -lR tests
-
-      - name: List current directory contents (pre-pytest)
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -l
-
-      - name: List tests directory contents (pre-pytest)
-        run: |
-          if [ -d tests ]; then
-            echo "tests/ directory found. Listing contents:"
-            ls -lR tests
-          else
-            echo "tests/ directory NOT found in $(pwd)"
-          fi
-
-      - name: Check for test files explicitly
-        run: |
-          find . -name 'test_basic.py' -print
-          find . -name 'test_api.py' -print
-
-      - name: List files in tests directory (pre-pytest)
-        run: |
-          echo "Listing files in tests directory:"
-          ls -lR tests
-
-      - name: Show current working directory (pre-pytest)
-        run: pwd
-
-      - name: Pytest collect-only debug
-        run: |
-          echo "Running: python -m pytest --collect-only -v"
-          python -m pytest --collect-only -v
-
-      - name: Run tests (handle double-nested checkout)
-        run: |
-          echo "Current working directory: $(pwd)"
-          if [ -d Subzero-Blackbox ]; then
-            cd Subzero-Blackbox
-            echo "Moved into Subzero-Blackbox subdirectory. Now in: $(pwd)"
-          fi
-          python scripts/init_db.py
-          pytest -v --maxfail=1 --disable-warnings
-
-      - name: Debug: List files
+      - name: Debug info
         run: |
           pwd
-          ls -lR
+          ls -la
+          ls -la tests/
+
+      - name: Run tests
+        run: |
+          python scripts/init_db.py
+          pytest -v --maxfail=1 --disable-warnings
