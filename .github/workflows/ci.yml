@@ -43,7 +43,7 @@ jobs:
       - name: Run tests
         run: |
           python scripts/init_db.py
-          pytest
+          pytest -v --maxfail=1 --disable-warnings
 
       - name: Debug: List files
         run: |
