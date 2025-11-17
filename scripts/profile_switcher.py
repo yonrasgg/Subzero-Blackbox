@@ -41,7 +41,7 @@ if str(BASE_DIR) not in sys.path:
 IS_ROOT = (os.geteuid() == 0)
 
 # Now this works because BASE_DIR is in sys.path
-from worker.db import SessionLocal, ProfileLog, Job  # noqa: E402
+from worker.db import SessionLocal, ProfileLog, Job  # noqa: E402  # noqa: E402
 
 
 
