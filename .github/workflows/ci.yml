@@ -35,7 +35,17 @@ jobs:
           bandit -r . || true
         # Ponlo sin '|| true' si quieres que falle el pipeline con vulnerabilidades
 
+      - name: Debug: List files and working directory
+        run: |
+          pwd
+          ls -lR
+
       - name: Run tests
         run: |
           python scripts/init_db.py
           pytest
+
+      - name: Debug: List files
+        run: |
+          pwd
+          ls -lR
