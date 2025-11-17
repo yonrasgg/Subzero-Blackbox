@@ -1,34 +1,43 @@
-raspi_id: subzero
+apis:
+  google_api_key: ''
+  onlinehashcrack_api_key: sk_52c5ce339c9605c8437bb24c140e1d39
+  wigle_api_name: n3kr0-voidnet
+  wigle_api_token: 7718d492389474f09609dfd86df89ad2
+  wpasec_api_key: e98418c20730fe7f8c1ca4c1abf32298
 environment: dev
-paths:
-  base_dir: /home/rayden/blackbox-dev
-  data_dir: /home/rayden/blackbox-dev/data
-  logs_dir: /home/rayden/blackbox-dev/data/logs
-  captures_dir: /home/rayden/blackbox-dev/data/captures
-network:
-  wifi_interface_monitor: wlan0mon
-  wifi_interface_managed: wlan0
-  bt_interface: hci0
-profiles:
-  active_profile: bluetooth_audit
-worker:
-  poll_interval_seconds: 30
 hash_services:
-  onlinehashcrack:
-    enabled: true
-    api_key_env: ONLINEHASHCRACK_API_KEY
-    default_algo_mode: 0
-    timeout: 20
-    max_hashes_per_job: 20
   leakcheck:
     enabled: true
     timeout: 10
-  wpa_sec:
-    enabled: false
-    api_key_env: WPASEC_API_KEY
-    timeout: 30
+  onlinehashcrack:
+    api_key_env: ONLINEHASHCRACK_API_KEY
+    default_algo_mode: 0
+    enabled: true
+    max_hashes_per_job: 20
+    timeout: 20
   wigle:
-    enabled: false
     api_name_env: WIGLE_API_NAME
     api_token_env: WIGLE_API_TOKEN
+    enabled: false
     timeout: 15
+  wpa_sec:
+    api_key_env: WPASEC_API_KEY
+    enabled: false
+    timeout: 30
+network:
+  bt_interface: hci0
+  wifi_interface_managed: wlan0
+  wifi_interface_monitor: wlan0mon
+paths:
+  base_dir: /home/rayden/blackbox-dev
+  captures_dir: /home/rayden/blackbox-dev/data/captures
+  data_dir: /home/rayden/blackbox-dev/data
+  logs_dir: /home/rayden/blackbox-dev/data/logs
+profiles:
+  active_profile: bluetooth_audit
+raspi_id: subzero
+ui:
+  password: change-this
+  username: admin
+worker:
+  poll_interval_seconds: 30
