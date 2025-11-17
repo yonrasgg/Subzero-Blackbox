@@ -39,11 +39,20 @@ jobs:
         run: |
           pwd
           ls -lR
+        - name: Debug: Python and Pytest info
+          run: |
+            which python
+            python --version
+            which pytest
+            pytest --version
+            echo $PYTHONPATH
+            python -c "import sys; print(sys.path)"
+            ls -lR tests
 
       - name: Run tests
         run: |
           python scripts/init_db.py
-          pytest -v --maxfail=1 --disable-warnings
+            pytest -v tests/ --maxfail=1 --disable-warnings
 
       - name: Debug: List files
         run: |
