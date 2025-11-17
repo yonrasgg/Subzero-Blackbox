@@ -20,10 +20,13 @@ from __future__ import annotations
 import argparse
 import logging
 import os
-import sys
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Dict, Optional
+
+import yaml
+from sqlalchemy.orm import Session
 
 
 # ---------------------------------------------------------------------------
@@ -37,9 +40,6 @@ if str(BASE_DIR) not in sys.path:
 
 
 IS_ROOT = (os.geteuid() == 0)
-
-import yaml
-from sqlalchemy.orm import Session
 
 # Now this works because BASE_DIR is in sys.path
 from worker.db import SessionLocal, ProfileLog, Job

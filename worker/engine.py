@@ -103,14 +103,14 @@ def get_profile_for_job(job_type: str) -> Optional[str]:
 
 
 def ensure_profile_for_job(job: Job) -> None:
-        """
-        Ensures that the correct profile is active before executing a job.
+    """
+    Ensures that the correct profile is active before executing a job.
 
-        - If JOB_PROFILE_MAP[job.type] is None → does nothing.
-        - If it has a profile name → invokes profile_switcher.py set <profile>.
-        - Idempotency (not changing if already active, not changing if there are running jobs)
-            is handled by profile_switcher itself.
-        """
+    - If JOB_PROFILE_MAP[job.type] is None → does nothing.
+    - If it has a profile name → invokes profile_switcher.py set <profile>.
+    - Idempotency (not changing if already active, not changing if there are running jobs)
+      is handled by profile_switcher itself.
+    """
     required_profile = JOB_PROFILE_MAP.get(job.type)
 
     if not required_profile:
@@ -132,17 +132,17 @@ def ensure_profile_for_job(job: Job) -> None:
         raise
 
 def process_job(session: Session, job: Job) -> None:
-     """
-     Processes a job from the queue.
+    """
+    Processes a job from the queue.
 
-     High-level flow:
-     1. Ensure correct profile according to job.type (profile_switcher).
-     2. Mark job as running.
-     3. Execute associated module (wifi_recon, bt_recon, hash_lookup, etc.)
-         capturing stdout/stderr.
-     4. Create a Run record with stdout, stderr, exit_code, started_at, finished_at.
-     5. Update job status (finished/error).
-     """
+    High-level flow:
+    1. Ensure correct profile according to job.type (profile_switcher).
+    2. Mark job as running.
+    3. Execute associated module (wifi_recon, bt_recon, hash_lookup, etc.)
+       capturing stdout/stderr.
+    4. Create a Run record with stdout, stderr, exit_code, started_at, finished_at.
+    5. Update job status (finished/error).
+    """
     # 1) Asegurar perfil correcto
     ensure_profile_for_job(job)
 
@@ -237,14 +237,14 @@ def process_job(session: Session, job: Job) -> None:
 
 
 class WorkerEngine:
-        """
-        Core worker loop.
+    """
+    Core worker loop.
 
-        At this stage the loop is still simple, but already:
-            - Reads jobs in 'queued' state from the DB.
-            - Calls process_job(session, job) for each job.
-            - Delegates profile switching to ensure_profile_for_job(job).
-        """
+    At this stage the loop is still simple, but already:
+        - Reads jobs in 'queued' state from the DB.
+        - Calls process_job(session, job) for each job.
+        - Delegates profile switching to ensure_profile_for_job(job).
+    """
 
     def __init__(self, poll_interval: int = 30) -> None:
         self.poll_interval = poll_interval

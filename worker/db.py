@@ -62,29 +62,29 @@ Base = declarative_base()
 
 
 class Job(Base):
-        """
-        jobs table:
-        - Represents an audit request / queued job that the worker must process.
+    """
+    jobs table:
+    - Represents an audit request / queued job that the worker must process.
 
-        Examples of type:
-            - wifi_recon
-            - wifi_active
-            - bt_recon
-            - bt_active
-            - hash_lookup
+    Examples of type:
+        - wifi_recon
+        - wifi_active
+        - bt_recon
+        - bt_active
+        - hash_lookup
 
-        For type == "hash_lookup", the params field usually looks like:
+    For type == "hash_lookup", the params field usually looks like:
 
-            {
-                "mode": "hash" | "wpa_capture" | "leakcheck",
-                "value": "...",         # hash or identifier, depending on mode
-                "hash_algo": "md5",     # optional, e.g. for OnlineHashCrack
-                "pcap_path": "...",     # for wpa_capture
-                "bssid": "...",         # optional
-                "ssid": "...",          # optional
-                "services": ["onlinehashcrack", "leakcheck", "wpa_sec"]
-            }
-        """
+        {
+            "mode": "hash" | "wpa_capture" | "leakcheck",
+            "value": "...",         # hash or identifier, depending on mode
+            "hash_algo": "md5",     # optional, e.g. for OnlineHashCrack
+            "pcap_path": "...",     # for wpa_capture
+            "bssid": "...",         # optional
+            "ssid": "...",          # optional
+            "services": ["onlinehashcrack", "leakcheck", "wpa_sec"]
+        }
+    """
 
     __tablename__ = "jobs"
 
@@ -170,31 +170,31 @@ class Run(Base):
 
 
 class HashResult(Base):
-        """
-        hash_results table:
-        - Responses from hash cracking services or external intelligence.
+    """
+    hash_results table:
+    - Responses from hash cracking services or external intelligence.
 
-        Typical field usage:
+    Typical field usage:
 
-            service:
-                - "onlinehashcrack"
-                - "leakcheck"
-                - "wpa_sec"
-                - other services that may be integrated later.
+        service:
+            - "onlinehashcrack"
+            - "leakcheck"
+            - "wpa_sec"
+            - other services that may be integrated later.
 
-            hash:
-                - mode = "hash":
-                        original hash (MD5, SHA1, etc.).
-                - mode = "leakcheck":
-                        identifier queried (email, username, truncated hash).
-                - mode = "wpa_capture":
-                        MD5 of the .pcap/.pcapng file prepared for WPA-sec.
+        hash:
+            - mode = "hash":
+                    original hash (MD5, SHA1, etc.).
+            - mode = "leakcheck":
+                    identifier queried (email, username, truncated hash).
+            - mode = "wpa_capture":
+                    MD5 of the .pcap/.pcapng file prepared for WPA-sec.
 
-            plaintext:
-                - could be the password (in controlled labs),
-                - a message like "3 breach(es) detected",
-                - or "capture_prepared" for prepared WPA captures.
-        """
+        plaintext:
+            - could be the password (in controlled labs),
+            - a message like "3 breach(es) detected",
+            - or "capture_prepared" for prepared WPA captures.
+    """
 
     __tablename__ = "hash_results"
 
