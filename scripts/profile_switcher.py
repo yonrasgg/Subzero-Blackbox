@@ -38,11 +38,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent  # ~/blackbox-dev
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-
 IS_ROOT = (os.geteuid() == 0)
 
 # Now this works because BASE_DIR is in sys.path
-from worker.db import SessionLocal, ProfileLog, Job
+from worker.db import SessionLocal, ProfileLog, Job  # noqa: E402
 
 
 
