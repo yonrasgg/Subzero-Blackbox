@@ -20,10 +20,10 @@ from fastapi import (
     status,
 )
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy.orm import Session
 import yaml
 
@@ -123,8 +123,7 @@ class JobOut(BaseModel):
     profile: Optional[str]
     status: str
 
-    class Config:
-        from_attributes = True  # for SQLAlchemy 2.x
+    model_config = ConfigDict(from_attributes=True)
 
 # --- Basic JSON API ---
 

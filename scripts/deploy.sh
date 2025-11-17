@@ -1,55 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
 
-#!/bin/bash
-# Deploy script: development → production
+SRC_DIR="$HOME/Subzero-Blackbox"
+DEST_DIR="/opt/blackbox"
 
+echo "[INFO] Sincronizando código desde $SRC_DIR a $DEST_DIR ..."
+sudo rsync -av \
+  --delete \
+  --exclude 'venv/' \
+  --exclude '.git/' \
+  --exclude '__pycache__/' \
+  --exclude 'data/*.db*' \
+  "$SRC_DIR/" "$DEST_DIR/"
 
-set -e
+echo "[INFO] Actualizando dependencias en venv de producción..."
+cd "$DEST_DIR"
+sudo ./venv/bin/pip install -r requirements.txt
 
+echo "[INFO] Reiniciando servicios systemd..."
+sudo systemctl restart blackbox-api.service
+sudo systemctl restart blackbox-worker.service
 
-DEV_DIR="/home/rayden/blackbox-dev"
-PROD_DIR="/opt/blackbox"
-
-echo "🚀 Starting deploy to production..."
-
-
-# Check that we are on the main branch
-cd "$DEV_DIR"
-BRANCH=$(git branch --show-current)
-if [ "$BRANCH" != "main" ]; then
-    echo "❌ Error: You must be on the 'main' branch to deploy"
-    echo "   Current branch: $BRANCH"
-    exit 1
-fi
-
-
-# Check that there are no uncommitted changes
-if ! git diff-index --quiet HEAD --; then
-    echo "❌ Error: There are uncommitted changes"
-    exit 1
-fi
-
-
-# Copy files to production (excluding .git and venv)
-echo "📦 Copying files..."
-rsync -av --delete \
-    --exclude='.git' \
-    --exclude='venv' \
-    --exclude='__pycache__' \
-    --exclude='*.pyc' \
-    --exclude='data/*.db' \
-    --exclude='data/logs/*' \
-    "$DEV_DIR/" "$PROD_DIR/"
-
-
-# Restart services if they are running
-if systemctl is-active --quiet blackbox-api; then
-    echo "🔄 Restarting API service..."
-    sudo systemctl restart blackbox-api
-fi
-
-if systemctl is-active --quiet blackbox-worker; then
-    echo "🔄 Restarting Worker service..."
-    sudo systemctl restart blackbox-worker
-fi
-
-echo "✅ Deploy completed successfully"
+echo "[OK] Despliegue completado."

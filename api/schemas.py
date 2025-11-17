@@ -46,12 +46,12 @@ class JobCreate(BaseModel):
 
 
 class JobOut(BaseModel):
-  """
-  Public representation of a Job.
+    """
+    Public representation of a Job.
 
-  Includes params to inspect exactly what was requested,
-  especially useful for jobs like hash_lookup.
-  """
+    Includes params to inspect exactly what was requested,
+    especially useful for jobs like hash_lookup.
+    """
     id: int
     type: str
     profile: Optional[str]
@@ -59,4 +59,4 @@ class JobOut(BaseModel):
     params: Optional[Dict[str, Any]] = None
 
     class Config:
-      from_attributes = True  # SQLAlchemy -> Pydantic
+        from_attributes = True  # SQLAlchemy -> Pydantic

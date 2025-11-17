@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          clean: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov ruff bandit httpx jinja2
+
+      - name: Lint (Ruff)
+        run: |
+          ruff check .
+
+      - name: Security scan (Bandit)
+        run: |
+          bandit -r . || true
+
+      - name: Debug info
+        run: |
+          pwd
+          ls -la
+          ls -la tests/
+
+      - name: Run tests
+        run: |
+          python scripts/init_db.py
+          pytest -v --maxfail=1 --disable-warnings

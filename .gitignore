@@ -27,3 +27,5 @@ config/secrets.yaml
 # Sistema
 .DS_Store
 *.swp
+
+Docs/*
