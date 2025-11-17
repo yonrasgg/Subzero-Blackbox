@@ -10,13 +10,12 @@
 <body class="has-background-dark">
   <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="/ui/dashboard">
+      <a class="navbar-item" href="/ui/home">
         <strong>Subzero / Blackbox</strong>
       </a>
     </div>
     <div class="navbar-menu is-active">
       <div class="navbar-start">
-        <a class="navbar-item" href="/ui/home">Home</a>
         <a class="navbar-item" href="/ui/dashboard">Dashboard</a>
         <a class="navbar-item" href="/ui/jobs">Jobs</a>
         <a class="navbar-item" href="/ui/config">Config</a>
@@ -35,5 +34,28 @@
       {% block content %}{% endblock %}
     </div>
   </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get all dropdown triggers
+      const dropdownTriggers = document.querySelectorAll('.dropdown-trigger button');
+
+      dropdownTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const dropdown = trigger.closest('.dropdown');
+          dropdown.classList.toggle('is-active');
+        });
+      });
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', () => {
+        const dropdowns = document.querySelectorAll('.dropdown.is-active');
+        dropdowns.forEach(dropdown => {
+          dropdown.classList.remove('is-active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>

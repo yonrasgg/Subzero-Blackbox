@@ -266,8 +266,6 @@ def ui_config(
         },
     )
 
-    )
-
 
 @app.get("/ui/logs", response_class=HTMLResponse, include_in_schema=False)
 def ui_logs(
@@ -293,10 +291,18 @@ def ui_save_config(
     ui_username: str = Form(...),
     ui_password: str = Form(...),
     google_api_key: str = Form(...),
+    online_hashcat_api_key: str = Form(...),
+    leakcheck_api_key: str = Form(...),
+    wiggle_api_key: str = Form(...),
 ) -> HTMLResponse:
     config = _load_yaml(CONFIG_PATH)
     config["ui"] = {"username": ui_username, "password": ui_password}
-    config["apis"] = {"google_api_key": google_api_key}
+    config["apis"] = {
+        "google_api_key": google_api_key,
+        "online_hashcat_api_key": online_hashcat_api_key,
+        "leakcheck_api_key": leakcheck_api_key,
+        "wiggle_api_key": wiggle_api_key,
+    }
     # Save to file
     import yaml
     with open(CONFIG_PATH, 'w') as f:
@@ -315,8 +321,6 @@ def ui_save_config(
             "config": config,
             "message": "Configuration saved successfully.",
         },
-    )
-
     )
 
 

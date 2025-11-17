@@ -33,7 +33,24 @@
         <input class="input" type="text" name="google_api_key" value="{{ config.google_api_key or '' }}">
       </div>
     </div>
-    <!-- Add more API fields here -->
+    <div class="field">
+      <label class="label">Online Hashcat API Key</label>
+      <div class="control">
+        <input class="input" type="text" name="online_hashcat_api_key" value="{{ config.online_hashcat_api_key or '' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">LeakCheck API Key</label>
+      <div class="control">
+        <input class="input" type="text" name="leakcheck_api_key" value="{{ config.leakcheck_api_key or '' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Wiggle API Key</label>
+      <div class="control">
+        <input class="input" type="text" name="wiggle_api_key" value="{{ config.wiggle_api_key or '' }}">
+      </div>
+    </div>
   </div>
 
   <div class="box">
