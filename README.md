@@ -18,7 +18,6 @@
 - [🚀 Quick Start](#-quick-start)
 - [📚 Documentation](#-documentation)
 - [🔧 API Reference](#-api-reference)
-- [🛠️ Development](#️-development)
 - [📋 TODOs & Roadmap](#-todos--roadmap)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
@@ -45,57 +44,265 @@ To democratize cybersecurity auditing by providing an affordable, powerful, and 
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Web UI        │    │   FastAPI       │    │   Worker        │
-│   (HTML/Jinja)  │◄──►│   Backend       │◄──►│   Engine        │
-│                 │    │                 │    │                 │
-│ - Dashboard     │    │ - REST API      │    │ - Job Queue     │
-│ - Configuration │    │ - WebSocket     │    │ - Profile Mgmt  │
-│ - Logs          │    │ - Auth          │    │ - Module Exec   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                    ┌─────────────────┐
-                    │   SQLite DB     │
-                    │                 │
-                    │ - Jobs          │
-                    │ - Audit Data    │
-                    │ - Vulnerabilities│
-                    │ - ML Training   │
-                    └─────────────────┘
+Subzero-Blackbox sigue una arquitectura modular de 4 capas basada en el patrón **Producer-Consumer** con separación clara de responsabilidades. El sistema está diseñado para entornos de recursos limitados (Raspberry Pi Zero 2W) con énfasis en eficiencia, seguridad y extensibilidad.
+
+### 📊 **Arquitectura General**
+
+```mermaid
+graph TB
+    subgraph "Presentation Layer"
+        UI[Web UI<br/>HTML5 + Jinja2]
+        API[FastAPI Backend<br/>REST + WebSocket]
+    end
+
+    subgraph "Application Layer"
+        Worker[Worker Engine<br/>Job Processor]
+        Modules[Audit Modules<br/>WiFi/BT/USB/Hash]
+    end
+
+    subgraph "Data Layer"
+        DB[(SQLite Database<br/>SQLAlchemy ORM)]
+        Config[Configuration Files<br/>YAML/JSON]
+    end
+
+    subgraph "External Services"
+        ExtAPI[External APIs<br/>Gemini, WiGLE, etc.]
+        System[System Services<br/>Network, USB, BT]
+    end
+
+    User[👤 User] --> UI
+    UI --> API
+    API --> Worker
+    Worker --> Modules
+    Modules --> DB
+    Modules --> ExtAPI
+    Modules --> System
+    API --> DB
+    Worker --> DB
+    UI --> Config
+    API --> Config
 ```
 
-### 🏛️ Core Components
+### 🔄 **Flujo de Datos**
 
-#### **1. Web Interface**
+```mermaid
+sequenceDiagram
+    participant U as 👤 User
+    participant W as Web UI
+    participant A as FastAPI
+    participant Q as Job Queue
+    participant E as Worker Engine
+    participant M as Audit Module
+    participant D as Database
+    participant X as External API
+
+    U->>W: Request Audit
+    W->>A: POST /jobs
+    A->>D: Create Job Record
+    A->>Q: Queue Job
+    Q->>E: Notify New Job
+    E->>M: Execute Module
+    M->>D: Store Audit Data
+    M->>X: Query External APIs
+    X-->>M: Return Intelligence
+    M->>D: Store Vulnerabilities
+    E->>D: Update Job Status
+    A->>D: Fetch Results
+    A-->>W: Return Data
+    W-->>U: Display Results
+```
+
+### 🧩 **Componentes Detallados**
+
+```mermaid
+graph TD
+    subgraph "Web Interface"
+        Templates[Jinja2 Templates<br/>Dashboard, Config, Logs]
+        Static[Static Assets<br/>Bulma CSS, JS]
+        Auth[HTTP Basic Auth<br/>Session Management]
+    end
+
+    subgraph "FastAPI Backend"
+        Routes[REST Endpoints<br/>/health, /jobs, /api/*]
+        Middleware[CORS, Auth, Logging]
+        Schemas[Pydantic Models<br/>JobCreate, JobOut]
+        Docs[OpenAPI/Swagger<br/>Auto-generated]
+    end
+
+    subgraph "Worker Engine"
+        Queue[Job Queue<br/>SQLAlchemy-based]
+        Executor[Module Executor<br/>Async Processing]
+        ProfileMgr[Profile Manager<br/>Tethering Switcher]
+        Logger[Comprehensive Logger<br/>Runs, Errors]
+    end
+
+    subgraph "Audit Modules"
+        WiFi[WiFi Recon<br/>iwlist/nmcli scanning]
+        BT[BT Recon<br/>bluez-tools discovery]
+        USB[USB HID<br/>pyusb enumeration]
+        Hash[Hash Ops<br/>Multi-API cracking]
+        Report[Report Generator<br/>Gemini AI integration]
+    end
+
+    subgraph "Database Schema"
+        Jobs[Jobs Table<br/>type, status, params]
+        Runs[Runs Table<br/>stdout, stderr, exit_code]
+        AuditData[AuditData Table<br/>JSON structured data]
+        Vulnerabilities[Vulnerabilities Table<br/>severity, description]
+        ProfileLogs[ProfileLogs Table<br/>old_profile, new_profile]
+    end
+
+    Templates --> Routes
+    Routes --> Middleware
+    Middleware --> Schemas
+    Schemas --> Docs
+    Queue --> Executor
+    Executor --> ProfileMgr
+    ProfileMgr --> Logger
+    WiFi --> Report
+    BT --> Report
+    USB --> Report
+    Hash --> Report
+    Jobs --> Runs
+    Runs --> AuditData
+    AuditData --> Vulnerabilities
+    Vulnerabilities --> ProfileLogs
+```
+
+### 🔗 **Relaciones Técnicas**
+
+```mermaid
+flowchart LR
+    subgraph "Data Flow"
+        direction LR
+        UI -->|"HTTP/JSON"| API
+        API -->|"SQL"| DB
+        Worker -->|"ORM"| DB
+        Modules -->|"Direct Query"| DB
+    end
+
+    subgraph "Control Flow"
+        direction LR
+        API -->|"Job Creation"| Worker
+        Worker -->|"Module Execution"| Modules
+        Modules -->|"System Calls"| OS
+        OS -->|"Data"| Modules
+    end
+
+    subgraph "External Interfaces"
+        direction LR
+        Modules -->|"REST/HTTP"| ExtAPIs
+        ExtAPIs -->|"JSON/XML"| Modules
+        Modules -->|"CLI"| Tools
+        Tools -->|"Output"| Modules
+    end
+
+    subgraph "Configuration"
+        direction LR
+        Config -->|"YAML Load"| API
+        Config -->|"Profile Switch"| Worker
+        Secrets -->|"API Keys"| Modules
+    end
+```
+
+### 🏛️ **Core Components**
+
+#### **1. Web Interface Layer**
 - **Framework**: HTML5 + Bulma CSS + Jinja2 Templates
-- **Pages**: Dashboard, Configuration, Audits, Logs, Reports
-- **Real-time**: Hardware monitoring, job status updates
+- **Responsabilidades**: 
+  - Renderizado de UI responsive
+  - Gestión de formularios de configuración
+  - Visualización de dashboards en tiempo real
+  - Navegación entre vistas de auditoría
+- **Endpoints**: `/ui/dashboard`, `/ui/config`, `/ui/logs`, `/ui/jobs/{id}`
 
-#### **2. API Backend**
-- **Framework**: FastAPI (ASGI)
-- **Authentication**: HTTP Basic Auth
-- **Endpoints**: RESTful API for all operations
-- **Documentation**: Auto-generated OpenAPI/Swagger
+#### **2. API Backend Layer**
+- **Framework**: FastAPI (ASGI) con SQLAlchemy ORM
+- **Autenticación**: HTTP Basic Auth con secrets.compare_digest()
+- **Middleware**: CORS para acceso cross-origin, logging estructurado
+- **Endpoints RESTful**:
+  - `GET /health` - Health checks
+  - `POST /jobs` - Creación de trabajos
+  - `GET /api/hardware` - Estadísticas de hardware
+  - `GET /api/cves` - Consultas CVE externas
+- **WebSocket**: Actualizaciones en tiempo real (futuro)
 
-#### **3. Worker Engine**
-- **Architecture**: Producer-Consumer pattern
-- **Job Types**: Wi-Fi recon, BT recon, USB HID audit, Hash cracking
-- **Profile Management**: Dynamic system configuration switching
-- **Error Handling**: Comprehensive logging and recovery
+#### **3. Worker Engine Layer**
+- **Patrón**: Producer-Consumer con cola SQL-based
+- **Gestión de Jobs**: Estados (queued → running → finished/error)
+- **Ejecución de Módulos**: Importación dinámica y ejecución aislada
+- **Manejo de Perfiles**: Cambio dinámico de configuración del sistema
+- **Logging**: Captura de stdout/stderr, códigos de salida, timestamps
 
-#### **4. Audit Modules**
-- **Wi-Fi**: Passive scanning, vulnerability analysis, CVE correlation
-- **Bluetooth**: Device enumeration, security assessment
-- **USB HID**: Device impersonation detection, firmware analysis
-- **Hash Operations**: Multi-service cracking integration
+#### **4. Audit Modules Layer**
+- **WiFi Recon**: 
+  - Escaneo pasivo con `iwlist`/`nmcli`
+  - Análisis de encriptación y vulnerabilidades
+  - Correlación con bases CVE (OpenCVE, NVD)
+  - Almacenamiento estructurado de datos de red
+- **BT Recon**: 
+  - Descubrimiento con `bluetoothctl`/`hcitool`
+  - Análisis de servicios SDP
+  - Evaluación básica de seguridad de emparejamiento
+- **USB HID**: 
+  - Enumeración con `pyusb`
+  - Análisis de dispositivos conectados
+  - Monitoreo de actividad USB
+- **Hash Operations**: 
+  - Integración multi-API (OnlineHashCrack, WPA-Sec)
+  - Gestión de claves API desde secrets.yaml
+  - Almacenamiento de resultados de cracking
+- **Report Generator**: 
+  - Integración Google Gemini AI
+  - Generación de reportes narrativos
+  - Correlación inteligente de hallazgos
 
-#### **5. Database Layer**
-- **Engine**: SQLite with SQLAlchemy ORM
-- **Tables**: Jobs, Runs, AuditData, Vulnerabilities, ProfileLogs
-- **ML Integration**: Structured data for AI training
+#### **5. Data Persistence Layer**
+- **Engine**: SQLite con WAL mode para concurrencia
+- **ORM**: SQLAlchemy con modelos tipados
+- **Tablas Principales**:
+  - `jobs`: Metadatos de trabajos de auditoría
+  - `runs`: Ejecuciones específicas de módulos
+  - `audit_data`: Datos recolectados (JSON flexible)
+  - `vulnerabilities`: Hallazgos de seguridad estructurados
+  - `profile_logs`: Historial de cambios de configuración
+- **Índices**: Optimizados para consultas por job_id, timestamps
+- **Migraciones**: Automáticas con SQLAlchemy
+
+### 🔐 **Security Architecture**
+
+```mermaid
+mindmap
+  root((Security))
+    Authentication
+      HTTP Basic Auth
+      Session Management
+      Credential Validation
+    Authorization
+      Role-based Access
+      API Key Management
+      Configuration Access
+    Data Protection
+      Secrets Encryption
+      API Key Isolation
+      Database Access Control
+    Network Security
+      CORS Policies
+      Input Validation
+      Rate Limiting
+    Audit Trail
+      Comprehensive Logging
+      Job Execution Tracking
+      Configuration Changes
+```
+
+### 📈 **Performance Considerations**
+
+- **Memoria Limitada**: Diseño para Raspberry Pi Zero 2W (512MB RAM)
+- **Procesamiento Asíncrono**: Jobs en background sin bloquear UI
+- **Base de Datos Ligera**: SQLite con consultas optimizadas
+- **APIs Externas**: Rate limiting y error handling robusto
+- **Monitoreo de Recursos**: CPU, memoria, batería en tiempo real
 
 ---
 
@@ -104,39 +311,37 @@ To democratize cybersecurity auditing by providing an affordable, powerful, and 
 ### 🔍 **Auditing Capabilities**
 
 #### **Wi-Fi Auditing**
-- ✅ Passive network scanning (iwlist/nmcli)
-- ✅ Vulnerability assessment (WEP, WPA, open networks)
-- ✅ Rogue AP detection
-- ✅ Manufacturer MAC analysis
-- ✅ Captive portal identification
-- ✅ CVE correlation via multiple APIs
+- ✅ Passive network scanning (iwlist/nmcli integration)
+- ✅ Vulnerability assessment (open networks, encryption analysis)
+- ✅ Manufacturer MAC analysis via integrated database
+- ✅ Captive portal detection
+- ✅ CVE correlation with external APIs (OpenCVE, NVD, CVE Search)
+- ✅ Structured data collection for reporting
 
 #### **Bluetooth Auditing**
 - ✅ Device discovery and enumeration
-- ✅ Pairing vulnerability analysis
-- ✅ Service discovery assessment
-- ✅ Bluejacking/BlueSnarfing detection
-- ✅ DoS attack simulation
+- ✅ Basic pairing and service analysis
+- ✅ Device information collection
+- ✅ Structured audit data storage
 
 #### **USB HID Auditing**
-- ✅ Keyboard emulation detection
-- ✅ Network adapter spoofing prevention
-- ✅ Malware delivery interception
-- ✅ Firmware analysis
-- ✅ Data exfiltration monitoring
+- ✅ Device identification and enumeration
+- ✅ Basic firmware and device analysis
+- ✅ USB device monitoring and logging
 
 ### 🤖 **AI & Machine Learning**
 
-#### **Current Implementation**
-- 🔄 AI Assistant with personality (Rayden/Subzero)
-- 🔄 API usage tracking for ML training
-- 🔄 Structured audit data collection
+#### **Implemented Features**
+- ✅ AI Assistant with personality (Rayden/Subzero characters)
+- ✅ API usage tracking for system intelligence
+- ✅ Structured audit data collection for future ML training
+- ✅ AI-powered report generation with Google Gemini
+- 🔄 Vulnerability correlation and analysis
 
-#### **Planned Features**
-- 📋 Intelligent vulnerability correlation
+#### **Future Enhancements**
 - 📋 Predictive threat analysis
-- 📋 Automated report generation
 - 📋 Behavioral pattern recognition
+- 📋 Automated security recommendations
 
 ### 📊 **Monitoring & Analytics**
 
@@ -481,88 +686,19 @@ subzero-blackbox/
 
 ---
 
-## 🛠️ Development
-
-### 🏃 **Running in Development**
-
-#### **API Server**
-```bash
-cd /home/pi/subzero-blackbox
-source venv/bin/activate
-uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-#### **Worker Engine**
-```bash
-source venv/bin/activate
-python worker/engine.py
-```
-
-#### **Database Management**
-```bash
-# Initialize/reset database
-python scripts/init_db.py
-
-# View database
-sqlite3 data/blackbox.db
-.schema
-```
-
-### 🧪 **Testing**
-
-#### **API Testing**
-```bash
-# Health check
-curl http://localhost:8000/health
-
-# Hardware stats
-curl http://localhost:8000/api/hardware
-
-# API documentation
-open http://localhost:8000/docs
-```
-
-#### **Module Testing**
-```bash
-# Test Wi-Fi scanning
-python -c "from modules.wifi_recon import scan_networks; print(scan_networks())"
-
-# Test BT scanning
-python -c "from modules.bt_recon import scan_devices; print(scan_devices())"
-```
-
-### 🔍 **Debugging**
-
-#### **Enable Debug Logging**
-```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
-```
-
-#### **Database Inspection**
-```bash
-# Connect to database
-sqlite3 data/blackbox.db
-
-# View recent jobs
-SELECT * FROM jobs ORDER BY created_at DESC LIMIT 5;
-
-# View vulnerabilities
-SELECT * FROM vulnerabilities ORDER BY created_at DESC LIMIT 10;
-```
-
----
-
 ## 📋 TODOs & Roadmap
 
-### 🚀 **Phase 1: Core Auditing (Current)**
-- ✅ Wi-Fi passive reconnaissance
-- ✅ Bluetooth device discovery
-- ✅ USB HID basic auditing
-- ✅ Web UI with real-time monitoring
-- ✅ Database integration
-- ✅ Profile management system
-- ✅ Basic vulnerability scanning
+### 🚀 **Phase 1: Core Auditing (Implemented)**
+- ✅ Wi-Fi passive reconnaissance with vulnerability scanning
+- ✅ Bluetooth device discovery and basic security assessment
+- ✅ USB HID auditing with device analysis
+- ✅ Web UI with real-time monitoring and dashboard
+- ✅ SQLite database with full ORM integration
+- ✅ Profile management system with tethering support
+- ✅ AI-powered report generation and assistant
+- ✅ External API integrations (Google Gemini, OnlineHashCrack, WiGLE, WPA-Sec)
+- ✅ Comprehensive logging and audit trails
+- ✅ Automated installation script for Raspberry Pi
 
 ### 🚀 **Phase 2: Advanced Features (Next)**
 - 🔄 **Active Wi-Fi Testing**
@@ -629,11 +765,11 @@ SELECT * FROM vulnerabilities ORDER BY created_at DESC LIMIT 10;
   - Type hints everywhere
 
 ### 🎯 **Immediate Next Steps**
-1. **Complete Active Wi-Fi Testing** - Implement deauth and evil twin capabilities
-2. **AI Model Training** - Start collecting data for ML model development
-3. **Report Generation** - Create automated report templates
-4. **API Key Management** - Improve secrets handling and rotation
-5. **Performance Monitoring** - Add detailed performance metrics
+1. **Active Wi-Fi Testing** - Implement deauthentication and evil twin capabilities
+2. **Advanced Bluetooth Exploitation** - BlueBorne scanning and pairing attacks
+3. **USB HID Deep Analysis** - Rubber Ducky detection and payload analysis
+4. **Performance Optimization** - Async processing and battery life improvements
+5. **Enterprise Reporting** - Compliance reports and executive summaries
 
 ---
 
