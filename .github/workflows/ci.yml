@@ -28,6 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest pytest-cov ruff bandit httpx jinja2
+          pip check
 
       - name: Lint (Ruff)
         run: |
@@ -42,6 +43,8 @@ jobs:
           pwd
           ls -la
           ls -la tests/
+          python --version
+          pip list | grep -E "(fastapi|sqlalchemy|pydantic|pytest|ruff)"
 
       - name: Run tests
         run: |
@@ -68,5 +71,12 @@ jobs:
       - name: Merge develop into main
         run: |
           git checkout main
-          git merge develop --no-ff
+          if git merge-base --is-ancestor develop main; then
+            echo "No new commits to merge from develop to main"
+            exit 0
+          fi
+          git merge develop --no-ff -m "feat: Deploy from develop branch
+
+          Automated deployment from develop to main branch.
+          $(git log develop --oneline -5 | sed 's/^/- /')"
           git push origin main
