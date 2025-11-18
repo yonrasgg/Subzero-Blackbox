@@ -1,0 +1,83 @@
+apis:
+  google_api_key: ''
+  onlinehashcrack_api_key: ''
+  wigle_api_name: ''
+  wigle_api_token: ''
+  wpasec_api_key: ''
+bt_audits:
+  captured_data_analysis:
+    device_info: true
+    pairing_info: true
+    service_discovery: true
+  enable_vulnerability_scan: true
+  scan_types:
+  - blue_snarfing
+  - bluejacking
+  - pairing_vulnerabilities
+  - software_firmware
+  - dos_attacks
+environment: dev
+hash_services:
+  leakcheck:
+    enabled: true
+    timeout: 10
+  onlinehashcrack:
+    api_key: onlinehashcrack_api_key
+    default_algo_mode: 0
+    enabled: true
+    max_hashes_per_job: 20
+    timeout: 20
+  wigle:
+    api_name: wigle_api_name
+    api_token: wigle_api_token
+    enabled: false
+    timeout: 15
+  wpa_sec:
+    api_key: wpasec_api_key
+    enabled: false
+    timeout: 30
+network:
+  bt_interface: hci0
+  usb_interface: usb0
+  wifi_interface_managed: wlan0
+  wifi_interface_monitor: wlan0mon
+paths:
+  base_dir: /home/rayden/blackbox-dev
+  captures_dir: /home/rayden/blackbox-dev/data/captures
+  data_dir: /home/rayden/blackbox-dev/data
+  logs_dir: /home/rayden/blackbox-dev/data/logs
+profiles:
+  active_profile: bluetooth_audit
+raspi_id: subzero
+ui:
+  password: change-this
+  username: admin
+usb_audits:
+  captured_data_analysis:
+    data_exfiltration: true
+    device_identification: true
+    firmware_analysis: true
+  enable_vulnerability_scan: true
+  scan_types:
+  - keyboard_emulation
+  - network_adapter_spoofing
+  - malware_delivery
+wifi_audits:
+  captured_data_analysis:
+    captive_portals: true
+    exposed_services: true
+    ip_recognition: true
+    manufacturer_mac: true
+  enable_vulnerability_scan: true
+  scan_types:
+  - outdated_protocols
+  - weak_passwords
+  - outdated_firmware
+  - incorrect_configurations
+  - open_networks
+  - mitm_attacks
+  - rogue_aps
+  - brute_force
+  - deauth_attacks
+worker:
+  poll_interval_seconds: 30

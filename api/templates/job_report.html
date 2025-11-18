@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Report for Job {{ job.id }}</h1>
+
+<div class="box">
+  <h2 class="title is-5">Job Information</h2>
+  <p><strong>Type:</strong> {{ job.type }}</p>
+  <p><strong>Status:</strong> {{ job.status }}</p>
+  <p><strong>Profile:</strong> {{ job.profile or "-" }}</p>
+  <p><strong>Created:</strong> {{ job.created_at }}</p>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">AI-Generated Report</h2>
+  {% if report %}
+    <pre style="white-space: pre-wrap; font-family: monospace;">{{ report }}</pre>
+  {% else %}
+    <p>No report available yet. Ensure the job has completed and data was collected.</p>
+  {% endif %}
+</div>
+
+{% if run %}
+<div class="box">
+  <h2 class="title is-5">Run Details</h2>
+  <p><strong>Started:</strong> {{ run.started_at }}</p>
+  <p><strong>Finished:</strong> {{ run.finished_at }}</p>
+  <p><strong>Exit Code:</strong> {{ run.exit_code }}</p>
+  {% if run.stdout %}
+    <h3>Stdout</h3>
+    <pre style="white-space: pre-wrap; font-family: monospace;">{{ run.stdout }}</pre>
+  {% endif %}
+  {% if run.stderr %}
+    <h3>Stderr</h3>
+    <pre style="white-space: pre-wrap; font-family: monospace;">{{ run.stderr }}</pre>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

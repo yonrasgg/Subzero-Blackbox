@@ -1,0 +1,66 @@
+profiles:
+  stealth_recon:
+    description: "Low-noise passive Wi-Fi / BT recon"
+    internet_via: wifi
+    disable_interfaces: []
+    enable_interfaces: []
+    modules_enabled:
+      - wifi_recon
+      - bt_recon
+
+  aggressive_recon:
+    description: "More frequent scans, active probing"
+    internet_via: wifi
+    disable_interfaces: []
+    enable_interfaces: []
+    modules_enabled:
+      - wifi_recon
+      - wifi_active
+      - bt_recon
+      - bt_active
+
+  bt_only:
+    description: "Only Bluetooth recon/ops, Wi-Fi disabled"
+    internet_via: bluetooth
+    disable_interfaces:
+      - wlan0
+    enable_interfaces:
+      - hci0
+    modules_enabled:
+      - bt_recon
+      - bt_active
+
+  wifi_audit:
+    description: "Wi-Fi auditing with wlan0 free for monitor mode"
+    internet_via: bluetooth
+    disable_interfaces:
+      - wlan0
+    enable_interfaces:
+      - wlan1
+    modules_enabled:
+      - wifi_recon
+      - wifi_active
+
+  bluetooth_audit:
+    description: "Bluetooth auditing while internet goes over Wi-Fi"
+    internet_via: wifi
+    disable_interfaces:
+      - hci0
+    enable_interfaces:
+      - hci0
+    modules_enabled:
+      - bt_recon
+      - bt_active
+
+  usb_audit:
+    description: "Auditing with internet via USB tethering, Wi-Fi and BT disabled for power savings"
+    internet_via: usb
+    disable_interfaces:
+      - wlan0
+      - hci0
+    enable_interfaces:
+      - usb0
+    modules_enabled:
+      - wifi_recon
+      - bt_recon
+      - usb_hid_audit

@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Audits Configuration</h1>
+<h2 class="subtitle has-text-grey-light">Configure profiles and vulnerabilities for each audit type</h2>
+
+<div class="tabs is-centered">
+  <ul>
+    <li><a href="/ui/dashboard">Dashboard</a></li>
+    <li class="is-active"><a href="/ui/audits_config">Audits Configuration</a></li>
+  </ul>
+</div>
+
+<div class="tabs is-centered">
+  <ul>
+    <li class="is-active" id="wifi-tab"><a onclick="showTab('wifi')">Wi-Fi Audits</a></li>
+    <li id="bt-tab"><a onclick="showTab('bt')">Bluetooth Audits</a></li>
+    <li id="usb-tab"><a onclick="showTab('usb')">USB HID Audits</a></li>
+  </ul>
+</div>
+
+<div id="wifi-content" class="tab-content">
+  <div class="box">
+    <h3 class="title is-4">Wi-Fi Audit Configuration</h3>
+    <form method="post" action="/ui/audits_config/save">
+      <div class="field">
+        <label class="label">Timeout (seconds)</label>
+        <div class="control">
+          <input class="input" type="number" name="wifi_timeout" value="{{ config.hash_services.wigle.timeout or 15 }}">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Max Networks per Scan</label>
+        <div class="control">
+          <input class="input" type="number" name="wifi_max_networks" value="50">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="checkbox">
+          <input type="checkbox" name="enable_vulnerability_scan" {% if config.wifi_audits.enable_vulnerability_scan %}checked{% endif %}>
+          Enable Vulnerability Scanning
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="label">Scan Types</label>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="outdated_protocols" {% if 'outdated_protocols' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Outdated Security Protocols
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="weak_passwords" {% if 'weak_passwords' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Weak or Default Passwords
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="outdated_firmware" {% if 'outdated_firmware' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Outdated Firmware
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="incorrect_configurations" {% if 'incorrect_configurations' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Incorrect Configurations
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="open_networks" {% if 'open_networks' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Open Wi-Fi Networks
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="mitm_attacks" {% if 'mitm_attacks' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Man-in-the-Middle (MITM) Attacks
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="rogue_aps" {% if 'rogue_aps' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Fake Wi-Fi Networks (Rogue APs)
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="brute_force" {% if 'brute_force' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Brute Force Attacks
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="scan_types" value="deauth_attacks" {% if 'deauth_attacks' in config.wifi_audits.scan_types %}checked{% endif %}>
+            Deauthentication Attacks
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Captured Data Analysis</label>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="captured_data_analysis" value="manufacturer_mac" {% if config.wifi_audits.captured_data_analysis.manufacturer_mac %}checked{% endif %}>
+            Manufacturer & MAC
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="captured_data_analysis" value="ip_recognition" {% if config.wifi_audits.captured_data_analysis.ip_recognition %}checked{% endif %}>
+            IP Recognition
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="captured_data_analysis" value="exposed_services" {% if config.wifi_audits.captured_data_analysis.exposed_services %}checked{% endif %}>
+            Exposed Services
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="captured_data_analysis" value="captive_portals" {% if config.wifi_audits.captured_data_analysis.captive_portals %}checked{% endif %}>
+            Captive Portals
+          </label>
+        </div>
+      </div>
+
+      <button class="button is-primary" type="submit">Save Wi-Fi Config</button>
+    </form>
+  </div>
+
+  <div class="box">
+    <h3 class="title is-4">Common Wi-Fi Vulnerabilities</h3>
+    <ul>
+      <li><strong>Outdated Security Protocols:</strong> Use of old protocols like WEP or even WPA/WPA2 without secure configuration is one of the most critical vulnerabilities, as flaws have been found that allow unauthorized access.</li>
+      <li><strong>Weak or Default Passwords:</strong> Using simple, predictable passwords or not changing the router's default password makes it easy for attackers to gain access.</li>
+      <li><strong>Outdated Firmware:</strong> Router software (firmware) may contain known vulnerabilities that haven't been fixed. Keeping it updated is essential to close these security gaps.</li>
+      <li><strong>Incorrect Configurations:</strong> Configuring the router with default security options or leaving unnecessary ports open can create easy access points for attackers.</li>
+      <li><strong>Open Wi-Fi Networks:</strong> Networks without passwords are vulnerable to data interception. Anyone can connect and, with the right tools, spy on other users' activity on the network.</li>
+      <li><strong>Man-in-the-Middle (MITM) Attacks:</strong> The attacker intercepts or manipulates communication between the user and the access point by posing as a legitimate access point.</li>
+      <li><strong>Fake Wi-Fi Networks (Rogue APs):</strong> Cybercriminals create fake access points with names similar to legitimate networks to trick users and steal their credentials.</li>
+      <li><strong>Brute Force and Deauthentication Attacks:</strong> Attackers try to crack passwords by testing combinations (brute force) or try to disconnect users from the network to steal the access key.</li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <h3 class="title is-4">Captured Data Analysis</h3>
+    <p>If we capture the manufacturer, MAC address, recognized IP, exposed services on the network, exposed captive portals, what are the vulnerabilities of these and how to extract data from those who have these captive portals exposed.</p>
+    <ul>
+      <li><strong>Manufacturer & MAC:</strong> Identify device type and potential known vulnerabilities (e.g., via CVE database).</li>
+      <li><strong>IP Recognition:</strong> Check for public IPs or known malicious IPs.</li>
+      <li><strong>Exposed Services:</strong> Scan for open ports (e.g., 80/443 for web, 22 for SSH) and vulnerabilities like unpatched services.</li>
+      <li><strong>Captive Portals:</strong> Vulnerabilities include weak authentication, XSS, data leakage. Extract data by intercepting login forms or exploiting misconfigurations.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="bt-content" class="tab-content" style="display: none;">
+  <div class="box">
+    <h3 class="title is-4">Bluetooth Audit Configuration</h3>
+    <form method="post" action="/ui/audits_config/save">
+      <div class="field">
+        <label class="label">Scan Timeout (seconds)</label>
+        <div class="control">
+          <input class="input" type="number" name="bt_timeout" value="30">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="checkbox">
+          <input type="checkbox" name="bt_enable_vulnerability_scan" {% if config.bt_audits.enable_vulnerability_scan %}checked{% endif %}>
+          Enable Vulnerability Scanning
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="label">Scan Types</label>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_scan_types" value="blue_snarfing" {% if 'blue_snarfing' in config.bt_audits.scan_types %}checked{% endif %}>
+            Blue Snarfing
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_scan_types" value="bluejacking" {% if 'bluejacking' in config.bt_audits.scan_types %}checked{% endif %}>
+            Bluejacking
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_scan_types" value="pairing_vulnerabilities" {% if 'pairing_vulnerabilities' in config.bt_audits.scan_types %}checked{% endif %}>
+            Pairing Vulnerabilities
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_scan_types" value="software_firmware" {% if 'software_firmware' in config.bt_audits.scan_types %}checked{% endif %}>
+            Software/Firmware Vulnerabilities
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_scan_types" value="dos_attacks" {% if 'dos_attacks' in config.bt_audits.scan_types %}checked{% endif %}>
+            DoS Attacks
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Captured Data Analysis</label>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_captured_data_analysis" value="device_info" {% if config.bt_audits.captured_data_analysis.device_info %}checked{% endif %}>
+            Device Info
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_captured_data_analysis" value="service_discovery" {% if config.bt_audits.captured_data_analysis.service_discovery %}checked{% endif %}>
+            Service Discovery
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="bt_captured_data_analysis" value="pairing_info" {% if config.bt_audits.captured_data_analysis.pairing_info %}checked{% endif %}>
+            Pairing Info
+          </label>
+        </div>
+      </div>
+
+      <button class="button is-primary" type="submit">Save BT Config</button>
+    </form>
+  </div>
+
+  <div class="box">
+    <h3 class="title is-4">Common Bluetooth Vulnerabilities</h3>
+    <ul>
+      <li><strong>Blue Snarfing:</strong> Allows unauthorized remote access to device data like contacts and messages, especially if visible.</li>
+      <li><strong>Bluejacking:</strong> Sending unsolicited messages; can be a gateway to more complex attacks.</li>
+      <li><strong>Pairing Vulnerabilities:</strong> Interception during pairing, weak default codes like "0000".</li>
+      <li><strong>Software/Firmware Vulnerabilities:</strong> Old Bluetooth versions lack security; unpatched devices are at risk.</li>
+      <li><strong>DoS Attacks:</strong> Malformed packets can crash devices.</li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <h3 class="title is-4">Captured Data Analysis</h3>
+    <p>Analysis of captured Bluetooth data for vulnerabilities.</p>
+    <ul>
+      <li><strong>Device Info:</strong> Identify device type and potential vulnerabilities.</li>
+      <li><strong>Service Discovery:</strong> Check exposed services for unauthorized access.</li>
+      <li><strong>Pairing Info:</strong> Analyze pairing data for weak keys or misconfigurations.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="usb-content" class="tab-content" style="display: none;">
+  <div class="box">
+    <h3 class="title is-4">USB HID Audit Configuration</h3>
+    <form method="post" action="/ui/audits_config/save">
+      <div class="field">
+        <label class="label">Injection Delay (ms)</label>
+        <div class="control">
+          <input class="input" type="number" name="usb_delay" value="100">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="checkbox">
+          <input type="checkbox" name="usb_enable_vulnerability_scan" {% if config.usb_audits.enable_vulnerability_scan %}checked{% endif %}>
+          Enable Vulnerability Scanning
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="label">Scan Types</label>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="usb_scan_types" value="keyboard_emulation" {% if 'keyboard_emulation' in config.usb_audits.scan_types %}checked{% endif %}>
+            Keyboard Emulation
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="usb_scan_types" value="network_adapter_spoofing" {% if 'network_adapter_spoofing' in config.usb_audits.scan_types %}checked{% endif %}>
+            Network Adapter Spoofing
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="usb_scan_types" value="malware_delivery" {% if 'malware_delivery' in config.usb_audits.scan_types %}checked{% endif %}>
+            Malware Delivery
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Captured Data Analysis</label>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="usb_captured_data_analysis" value="device_identification" {% if config.usb_audits.captured_data_analysis.device_identification %}checked{% endif %}>
+            Device Identification
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="usb_captured_data_analysis" value="firmware_analysis" {% if config.usb_audits.captured_data_analysis.firmware_analysis %}checked{% endif %}>
+            Firmware Analysis
+          </label>
+        </div>
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" name="usb_captured_data_analysis" value="data_exfiltration" {% if config.usb_audits.captured_data_analysis.data_exfiltration %}checked{% endif %}>
+            Data Exfiltration Detection
+          </label>
+        </div>
+      </div>
+
+      <button class="button is-primary" type="submit">Save USB Config</button>
+    </form>
+  </div>
+
+  <div class="box">
+    <h3 class="title is-4">Common USB HID Vulnerabilities</h3>
+    <p>Common USB HID attacks include malware infection through disguised devices, device impersonation (e.g., masquerading as a keyboard to inject malicious keystrokes), and man-in-the-middle attacks by spoofing as a network adapter. These attacks exploit the fact that HID devices are often trusted by default, allowing them to bypass traditional security measures that block removable storage devices.</p>
+    <ul>
+      <li><strong>Keyboard Emulation:</strong> An attacker's USB device can mimic a keyboard and instantly inject malicious commands, such as opening a command prompt or downloading malware, as if a user were typing them.</li>
+      <li><strong>Network Adapter Spoofing:</strong> The device can pretend to be a legitimate network interface. Once connected, it can reroute traffic to a malicious server, enabling man-in-the-middle attacks to steal credentials or other sensitive data.</li>
+      <li><strong>Malware Delivery:</strong> While not exclusively an HID attack, it's a common vector. A USB device can carry malware, and when plugged in, it can infect the host system. This can happen with or without an HID attack, but sophisticated attacks can use HID functionality to automatically execute malware.</li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <h3 class="title is-4">Captured Data Analysis</h3>
+    <p>Analysis of captured USB HID data for vulnerabilities and potential threats.</p>
+    <ul>
+      <li><strong>Device Identification:</strong> Identify device type, manufacturer, and potential known vulnerabilities (e.g., via CVE database).</li>
+      <li><strong>Firmware Analysis:</strong> Check for outdated or malicious firmware that could allow unauthorized access or data manipulation.</li>
+      <li><strong>Data Exfiltration Detection:</strong> Monitor for attempts to extract sensitive data through HID channels or disguised as legitimate input.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.tabs li').forEach(el => el.classList.remove('is-active'));
+    document.getElementById(tab + '-content').style.display = 'block';
+    document.getElementById(tab + '-tab').classList.add('is-active');
+  }
+</script>
+
+{% endblock %}

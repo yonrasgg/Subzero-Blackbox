@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Activity Logs</h1>
+<h2 class="subtitle has-text-grey-light">Comprehensive audit logs, vulnerabilities, and collected data</h2>
+
+<div class="tabs is-centered">
+  <ul>
+    <li class="is-active" id="jobs-tab"><a onclick="showTab('jobs')">Job Logs</a></li>
+    <li id="vulns-tab"><a onclick="showTab('vulns')">Vulnerabilities</a></li>
+    <li id="data-tab"><a onclick="showTab('data')">Audit Data</a></li>
+    <li id="profiles-tab"><a onclick="showTab('profiles')">Profile Changes</a></li>
+  </ul>
+</div>
+
+<div id="jobs-content" class="tab-content">
+  <h3 class="title is-4 has-text-white">Recent Jobs</h3>
+  <div class="table-container">
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Profile</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for job in jobs %}
+        <tr>
+          <td>{{ job.id }}</td>
+          <td>{{ job.type }}</td>
+          <td>{{ job.profile or 'N/A' }}</td>
+          <td>
+            <span class="tag {% if job.status == 'finished' %}is-success{% elif job.status == 'error' %}is-danger{% elif job.status == 'running' %}is-info{% else %}is-warning{% endif %}">
+              {{ job.status }}
+            </span>
+          </td>
+          <td>{{ job.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>
+            <a href="/ui/jobs/{{ job.id }}" class="button is-small is-info">Details</a>
+            {% if job.runs %}
+            <a href="/ui/jobs/{{ job.id }}/report" class="button is-small is-primary">Report</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="vulns-content" class="tab-content" style="display: none;">
+  <h3 class="title is-4 has-text-white">Found Vulnerabilities</h3>
+  <div class="table-container">
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Type</th>
+          <th>Severity</th>
+          <th>Description</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vuln in vulnerabilities %}
+        <tr>
+          <td>{{ vuln.job_id }}</td>
+          <td>{{ vuln.vuln_type }}</td>
+          <td>
+            <span class="tag {% if vuln.severity == 'critical' %}is-danger{% elif vuln.severity == 'high' %}is-warning{% elif vuln.severity == 'medium' %}is-info{% else %}is-light{% endif %}">
+              {{ vuln.severity }}
+            </span>
+          </td>
+          <td>{{ vuln.description }}</td>
+          <td>{{ vuln.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="data-content" class="tab-content" style="display: none;">
+  <h3 class="title is-4 has-text-white">Collected Audit Data</h3>
+  <div class="table-container">
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Data Type</th>
+          <th>Data Preview</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for data in audit_data %}
+        <tr>
+          <td>{{ data.job_id }}</td>
+          <td>{{ data.data_type }}</td>
+          <td>
+            <details>
+              <summary>View Data</summary>
+              <pre>{{ data.data | tojson(indent=2) }}</pre>
+            </details>
+          </td>
+          <td>{{ data.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="profiles-content" class="tab-content" style="display: none;">
+  <h3 class="title is-4 has-text-white">Profile Change Logs</h3>
+  <div class="table-container">
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr>
+          <th>Old Profile</th>
+          <th>New Profile</th>
+          <th>Reason</th>
+          <th>Triggered By</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in profile_logs %}
+        <tr>
+          <td>{{ log.old_profile or 'None' }}</td>
+          <td>{{ log.new_profile }}</td>
+          <td>{{ log.reason or 'N/A' }}</td>
+          <td>{{ log.triggered_by or 'Unknown' }}</td>
+          <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.tabs li').forEach(el => el.classList.remove('is-active'));
+    document.getElementById(tab + '-content').style.display = 'block';
+    document.getElementById(tab + '-tab').classList.add('is-active');
+  }
+</script>
+
+{% endblock %}

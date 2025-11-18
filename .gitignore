@@ -7,15 +7,18 @@ __pycache__/
 venv/
 env/
 
-# Base de datos y logs
+# Database and logs
 data/*.db
 data/logs/*.log
 data/captures/*
 
-# Configuración sensible
+# Sensitive configuration
 config/secrets.yaml
 *.key
 *.pem
+.env
+.env.*
+!.env.example
 
 # IDE
 .vscode/
@@ -24,3 +27,5 @@ config/secrets.yaml
 # Sistema
 .DS_Store
 *.swp
+
+Docs/*

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Job Detail: {{ job.id }}</h1>
+
+<div class="box">
+  <h2 class="title is-5">Job Information</h2>
+  <p><strong>ID:</strong> {{ job.id }}</p>
+  <p><strong>Type:</strong> {{ job.type }}</p>
+  <p><strong>Profile:</strong> {{ job.profile or "-" }}</p>
+  <p><strong>Status:</strong> {{ job.status }}</p>
+  <p><strong>Created:</strong> {{ job.created_at }}</p>
+  <p><strong>Updated:</strong> {{ job.updated_at }}</p>
+  <p><strong>Params:</strong> {{ job.params }}</p>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">Outputs</h2>
+  {% if run %}
+  <p><strong>Module:</strong> {{ run.module }}</p>
+  <p><strong>Exit Code:</strong> {{ run.exit_code }}</p>
+  <p><strong>Started:</strong> {{ run.started_at }}</p>
+  <p><strong>Finished:</strong> {{ run.finished_at }}</p>
+  <h3>Stdout</h3>
+  <pre>{{ run.stdout }}</pre>
+  <h3>Stderr</h3>
+  <pre>{{ run.stderr }}</pre>
+  {% else %}
+  <p>No run data available yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

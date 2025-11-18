@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Welcome to Subzero Blackbox</h1>
+
+<div class="box">
+  <h2 class="title is-5">AI Assistant</h2>
+  <div id="ai-assistant">
+    <div class="cube">
+      <div class="rayden" id="rayden"></div>
+    </div>
+    <p id="assistant-message">Loading...</p>
+  </div>
+</div>
+
+<div class="box">
+  <p class="subtitle">Cyber-security swissknife for Raspberry Pi Zero 2W - Wi-Fi/Bluetooth Auditing System</p>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">Site Map</h2>
+  <div class="content">
+    <ul>
+      <li><a href="/ui/dashboard">Dashboard</a> - System monitoring and hardware status</li>
+      <li><a href="/ui/jobs">Jobs</a> - Manage and monitor auditing jobs</li>
+      <li><a href="/ui/config">Config</a> - Configure system settings and profiles</li>
+      <li><a href="/ui/logs">Logs</a> - View system activity logs</li>
+      <li><a href="/ui/audits_config">Audits Configuration</a> - Configure audit profiles and vulnerabilities</li>
+    </ul>
+  </div>
+</div>
+
+<div class="box">
+  <h2 class="title is-5">Available Audits</h2>
+  <ul>
+    <li>Wi-Fi Recon: Wireless network scanning</li>
+    <li>Bluetooth Recon: BT device detection</li>
+    <li>Coming Soon: Web servers, etc.</li>
+  </ul>
+</div>
+
+<style>
+  .cube {
+    width: 120px;
+    height: 120px;
+    border: 3px solid #b0e0e6;
+    background: linear-gradient(135deg, rgba(173, 216, 230, 0.8), rgba(255, 255, 255, 0.6), rgba(173, 216, 230, 0.8));
+    position: relative;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(173, 216, 230, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+  }
+  .cube::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    width: 60%;
+    height: 60%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 50%;
+    transform: rotate(30deg);
+  }
+  .rayden {
+    width: 40px;
+    height: 80px;
+    background: linear-gradient(45deg, #ffff00, #ffd700, #ffffff, #ffff00);
+    clip-path: polygon(50% 0%, 20% 30%, 80% 30%, 50% 60%, 20% 90%, 80% 90%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700, 0 0 60px #ffffff;
+    animation: electric 0.8s infinite alternate;
+  }
+  @keyframes electric {
+    0% { 
+      transform: translate(-50%, -50%) scale(1) rotate(0deg); 
+      box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700; 
+      opacity: 1;
+    }
+    25% { 
+      transform: translate(-50%, -50%) scale(1.2) rotate(10deg); 
+      box-shadow: 0 0 30px #ffffff, 0 0 50px #ffff00; 
+      opacity: 0.9;
+    }
+    50% { 
+      transform: translate(-50%, -50%) scale(1.1) rotate(-5deg); 
+      box-shadow: 0 0 25px #ffd700, 0 0 45px #ffffff; 
+      opacity: 1;
+    }
+    75% { 
+      transform: translate(-50%, -50%) scale(1.3) rotate(15deg); 
+      box-shadow: 0 0 35px #ffff00, 0 0 55px #ffd700; 
+      opacity: 0.8;
+    }
+    100% { 
+      transform: translate(-50%, -50%) scale(1) rotate(0deg); 
+      box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700; 
+      opacity: 1;
+    }
+  }
+  #assistant-message {
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+  }
+</style>
+
+<script>
+  async function updateAssistant() {
+    try {
+      const response = await fetch('/api/ai_assistant');
+      const data = await response.json();
+      const rayden = document.getElementById('rayden');
+      const message = document.getElementById('assistant-message');
+
+      // Update size
+      const baseWidth = 40;
+      const baseHeight = 80;
+      const scale = data.rayden_size / 100;
+      rayden.style.width = (baseWidth * scale) + 'px';
+      rayden.style.height = (baseHeight * scale) + 'px';
+
+      // Update message
+      message.textContent = data.message;
+
+      // Absorbing effect if low activity
+      if (data.absorbing) {
+        rayden.style.opacity = '0.5';
+      } else {
+        rayden.style.opacity = '1';
+      }
+    } catch (error) {
+      console.error('Error updating assistant:', error);
+    }
+  }
+
+  // Update every 30 seconds
+  setInterval(updateAssistant, 30000);
+  updateAssistant();
+</script>
+{% endblock %}

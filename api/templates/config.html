@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Configuration</h1>
+
+{% if message %}
+<div class="notification is-success">
+  {{ message }}
+</div>
+{% endif %}
+
+<form method="post" action="/ui/config/save">
+  <div class="box">
+    <h2 class="title is-5">General Settings</h2>
+    <div class="field">
+      <label class="label">UI Username</label>
+      <div class="control">
+        <input class="input" type="text" name="ui_username" value="{{ config.ui_username or 'admin' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">UI Password</label>
+      <div class="control">
+        <input class="input" type="password" name="ui_password" value="{{ config.ui_password or 'change-this' }}">
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <h2 class="title is-5">APIs and Keys</h2>
+    <div class="field">
+      <label class="label">Google API Key (for AI Assistant)</label>
+      <div class="control">
+        <input class="input" type="text" name="google_api_key" value="{{ config.google_api_key or '' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">OnlineHashCrack API Key</label>
+      <div class="control">
+        <input class="input" type="text" name="onlinehashcrack_api_key" value="{{ config.onlinehashcrack_api_key or '' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">WPASEC API Key</label>
+      <div class="control">
+        <input class="input" type="text" name="wpasec_api_key" value="{{ config.wpasec_api_key or '' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Wigle API Name</label>
+      <div class="control">
+        <input class="input" type="text" name="wigle_api_name" value="{{ config.wigle_api_name or '' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Wigle API Token</label>
+      <div class="control">
+        <input class="input" type="text" name="wigle_api_token" value="{{ config.wigle_api_token or '' }}">
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <h2 class="title is-5">Active Profile</h2>
+    <p><strong>Active:</strong> {{ active_profile or "None" }}</p>
+    <p><strong>internet_via:</strong> {{ internet_via or "-" }}</p>
+    <p><strong>modules_enabled:</strong> {{ modules_enabled or [] }}</p>
+    <!-- Add profile selector here -->
+  </div>
+
+  <div class="field">
+    <div class="control">
+      <button class="button is-primary" type="submit">Save Configuration</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

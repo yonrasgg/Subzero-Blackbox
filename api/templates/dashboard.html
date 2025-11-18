@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title has-text-white">Blackbox Dashboard</h1>
+<h2 class="subtitle has-text-grey-light">Quick actions & status</h2>
+
+<div class="tabs is-centered">
+  <ul>
+    <li class="is-active"><a href="/ui/dashboard">Dashboard</a></li>
+    <li><a href="/ui/audits_config">Audits Configuration</a></li>
+  </ul>
+</div>
+
+<!-- Physical Device Observability -->
+<div class="section">
+  <h2 class="title is-4">Physical Device Observability</h2>
+  <div class="columns">
+    <div class="column is-3">
+      <h3 class="title is-5">CPU Usage (%)</h3>
+      <canvas id="cpuChart" width="300" height="150"></canvas>
+    </div>
+    <div class="column is-3">
+      <h3 class="title is-5">Memory Usage (%)</h3>
+      <canvas id="memoryChart" width="300" height="150"></canvas>
+    </div>
+    <div class="column is-3">
+      <h3 class="title is-5">Battery Level (%)</h3>
+      <canvas id="batteryChart" width="300" height="150"></canvas>
+    </div>
+    <div class="column is-3">
+      <h3 class="title is-5">API Usage (Calls)</h3>
+      <canvas id="apiChart" width="300" height="150"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="columns">
+  <div class="column is-one-third">
+    <div class="box">
+      <h3 class="title is-5">Quick audits</h3>
+
+      <form method="post" action="/ui/jobs/start/wifi">
+        <button class="button is-link is-fullwidth" type="submit">
+          Start Wi-Fi Audit
+        </button>
+      </form>
+      <br>
+      <form method="post" action="/ui/jobs/start/bt">
+        <button class="button is-info is-fullwidth" type="submit">
+          Start BT Audit
+        </button>
+      </form>
+      <br>
+      <form method="post" action="/ui/jobs/start/usb_hid">
+        <button class="button is-warning is-fullwidth" type="submit">
+          Start USB HID Audit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="box">
+      <h3 class="title is-5">Jobs summary</h3>
+      <div class="columns">
+        <div class="column">
+          <p><strong>Total:</strong> {{ stats.total_jobs }}</p>
+          <p><strong>Queued:</strong> {{ stats.queued }}</p>
+          <p><strong>Running:</strong> {{ stats.running }}</p>
+          <p><strong>Finished:</strong> {{ stats.finished }}</p>
+          <p><strong>Error:</strong> {{ stats.error }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3 class="title is-5">Last 10 jobs</h3>
+      <table class="table is-fullwidth is-striped is-hoverable is-narrow">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Profile</th>
+            <th>Status</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobs %}
+          <tr>
+            <td>{{ job.id }}</td>
+            <td>{{ job.type }}</td>
+            <td>{{ job.profile or "-" }}</td>
+            <td>{{ job.status }}</td>
+            <td>{{ job.created_at }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5">No jobs yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Initialize charts
+  const cpuCtx = document.getElementById('cpuChart').getContext('2d');
+  const memoryCtx = document.getElementById('memoryChart').getContext('2d');
+  const batteryCtx = document.getElementById('batteryChart').getContext('2d');
+  const apiCtx = document.getElementById('apiChart').getContext('2d');
+
+  const cpuChart = new Chart(cpuCtx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'CPU %',
+        data: [],
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100
+        }
+      }
+    }
+  });
+
+  const memoryChart = new Chart(memoryCtx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Memory %',
+        data: [],
+        borderColor: 'rgb(255, 99, 132)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100
+        }
+      }
+    }
+  });
+
+  const batteryChart = new Chart(batteryCtx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Battery %',
+        data: [],
+        borderColor: 'rgb(54, 162, 235)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100
+        }
+      }
+    }
+  });
+
+  const apiChart = new Chart(apiCtx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Total API Calls',
+        data: [],
+        borderColor: 'rgb(153, 102, 255)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Function to update data
+  async function updateCharts() {
+    try {
+      const response = await fetch('/api/hardware');
+      const data = await response.json();
+      const now = new Date().toLocaleTimeString();
+
+      // Update CPU
+      cpuChart.data.labels.push(now);
+      cpuChart.data.datasets[0].data.push(data.cpu_percent);
+      if (cpuChart.data.labels.length > 20) {
+        cpuChart.data.labels.shift();
+        cpuChart.data.datasets[0].data.shift();
+      }
+      cpuChart.update();
+
+      // Update Memory
+      memoryChart.data.labels.push(now);
+      memoryChart.data.datasets[0].data.push(data.memory_percent);
+      if (memoryChart.data.labels.length > 20) {
+        memoryChart.data.labels.shift();
+        memoryChart.data.datasets[0].data.shift();
+      }
+      memoryChart.update();
+
+      // Update Battery (if exists)
+      if (data.battery_percent !== null) {
+        batteryChart.data.labels.push(now);
+        batteryChart.data.datasets[0].data.push(data.battery_percent);
+        if (batteryChart.data.labels.length > 20) {
+          batteryChart.data.labels.shift();
+          batteryChart.data.datasets[0].data.shift();
+        }
+        batteryChart.update();
+      }
+
+      // Update APIs
+      const apiResponse = await fetch('/api/api_usage');
+      const apiData = await apiResponse.json();
+      apiChart.data.labels.push(now);
+      apiChart.data.datasets[0].data.push(apiData.api_calls);
+      if (apiChart.data.labels.length > 20) {
+        apiChart.data.labels.shift();
+        apiChart.data.datasets[0].data.shift();
+      }
+      apiChart.update();
+    } catch (error) {
+      console.error('Error updating charts:', error);
+    }
+  }
+
+  // Polling every 5 seconds
+  setInterval(updateCharts, 5000);
+  // Update immediately
+  updateCharts();
+</script>
+
+{% endblock %}
