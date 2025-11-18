@@ -3,12 +3,35 @@
 <h1 class="title has-text-white">Welcome to Subzero Blackbox</h1>
 
 <div class="box">
-  <h2 class="title is-5">AI Assistant</h2>
-  <div id="ai-assistant">
-    <div class="cube">
-      <div class="rayden" id="rayden"></div>
+  <h2 class="title is-5">AI Assistant Battle Arena</h2>
+  <div id="ai-assistant" class="cyberpunk-terminal">
+    <div class="terminal-header">
+      <span class="terminal-title">⚡ SUBZERO vs RAYDEN ⚡</span>
+      <span class="terminal-status" id="terminal-status">INITIALIZING...</span>
     </div>
-    <p id="assistant-message">Loading...</p>
+    <div class="arena">
+      <div class="character subzero" id="subzero">
+        <div class="character-icon">❄️</div>
+        <div class="character-name">SUBZERO</div>
+        <div class="character-status" id="subzero-status">READY</div>
+      </div>
+      <div class="vs-indicator">VS</div>
+      <div class="character rayden active" id="rayden">
+        <div class="character-icon">⚡</div>
+        <div class="character-name">RAYDEN</div>
+        <div class="character-status" id="rayden-status">ACTIVE</div>
+      </div>
+    </div>
+    <div class="dialogue-display">
+      <div class="dialogue-speaker" id="dialogue-speaker">RAYDEN</div>
+      <div class="dialogue-text" id="dialogue-text">Loading cyberpunk dialogue...</div>
+      <div class="dialogue-emotion" id="dialogue-emotion">neutral</div>
+    </div>
+    <div class="terminal-controls">
+      <button class="button is-small is-dark" id="refresh-dialogue">🔄 REFRESH</button>
+      <button class="button is-small is-info" id="get-conversation">💬 CONVERSATION</button>
+      <button class="button is-small is-warning" id="system-status">📊 STATUS</button>
+    </div>
   </div>
 </div>
 
@@ -39,105 +62,398 @@
 </div>
 
 <style>
-  .cube {
-    width: 120px;
-    height: 120px;
-    border: 3px solid #b0e0e6;
-    background: linear-gradient(135deg, rgba(173, 216, 230, 0.8), rgba(255, 255, 255, 0.6), rgba(173, 216, 230, 0.8));
+  .cyberpunk-terminal {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.1);
+    font-family: 'Courier New', monospace;
     position: relative;
-    margin: 0 auto;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(173, 216, 230, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.5);
     overflow: hidden;
   }
-  .cube::before {
+
+  .cyberpunk-terminal::before {
     content: '';
     position: absolute;
-    top: 10%;
-    left: 20%;
-    width: 60%;
-    height: 60%;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), transparent);
-    border-radius: 50%;
-    transform: rotate(30deg);
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffff, transparent);
+    animation: scanline 2s linear infinite;
   }
-  .rayden {
-    width: 40px;
-    height: 80px;
-    background: linear-gradient(45deg, #ffff00, #ffd700, #ffffff, #ffff00);
-    clip-path: polygon(50% 0%, 20% 30%, 80% 30%, 50% 60%, 20% 90%, 80% 90%);
+
+  @keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #00ffff;
+  }
+
+  .terminal-title {
+    color: #00ffff;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ffff;
+    font-size: 1.2em;
+  }
+
+  .terminal-status {
+    color: #ff00ff;
+    font-size: 0.9em;
+    text-shadow: 0 0 5px #ff00ff;
+  }
+
+  .arena {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .character {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    min-width: 120px;
+  }
+
+  .character.subzero {
+    background: linear-gradient(135deg, #e0f7ff 0%, #b0e0e6 50%, #87ceeb 100%);
+    border: 2px solid #4682b4;
+    box-shadow: 0 0 15px rgba(70, 130, 180, 0.5);
+  }
+
+  .character.rayden {
+    background: linear-gradient(135deg, #fffacd 0%, #ffd700 50%, #ffff00 100%);
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+
+  .character.active {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+  }
+
+  .character-icon {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 5px currentColor);
+  }
+
+  .character-name {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    color: #000;
+  }
+
+  .character-status {
+    font-size: 0.8em;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .vs-indicator {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ff00ff;
+    margin: 0 20px;
+    text-shadow: 0 0 10px #ff00ff;
+    animation: pulse 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { opacity: 1; }
+    to { opacity: 0.5; }
+  }
+
+  .dialogue-display {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px 0;
+    min-height: 80px;
+    position: relative;
+  }
+
+  .dialogue-display::before {
+    content: '>';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700, 0 0 60px #ffffff;
-    animation: electric 0.8s infinite alternate;
+    left: 10px;
+    top: 15px;
+    color: #00ff00;
+    font-weight: bold;
   }
-  @keyframes electric {
-    0% { 
-      transform: translate(-50%, -50%) scale(1) rotate(0deg); 
-      box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700; 
-      opacity: 1;
-    }
-    25% { 
-      transform: translate(-50%, -50%) scale(1.2) rotate(10deg); 
-      box-shadow: 0 0 30px #ffffff, 0 0 50px #ffff00; 
-      opacity: 0.9;
-    }
-    50% { 
-      transform: translate(-50%, -50%) scale(1.1) rotate(-5deg); 
-      box-shadow: 0 0 25px #ffd700, 0 0 45px #ffffff; 
-      opacity: 1;
-    }
-    75% { 
-      transform: translate(-50%, -50%) scale(1.3) rotate(15deg); 
-      box-shadow: 0 0 35px #ffff00, 0 0 55px #ffd700; 
-      opacity: 0.8;
-    }
-    100% { 
-      transform: translate(-50%, -50%) scale(1) rotate(0deg); 
-      box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700; 
-      opacity: 1;
-    }
+
+  .dialogue-speaker {
+    color: #00ffff;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px #00ffff;
   }
-  #assistant-message {
-    text-align: center;
-    margin-top: 10px;
-    font-style: italic;
+
+  .dialogue-text {
+    color: #ffffff;
+    font-size: 1em;
+    line-height: 1.4;
+    text-shadow: 0 0 3px #ffffff;
+  }
+
+  .dialogue-emotion {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #ff00ff;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    text-shadow: 0 0 3px #ff00ff;
+  }
+
+  .terminal-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .terminal-controls .button {
+    border: 1px solid currentColor;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8em;
+    transition: all 0.2s ease;
+  }
+
+  .terminal-controls .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Glitch effect for special occasions */
+  .glitch {
+    animation: glitch 0.3s ease-in-out;
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
   }
 </style>
 
 <script>
-  async function updateAssistant() {
-    try {
-      const response = await fetch('/api/ai_assistant');
-      const data = await response.json();
-      const rayden = document.getElementById('rayden');
-      const message = document.getElementById('assistant-message');
+  class CyberpunkTerminal {
+    constructor() {
+      this.currentSpeaker = 'rayden';
+      this.context = 'idle';
+      this.conversationMode = false;
+      this.conversationIndex = 0;
+      this.currentConversation = [];
 
-      // Update size
-      const baseWidth = 40;
-      const baseHeight = 80;
-      const scale = data.rayden_size / 100;
-      rayden.style.width = (baseWidth * scale) + 'px';
-      rayden.style.height = (baseHeight * scale) + 'px';
+      this.init();
+      this.bindEvents();
+    }
 
-      // Update message
-      message.textContent = data.message;
+    init() {
+      this.updateTerminalStatus('INITIALIZING...');
+      this.loadDialogue('boot');
+      this.updateCharacterStatus();
+    }
 
-      // Absorbing effect if low activity
-      if (data.absorbing) {
-        rayden.style.opacity = '0.5';
-      } else {
-        rayden.style.opacity = '1';
+    bindEvents() {
+      document.getElementById('refresh-dialogue').addEventListener('click', () => {
+        this.loadDialogue(this.context);
+        this.addGlitchEffect();
+      });
+
+      document.getElementById('get-conversation').addEventListener('click', () => {
+        this.startConversation();
+      });
+
+      document.getElementById('system-status').addEventListener('click', () => {
+        this.showSystemStatus();
+      });
+    }
+
+    async loadDialogue(context = null, speaker = null) {
+      try {
+        const params = new URLSearchParams();
+        if (context) params.append('context', context);
+        if (speaker) params.append('speaker', speaker);
+
+        const response = await fetch(`/api/ai/dialogue?${params}`);
+        const data = await response.json();
+
+        if (data.dialogue) {
+          this.displayDialogue(data.dialogue);
+          this.context = context || data.dialogue.context;
+        }
+      } catch (error) {
+        console.error('Error loading dialogue:', error);
+        this.displayDialogue({
+          speaker: 'system',
+          emotion: 'error',
+          text: 'Error loading dialogue system...'
+        });
       }
-    } catch (error) {
-      console.error('Error updating assistant:', error);
+    }
+
+    async startConversation() {
+      try {
+        this.conversationMode = true;
+        this.conversationIndex = 0;
+
+        const response = await fetch('/api/ai/conversation?context=system&length=4');
+        const data = await response.json();
+
+        if (data.conversation && data.conversation.length > 0) {
+          this.currentConversation = data.conversation;
+          this.displayConversationStep();
+          this.updateTerminalStatus('CONVERSATION MODE');
+        }
+      } catch (error) {
+        console.error('Error starting conversation:', error);
+      }
+    }
+
+    displayConversationStep() {
+      if (this.conversationIndex < this.currentConversation.length) {
+        const dialogue = this.currentConversation[this.conversationIndex];
+        this.displayDialogue(dialogue);
+        this.conversationIndex++;
+
+        // Auto-advance conversation after 3 seconds
+        setTimeout(() => {
+          this.displayConversationStep();
+        }, 3000);
+      } else {
+        this.conversationMode = false;
+        this.updateTerminalStatus('STANDBY');
+      }
+    }
+
+    displayDialogue(dialogue) {
+      const speakerElement = document.getElementById('dialogue-speaker');
+      const textElement = document.getElementById('dialogue-text');
+      const emotionElement = document.getElementById('dialogue-emotion');
+
+      speakerElement.textContent = dialogue.speaker.toUpperCase();
+      textElement.textContent = dialogue.text;
+      emotionElement.textContent = dialogue.emotion;
+
+      // Update active character
+      this.setActiveCharacter(dialogue.speaker);
+
+      // Update terminal status based on speaker
+      if (dialogue.speaker === 'subzero') {
+        this.updateTerminalStatus('SUBZERO ACTIVE');
+      } else if (dialogue.speaker === 'rayden') {
+        this.updateTerminalStatus('RAYDEN ACTIVE');
+      }
+    }
+
+    setActiveCharacter(speaker) {
+      const subzero = document.getElementById('subzero');
+      const rayden = document.getElementById('rayden');
+
+      subzero.classList.remove('active');
+      rayden.classList.remove('active');
+
+      if (speaker === 'subzero') {
+        subzero.classList.add('active');
+      } else if (speaker === 'rayden') {
+        rayden.classList.add('active');
+      }
+
+      this.currentSpeaker = speaker;
+    }
+
+    updateTerminalStatus(status) {
+      document.getElementById('terminal-status').textContent = status;
+    }
+
+    updateCharacterStatus() {
+      // Update character statuses based on system state
+      fetch('/api/ai_assistant')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('rayden-status').textContent =
+            data.absorbing ? 'ABSORBING' : 'READY';
+          document.getElementById('subzero-status').textContent = 'READY';
+        })
+        .catch(error => console.error('Error updating character status:', error));
+    }
+
+    async showSystemStatus() {
+      try {
+        const response = await fetch('/api/ai/stats');
+        const data = await response.json();
+
+        const statusDialogue = {
+          speaker: 'system',
+          emotion: 'debug',
+          text: `AI Status: Embeddings ${data.pipeline_status.embeddings_available ? 'ONLINE' : 'OFFLINE'}, ` +
+                `Classification ${data.pipeline_status.classification_available ? 'ONLINE' : 'OFFLINE'}, ` +
+                `Dialogues ${data.pipeline_status.dialogue_available ? 'READY' : 'ERROR'}`
+        };
+
+        this.displayDialogue(statusDialogue);
+        this.updateTerminalStatus('SYSTEM STATUS');
+      } catch (error) {
+        console.error('Error getting system status:', error);
+      }
+    }
+
+    addGlitchEffect() {
+      const terminal = document.querySelector('.cyberpunk-terminal');
+      terminal.classList.add('glitch');
+      setTimeout(() => {
+        terminal.classList.remove('glitch');
+      }, 300);
+    }
+
+    // Context-aware dialogue updates based on system events
+    updateContextFromSystem() {
+      // Check for recent jobs or system activity
+      fetch('/api/hardware')
+        .then(response => response.json())
+        .then(data => {
+          if (data.cpu_percent > 80) {
+            this.context = 'system';
+            this.loadDialogue('system');
+          }
+        })
+        .catch(error => console.error('Error checking system context:', error));
     }
   }
 
-  // Update every 30 seconds
-  setInterval(updateAssistant, 30000);
-  updateAssistant();
+  // Initialize the cyberpunk terminal
+  const terminal = new CyberpunkTerminal();
+
+  // Auto-update context every 30 seconds
+  setInterval(() => {
+    terminal.updateContextFromSystem();
+    terminal.updateCharacterStatus();
+  }, 30000);
+
+  // Initial context update
+  setTimeout(() => {
+    terminal.updateContextFromSystem();
+  }, 2000);
 </script>
 {% endblock %}

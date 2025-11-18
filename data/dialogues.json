@@ -1,0 +1,184 @@
+{
+  "dialogues": [
+    {
+      "speaker": "subzero",
+      "emotion": "neutral",
+      "context": "boot",
+      "text": "Initializing systems... Preparing modules for audits as cold as ice."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "sarcastic",
+      "context": "boot",
+      "text": "Slow again? Come on, even the kernel doesn't take this long to load."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "aggressive",
+      "context": "wifi_audit",
+      "text": "Target detected. I will freeze every packet until I get the handshake."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "calm",
+      "context": "wifi_audit",
+      "text": "Easy, ice gladiator... let me analyze the channels like a pro."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "debug",
+      "context": "system",
+      "text": "CPU stable. RAM low. Your scripts survive... for now."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "warning",
+      "context": "system",
+      "text": "Warning: process overloaded. Rayden, release the PCIe bus."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "aggressive",
+      "context": "bt_audit",
+      "text": "Bluetooth open. Scanning started. This wireless spectrum is mine."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "sarcastic",
+      "context": "bt_audit",
+      "text": "Don't get excited, spark plug. I can freeze BLE signals too."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "calm",
+      "context": "hashing",
+      "text": "Hash received. Proceeding to dismantle it with surgical precision."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "neutral",
+      "context": "hashing",
+      "text": "Lightning ready. Hashcat prepared. This will be quick."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "sarcastic",
+      "context": "scan",
+      "text": "What a surprise... Rayden left ports unchecked again."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "aggressive",
+      "context": "scan",
+      "text": "At least I don't freeze the system when I see port 22 exposed."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "neutral",
+      "context": "idle",
+      "text": "On standby. If you need precision, you know who to send first."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "neutral",
+      "context": "idle",
+      "text": "I can keep watch without consuming your precious resources."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "warning",
+      "context": "error",
+      "text": "Error detected. It wasn't me... this time."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "sarcastic",
+      "context": "error",
+      "text": "Me neither. Probably the human's fault."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "aggressive",
+      "context": "escalation",
+      "text": "Rayden, your interference is out of parameters. I will freeze your processes."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "aggressive",
+      "context": "escalation",
+      "text": "Try it. My electric shocks would melt your cache in seconds."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "calm",
+      "context": "success",
+      "text": "Audit complete. Not bad, partner. Though I could've done it faster."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "calm",
+      "context": "success",
+      "text": "Clean work. Let's continue before the network heats up again."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "neutral",
+      "context": "notification",
+      "text": "New job in the queue. Proceeding to assign it emotionlessly... as it should be."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "sarcastic",
+      "context": "notification",
+      "text": "Job detected. Do you want it or should I make it pretty?"
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "calm",
+      "context": "wifi_audit",
+      "text": "Deauthentications ready. Starting to cool down the AP."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "neutral",
+      "context": "wifi_audit",
+      "text": "Packets injected. If the handshake doesn't fall now, it never will."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "debug",
+      "context": "system",
+      "text": "Analyzing dependencies... Your hash module fails more than your humor, Rayden."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "sarcastic",
+      "context": "system",
+      "text": "Relax, glacier. I know you can't handle the pressure."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "warning",
+      "context": "scan",
+      "text": "Unusual movement in the environment... traffic increase. Watch your lightning."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "neutral",
+      "context": "scan",
+      "text": "Relax, dry ice. It's just normal ARP. Not an attack... yet."
+    },
+    {
+      "speaker": "subzero",
+      "emotion": "aggressive",
+      "context": "bt_audit",
+      "text": "I've already identified vulnerable devices. Proceeding to freeze the spectrum."
+    },
+    {
+      "speaker": "rayden",
+      "emotion": "neutral",
+      "context": "bt_audit",
+      "text": "BLE analysis finished. Several targets with low security levels."
+    }
+  ]
+}

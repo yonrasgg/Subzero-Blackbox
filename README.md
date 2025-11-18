@@ -47,6 +47,24 @@ To democratize cybersecurity auditing by providing an affordable, powerful, and 
 
 Subzero-Blackbox follows a modular 4-layer architecture based on the **Producer-Consumer** pattern with clear separation of responsibilities. The system is designed for resource-constrained environments (lowspec computing cards or boards) with emphasis on efficiency, security, and extensibility.
 
+### 🧠 **AI Indexing & Intelligence Layer (Offline-First)**
+- **MiniLM-L6 (offline)** → embeddings and search across Jobs/Runs/AuditData/Vulnerabilities
+- **ALBERT-tiny (offline)** → classification (vuln_type, attack_family, domain, severity)
+- **Google Gen AI (online)** → generation, explanations, storytelling for UI/reports/animations
+- **Hybrid Operation**: Works offline, enhanced when internet available
+
+#### **AI Database Extensions**
+- **AIEmbedding Table**: Vector storage for semantic search (MiniLM-L6)
+- **AILabel Table**: Classification results (ALBERT-tiny)
+- **Automatic Enrichment**: Every completed audit gets AI-indexed
+- **Context-Aware Queries**: AI assistant with full audit history awareness
+
+#### **AI Pipeline Integration**
+- **Offline Processing**: All AI operations work without internet
+- **Online Enhancement**: Google Gemini adds advanced capabilities when available
+- **Graceful Degradation**: System functions fully offline
+- **Real-time Indexing**: New audit data automatically processed and indexed
+
 
 ### 📊 **General Architecture**
 
@@ -272,7 +290,9 @@ flowchart LR
   - `audit_data`: Collected data (flexible JSON)
   - `vulnerabilities`: Structured security findings
   - `profile_logs`: Configuration change history
-- **Indexes**: Optimized for queries by job_id, timestamps
+  - `ai_embeddings`: Vector embeddings for semantic search (MiniLM-L6)
+  - `ai_labels`: AI-generated classifications (ALBERT-tiny)
+- **Indexes**: Optimized for queries by job_id, timestamps, embeddings, and labels
 - **Migrations**: Automatic with SQLAlchemy
 
 
@@ -336,19 +356,49 @@ mindmap
 - ✅ Basic firmware and device analysis
 - ✅ USB device monitoring and logging
 
-### 🤖 **AI & Machine Learning**
+#### **AI & Machine Learning**
 
-#### **Implemented Features**
-- ✅ AI Assistant with personality (Rayden/Subzero characters)
-- ✅ API usage tracking for system intelligence
-- ✅ Structured audit data collection for future ML training
-- ✅ AI-powered report generation with Google Gemini
-- 🔄 Vulnerability correlation and analysis
+#### **Offline AI (Always Available)**
+- ✅ **MiniLM-L6**: Embeddings + semantic search across audit database
+- ✅ **ALBERT-tiny**: Classification of vulnerabilities/attacks/domains/severity
+- ✅ **Local RAG**: Context-aware responses using indexed audit data
+- ✅ **Zero Internet Dependency**: Full AI capabilities work offline
 
-#### **Future Enhancements**
-- 📋 Predictive threat analysis
-- 📋 Behavioral pattern recognition
-- 📋 Automated security recommendations
+#### **Online AI Enhancement (When Internet Available)**
+- ✅ **Google Gemini**: Advanced report generation, storytelling, and chat enhancement
+- ✅ **Hybrid Intelligence**: Offline context + online enhancement
+- ✅ **Fallback Graceful**: Degrades gracefully when online services unavailable
+
+#### **Character Dialogue System**
+- ❄️ **Subzero**: Cold, precise AI assistant (methodical, warning-focused)
+- ⚡ **Rayden**: Electric, energetic AI assistant (dynamic, sarcastic)
+- 🎭 **Contextual Dialogues**: 30+ dialogues for different system states (English)
+- 🎭 **Cyberpunk Style**: Terminal-arcade interface with AI personality clashes
+- 🎭 **Dynamic Conversations**: Alternating character responses based on context
+
+#### **AI Pipeline Features**
+- 🔄 **Automatic Enrichment**: Every completed audit gets AI-indexed
+- 🔄 **Semantic Search**: Find similar vulnerabilities across all audits
+- 🔄 **Intelligent Classification**: Auto-categorize findings by type and severity
+- 🔄 **Context-Aware Chat**: AI assistant with full audit history awareness
+- 🔄 **Character Dialogue System**: Subzero vs Rayden cyberpunk-style interactions
+
+### 🎨 **User Interface**
+
+#### **Cyberpunk Terminal Design**
+- 🎮 **Battle Arena**: Subzero vs Rayden character showdown
+- 🎨 **Neon Aesthetics**: Cyan/magenta color scheme with glow effects
+- ⚡ **Animated Elements**: Scanning lines, electric pulses, glitch effects
+- 🎯 **Terminal Interface**: Courier font, retro-tech styling
+- 🎭 **Character Switching**: Dynamic active character highlighting
+- 💬 **Dialogue Display**: Real-time conversation with emotion indicators
+
+#### **Interactive Features**
+- 🔄 **Live Dialogue**: Context-aware AI conversations
+- 🎮 **Control Buttons**: Refresh dialogue, start conversations, system status
+- 📊 **Mini Terminal**: Dashboard widget for quick AI interactions
+- 🚀 **Job Integration**: Dialogue triggers when starting audits
+- 📱 **Responsive Design**: Works on desktop and mobile devices
 
 ### 📊 **Monitoring & Analytics**
 
@@ -642,6 +692,15 @@ subzero-blackbox/
 - `GET /api/cves` - Query CVE databases
 - `POST /api/parse_embedded` - Parse embedded vulnerabilities
 
+#### **AI APIs (Offline-First)**
+- `GET /api/ai/stats` - AI system statistics and status
+- `POST /api/ai/search` - Semantic search across audit database
+- `POST /api/ai/chat` - AI-powered chat with audit context
+- `POST /api/ai/classify` - Classify text using offline AI classifiers
+- `GET /api/ai/dialogue` - Get contextual dialogue from Subzero/Rayden
+- `GET /api/ai/conversation` - Generate conversation sequences
+- `GET /api/ai/dialogue/stats` - Dialogue system statistics
+
 #### **Web Interface**
 - `GET /ui/home` - Home page
 - `GET /ui/dashboard` - Main dashboard
@@ -703,6 +762,7 @@ subzero-blackbox/
 - ✅ SQLite database with full ORM integration
 - ✅ Profile management system with tethering support
 - ✅ AI-powered report generation and assistant
+- ✅ **AI Layer Integration**: MiniLM-L6 embeddings, ALBERT-tiny classification, hybrid offline/online intelligence
 - ✅ External API integrations (Google Gemini, OnlineHashCrack, WiGLE, WPA-Sec)
 - ✅ Comprehensive logging and audit trails
 - ✅ Automated installation script for Raspberry Pi
@@ -725,10 +785,12 @@ subzero-blackbox/
   - Custom payload development
 
 - 🔄 **AI/ML Integration**
-  - Vulnerability pattern recognition
-  - Automated report generation
-  - Predictive threat analysis
-  - Behavioral anomaly detection
+  - ✅ Vulnerability pattern recognition (ALBERT-tiny classification)
+  - ✅ Automated report generation (Google Gemini integration)
+  - ✅ Semantic search across audit data (MiniLM-L6 embeddings)
+  - ✅ Character dialogue system (Subzero vs Rayden cyberpunk interactions)
+  - 🔄 Predictive threat analysis
+  - 🔄 Behavioral anomaly detection
 
 ### 🚀 **Phase 3: Enterprise Features (Future)**
 - 📋 **Distributed Auditing**
