@@ -20,6 +20,10 @@ config/secrets.yaml
 .env.*
 !.env.example
 
+# Runtime state files
+api_usage.json
+api_usage_counter.json
+
 # IDE
 .vscode/
 .idea/
