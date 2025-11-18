@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Subzero-Blackbox Installation Script
-# This script installs Subzero-Blackbox on a Raspberry Pi Zero 2W
+# This script installs Subzero-Blackbox on a lowspec computing card or board
 # Author: Geovanny Alpizar S. (yonrasgg)
 
 # Colors for output

@@ -1,6 +1,6 @@
 # 🔐 Subzero-Blackbox
 
-**Cyber-security Swiss Army Knife for Raspberry Pi Zero 2W**
+**Cyber-security Swiss Army Knife for lowspec computing cards or boards**
 
 *Wi-Fi/Bluetooth/USB HID Auditing System with AI-Powered Analysis*
 
@@ -27,10 +27,10 @@
 
 ## 🎯 Overview
 
-**Subzero-Blackbox** is a comprehensive cybersecurity auditing platform designed specifically for the Raspberry Pi Zero 2W. It combines passive and active reconnaissance capabilities with AI-powered analysis to provide security professionals and researchers with a powerful, portable auditing toolkit.
+**Subzero-Blackbox** is a comprehensive cybersecurity auditing platform designed specifically for lowspec computing cards or boards. It combines passive and active reconnaissance capabilities with AI-powered analysis to provide security professionals and researchers with a powerful, portable auditing toolkit.
 
 ### 🎯 Mission
-To democratize cybersecurity auditing by providing an affordable, powerful, and intelligent auditing platform that can be deployed anywhere with just a Raspberry Pi Zero 2W.
+To democratize cybersecurity auditing by providing an affordable, powerful, and intelligent auditing platform that can be deployed anywhere with just a lowspec computing card or board.
 
 ### 🔑 Key Capabilities
 - **Wi-Fi Auditing**: Passive network scanning, vulnerability assessment, rogue AP detection
@@ -45,7 +45,7 @@ To democratize cybersecurity auditing by providing an affordable, powerful, and 
 ## 🏗️ Architecture
 
 
-Subzero-Blackbox follows a modular 4-layer architecture based on the **Producer-Consumer** pattern with clear separation of responsibilities. The system is designed for resource-constrained environments (Raspberry Pi Zero 2W) with emphasis on efficiency, security, and extensibility.
+Subzero-Blackbox follows a modular 4-layer architecture based on the **Producer-Consumer** pattern with clear separation of responsibilities. The system is designed for resource-constrained environments (lowspec computing cards or boards) with emphasis on efficiency, security, and extensibility.
 
 
 ### 📊 **General Architecture**
@@ -305,7 +305,7 @@ mindmap
 
 ### 📈 **Performance Considerations**
 
-- **Limited Memory**: Designed for Raspberry Pi Zero 2W (512MB RAM)
+- **Limited Memory**: Designed for lowspec computing cards or boards (512MB RAM)
 - **Asynchronous Processing**: Background jobs without blocking UI
 - **Lightweight Database**: SQLite with optimized queries
 - **External APIs**: Robust rate limiting and error handling
@@ -385,7 +385,7 @@ mindmap
 ## 🚀 Quick Start
 
 ### 📦 **Prerequisites**
-- Raspberry Pi Zero 2W (or compatible)
+- lowspec computing card or board (or compatible)
 - MicroSD card (32GB+ recommended)
 - USB Wi-Fi adapter (optional, for extended range)
 - Bluetooth adapter (optional, for BT auditing)
@@ -854,4 +854,4 @@ Special thanks to the cybersecurity community for their invaluable contributions
 
 ---
 
-*Built with ❤️ for the cybersecurity community on Raspberry Pi Zero 2W*
+*Built with ❤️ for the cybersecurity community on lowspec computing cards or boards*
