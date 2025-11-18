@@ -2,7 +2,8 @@
 set -euo pipefail
 
 # Subzero-Blackbox Installation Script
-# This script installs Subzero-Blackbox on a lowspec computing card or board
+# Cyber-security Swiss Army Knife for lowspec computing cards or boards
+# Features: Wi-Fi/Bluetooth/USB Auditing + AI-Powered Analysis + Cyberpunk UI
 # Author: Geovanny Alpizar S. (yonrasgg)
 
 # Colors for output
@@ -10,6 +11,8 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Configuration
@@ -18,16 +21,20 @@ VENV_DIR="$PROD_DIR/venv"
 DATA_DIR="$PROD_DIR/data"
 CONFIG_DIR="$PROD_DIR/config"
 SCRIPTS_DIR="$PROD_DIR/scripts"
+EXAMPLES_DIR="$PROD_DIR/examples"
 
 # Get current user
 CURRENT_USER=$(whoami)
 
 # Functions
 print_header() {
-    echo -e "${BLUE}================================================${NC}"
-    echo -e "${BLUE}  Subzero-Blackbox Installation Script${NC}"
-    echo -e "${BLUE}  Author: Geovanny Alpizar S. (yonrasgg)${NC}"
-    echo -e "${BLUE}================================================${NC}"
+    echo -e "${CYAN}================================================${NC}"
+    echo -e "${CYAN}  🔐 Subzero-Blackbox Installation Script${NC}"
+    echo -e "${CYAN}  🎯 Cyber-security Swiss Army Knife${NC}"
+    echo -e "${CYAN}  ⚡ Wi-Fi/BT/USB Auditing + AI Analysis${NC}"
+    echo -e "${CYAN}  🎮 Cyberpunk UI with AI Character Battles${NC}"
+    echo -e "${CYAN}  Author: Geovanny Alpizar S. (yonrasgg)${NC}"
+    echo -e "${CYAN}================================================${NC}"
     echo
 }
 
@@ -105,6 +112,7 @@ create_directories() {
     mkdir -p "$DATA_DIR"
     mkdir -p "$CONFIG_DIR"
     mkdir -p "$SCRIPTS_DIR"
+    mkdir -p "$EXAMPLES_DIR"
 
     print_success "Directories created"
 }
@@ -132,6 +140,33 @@ install_python_dependencies() {
     pip install -r requirements.txt
 
     print_success "Python dependencies installed"
+}
+
+download_ai_models() {
+    print_step "Downloading AI models (this may take a few minutes)..."
+
+    # Activate virtual environment
+    source "$VENV_DIR/bin/activate"
+
+    # Change to production directory
+    cd "$PROD_DIR"
+
+    # Download AI models by importing them
+    echo "Downloading MiniLM-L6 model..."
+    python3 -c "
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+print('✅ MiniLM-L6 model downloaded')
+" 2>/dev/null || print_warning "MiniLM-L6 download failed - will download on first use"
+
+    echo "Downloading ALBERT-tiny model..."
+    python3 -c "
+from transformers import pipeline
+classifier = pipeline('text-classification', model='albert-base-v2')
+print('✅ ALBERT-tiny model downloaded')
+" 2>/dev/null || print_warning "ALBERT-tiny download failed - will download on first use"
+
+    print_success "AI models download completed"
 }
 
 copy_project_files() {
@@ -242,8 +277,8 @@ EOF
 create_config_files() {
     print_step "Creating configuration files..."
 
-    # Create secrets.yaml template
-    cat > "$CONFIG_DIR/secrets.yaml" << EOF
+    # Create secrets.yaml template with new structure
+    cat > "$CONFIG_DIR/secrets.yaml" << 'EOF'
 # Subzero-Blackbox API Keys Configuration
 # Please fill in your API keys below
 
@@ -308,16 +343,37 @@ verify_installation() {
         return 1
     fi
 
+    # Test dialogue system
+    if curl -s http://127.0.0.1:8010/api/ai/dialogue/stats > /dev/null; then
+        print_success "AI dialogue system operational"
+    else
+        print_warning "AI dialogue system not responding (may be loading models)"
+    fi
+
+    # Check if AI models are available
+    if [ -d "$HOME/.cache/huggingface" ] || [ -d "$PROD_DIR/.cache" ]; then
+        print_success "AI models cache directory found"
+    else
+        print_warning "AI models not cached yet (will download on first use)"
+    fi
+
     print_success "Installation verification completed"
 }
 
 show_post_installation_info() {
     echo
-    echo -e "${BLUE}================================================${NC}"
-    echo -e "${GREEN}  Installation Complete!${NC}"
-    echo -e "${BLUE}================================================${NC}"
+    echo -e "${CYAN}================================================${NC}"
+    echo -e "${GREEN}  🎉 Installation Complete!${NC}"
+    echo -e "${CYAN}================================================${NC}"
     echo
-    echo -e "${YELLOW}IMPORTANT: Configure your API keys${NC}"
+    echo -e "${MAGENTA}🎮 NEW FEATURES INSTALLED:${NC}"
+    echo -e "${CYAN}  • Cyberpunk Terminal UI with neon effects${NC}"
+    echo -e "${CYAN}  • AI Character Dialogue System (English)${NC}"
+    echo -e "${CYAN}  • Subzero ❄️ vs Rayden ⚡ personality battles${NC}"
+    echo -e "${CYAN}  • 30 contextual dialogues for different scenarios${NC}"
+    echo -e "${CYAN}  • Offline AI models (MiniLM-L6, ALBERT-tiny)${NC}"
+    echo
+    echo -e "${YELLOW}🔑 IMPORTANT: Configure your API keys${NC}"
     echo "Edit the following file with your API keys:"
     echo "  sudo nano $CONFIG_DIR/secrets.yaml"
     echo
@@ -327,17 +383,23 @@ show_post_installation_info() {
     echo "• WiGLE API: https://wigle.net/"
     echo "• WPA Security API: https://wpa-sec.stanev.org/"
     echo
-    echo -e "${YELLOW}Access your Blackbox:${NC}"
+    echo -e "${YELLOW}🌐 Access your Blackbox:${NC}"
     echo "• Web UI: http://$(hostname -I | awk '{print $1}'):8010/ui/home"
     echo "• API Docs: http://$(hostname -I | awk '{print $1}'):8010/docs"
+    echo "• Dialogue Demo: http://$(hostname -I | awk '{print $1}'):8010/api/ai/dialogue?context=boot"
     echo
-    echo -e "${YELLOW}Service Management:${NC}"
+    echo -e "${YELLOW}🎭 Try the AI Characters:${NC}"
+    echo "• Subzero (❄️): Precise, methodical AI assistant"
+    echo "• Rayden (⚡): Dynamic, sarcastic AI assistant"
+    echo "• Watch them 'battle' during security audits!"
+    echo
+    echo -e "${YELLOW}⚙️ Service Management:${NC}"
     echo "• Check status: sudo systemctl status blackbox-api blackbox-worker"
     echo "• View logs: sudo journalctl -u blackbox-api -f"
     echo "• Restart: sudo systemctl restart blackbox-api blackbox-worker"
     echo
-    echo -e "${GREEN}Enjoy your Subzero-Blackbox!${NC}"
-    echo -e "${BLUE}================================================${NC}"
+    echo -e "${GREEN}🚀 Enjoy your Cyberpunk Subzero-Blackbox!${NC}"
+    echo -e "${CYAN}================================================${NC}"
 }
 
 main() {
@@ -348,13 +410,15 @@ main() {
 
     echo "This script will install Subzero-Blackbox on your Raspberry Pi."
     echo "It will:"
-    echo "• Install system dependencies"
+    echo "• Install system dependencies (Python, Bluetooth, WiFi tools)"
     echo "• Create production environment at $PROD_DIR"
-    echo "• Set up Python virtual environment"
-    echo "• Install Python dependencies"
-    echo "• Initialize database"
-    echo "• Create systemd services"
-    echo "• Start the services"
+    echo "• Set up Python virtual environment with AI models"
+    echo "• Download AI models (MiniLM-L6, ALBERT-tiny) for offline operation"
+    echo "• Install Python dependencies (FastAPI, PyTorch, transformers)"
+    echo "• Initialize database with 30 English dialogues"
+    echo "• Create systemd services for auto-start"
+    echo "• Set up cyberpunk UI with character battle arena"
+    echo "• Start the services automatically"
     echo
     read -p "Continue with installation? (y/N): " -n 1 -r
     echo
@@ -367,6 +431,7 @@ main() {
     create_directories
     setup_virtual_environment
     install_python_dependencies
+    download_ai_models
     copy_project_files
     initialize_database
     create_systemd_services
