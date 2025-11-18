@@ -44,9 +44,11 @@ To democratize cybersecurity auditing by providing an affordable, powerful, and 
 
 ## 🏗️ Architecture
 
-Subzero-Blackbox sigue una arquitectura modular de 4 capas basada en el patrón **Producer-Consumer** con separación clara de responsabilidades. El sistema está diseñado para entornos de recursos limitados (Raspberry Pi Zero 2W) con énfasis en eficiencia, seguridad y extensibilidad.
 
-### 📊 **Arquitectura General**
+Subzero-Blackbox follows a modular 4-layer architecture based on the **Producer-Consumer** pattern with clear separation of responsibilities. The system is designed for resource-constrained environments (Raspberry Pi Zero 2W) with emphasis on efficiency, security, and extensibility.
+
+
+### 📊 **General Architecture**
 
 ```mermaid
 graph TB
@@ -83,7 +85,8 @@ graph TB
     API --> Config
 ```
 
-### 🔄 **Flujo de Datos**
+
+### 🔄 **Data Flow**
 
 ```mermaid
 sequenceDiagram
@@ -112,7 +115,8 @@ sequenceDiagram
     W-->>U: Display Results
 ```
 
-### 🧩 **Componentes Detallados**
+
+### 🧩 **Detailed Components**
 
 ```mermaid
 graph TD
@@ -169,7 +173,8 @@ graph TD
     Vulnerabilities --> ProfileLogs
 ```
 
-### 🔗 **Relaciones Técnicas**
+
+### 🔗 **Technical Relationships**
 
 ```mermaid
 flowchart LR
@@ -205,69 +210,71 @@ flowchart LR
     end
 ```
 
+
 ### 🏛️ **Core Components**
 
 #### **1. Web Interface Layer**
 - **Framework**: HTML5 + Bulma CSS + Jinja2 Templates
-- **Responsabilidades**: 
-  - Renderizado de UI responsive
-  - Gestión de formularios de configuración
-  - Visualización de dashboards en tiempo real
-  - Navegación entre vistas de auditoría
+- **Responsibilities**: 
+  - Responsive UI rendering
+  - Configuration form management
+  - Real-time dashboard visualization
+  - Navigation between audit views
 - **Endpoints**: `/ui/dashboard`, `/ui/config`, `/ui/logs`, `/ui/jobs/{id}`
 
 #### **2. API Backend Layer**
-- **Framework**: FastAPI (ASGI) con SQLAlchemy ORM
-- **Autenticación**: HTTP Basic Auth con secrets.compare_digest()
-- **Middleware**: CORS para acceso cross-origin, logging estructurado
-- **Endpoints RESTful**:
+- **Framework**: FastAPI (ASGI) with SQLAlchemy ORM
+- **Authentication**: HTTP Basic Auth with secrets.compare_digest()
+- **Middleware**: CORS for cross-origin access, structured logging
+- **RESTful Endpoints**:
   - `GET /health` - Health checks
-  - `POST /jobs` - Creación de trabajos
-  - `GET /api/hardware` - Estadísticas de hardware
-  - `GET /api/cves` - Consultas CVE externas
-- **WebSocket**: Actualizaciones en tiempo real (futuro)
+  - `POST /jobs` - Job creation
+  - `GET /api/hardware` - Hardware statistics
+  - `GET /api/cves` - External CVE queries
+- **WebSocket**: Real-time updates (future)
 
 #### **3. Worker Engine Layer**
-- **Patrón**: Producer-Consumer con cola SQL-based
-- **Gestión de Jobs**: Estados (queued → running → finished/error)
-- **Ejecución de Módulos**: Importación dinámica y ejecución aislada
-- **Manejo de Perfiles**: Cambio dinámico de configuración del sistema
-- **Logging**: Captura de stdout/stderr, códigos de salida, timestamps
+- **Pattern**: Producer-Consumer with SQL-based queue
+- **Job Management**: States (queued → running → finished/error)
+- **Module Execution**: Dynamic import and isolated execution
+- **Profile Management**: Dynamic system configuration switching
+- **Logging**: Captures stdout/stderr, exit codes, timestamps
 
 #### **4. Audit Modules Layer**
 - **WiFi Recon**: 
-  - Escaneo pasivo con `iwlist`/`nmcli`
-  - Análisis de encriptación y vulnerabilidades
-  - Correlación con bases CVE (OpenCVE, NVD)
-  - Almacenamiento estructurado de datos de red
+  - Passive scanning with `iwlist`/`nmcli`
+  - Encryption and vulnerability analysis
+  - Correlation with CVE databases (OpenCVE, NVD)
+  - Structured storage of network data
 - **BT Recon**: 
-  - Descubrimiento con `bluetoothctl`/`hcitool`
-  - Análisis de servicios SDP
-  - Evaluación básica de seguridad de emparejamiento
+  - Discovery with `bluetoothctl`/`hcitool`
+  - SDP service analysis
+  - Basic pairing security evaluation
 - **USB HID**: 
-  - Enumeración con `pyusb`
-  - Análisis de dispositivos conectados
-  - Monitoreo de actividad USB
+  - Enumeration with `pyusb`
+  - Connected device analysis
+  - USB activity monitoring
 - **Hash Operations**: 
-  - Integración multi-API (OnlineHashCrack, WPA-Sec)
-  - Gestión de claves API desde secrets.yaml
-  - Almacenamiento de resultados de cracking
+  - Multi-API integration (OnlineHashCrack, WPA-Sec)
+  - API key management from secrets.yaml
+  - Storage of cracking results
 - **Report Generator**: 
-  - Integración Google Gemini AI
-  - Generación de reportes narrativos
-  - Correlación inteligente de hallazgos
+  - Google Gemini AI integration
+  - Narrative report generation
+  - Intelligent correlation of findings
 
 #### **5. Data Persistence Layer**
-- **Engine**: SQLite con WAL mode para concurrencia
-- **ORM**: SQLAlchemy con modelos tipados
-- **Tablas Principales**:
-  - `jobs`: Metadatos de trabajos de auditoría
-  - `runs`: Ejecuciones específicas de módulos
-  - `audit_data`: Datos recolectados (JSON flexible)
-  - `vulnerabilities`: Hallazgos de seguridad estructurados
-  - `profile_logs`: Historial de cambios de configuración
-- **Índices**: Optimizados para consultas por job_id, timestamps
-- **Migraciones**: Automáticas con SQLAlchemy
+- **Engine**: SQLite with WAL mode for concurrency
+- **ORM**: SQLAlchemy with typed models
+- **Main Tables**:
+  - `jobs`: Audit job metadata
+  - `runs`: Specific module executions
+  - `audit_data`: Collected data (flexible JSON)
+  - `vulnerabilities`: Structured security findings
+  - `profile_logs`: Configuration change history
+- **Indexes**: Optimized for queries by job_id, timestamps
+- **Migrations**: Automatic with SQLAlchemy
+
 
 ### 🔐 **Security Architecture**
 
@@ -298,11 +305,11 @@ mindmap
 
 ### 📈 **Performance Considerations**
 
-- **Memoria Limitada**: Diseño para Raspberry Pi Zero 2W (512MB RAM)
-- **Procesamiento Asíncrono**: Jobs en background sin bloquear UI
-- **Base de Datos Ligera**: SQLite con consultas optimizadas
-- **APIs Externas**: Rate limiting y error handling robusto
-- **Monitoreo de Recursos**: CPU, memoria, batería en tiempo real
+- **Limited Memory**: Designed for Raspberry Pi Zero 2W (512MB RAM)
+- **Asynchronous Processing**: Background jobs without blocking UI
+- **Lightweight Database**: SQLite with optimized queries
+- **External APIs**: Robust rate limiting and error handling
+- **Resource Monitoring**: Real-time CPU, memory, battery
 
 ---
 
@@ -812,28 +819,6 @@ When reporting bugs, please include:
 - Expected vs actual behavior
 - Relevant log output
 - System configuration
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2025 Geovanny Alpizar S.
-
-Permission is granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-```
 
 ---
 
