@@ -31,8 +31,8 @@ import psutil
 import json
 
 
-from ..worker.db import SessionLocal, Job, Run  # Usa los modelos del Step 2
-from ..worker.db import Vulnerability, AuditData, ProfileLog
+from worker.db import SessionLocal, Job, Run  # Usa los modelos del Step 2
+from worker.db import Vulnerability, AuditData, ProfileLog
 from modules import report_generator
 from modules.cve_lookup import CVELookup
 
