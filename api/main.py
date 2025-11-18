@@ -29,6 +29,7 @@ from sqlalchemy.orm import Session
 import yaml
 import psutil
 import json
+import logging
 
 
 from worker.db import SessionLocal, Job, Run  # Usa los modelos del Step 2
@@ -36,10 +37,23 @@ from worker.db import Vulnerability, AuditData, ProfileLog
 from modules import report_generator
 from modules.cve_lookup import CVELookup
 
+logger = logging.getLogger(__name__)
+
 
 # --- Paths and templates ---
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load security environment variables for AI libraries
+import os
+security_env_path = BASE_DIR / "config" / "security.env"
+if security_env_path.exists():
+    from dotenv import load_dotenv
+    load_dotenv(security_env_path)
+    logger.info("Security environment variables loaded from config/security.env")
+else:
+    logger.warning("Security environment file not found at config/security.env")
+
 TEMPLATES_DIR = BASE_DIR / "api" / "templates"
 CONFIG_PATH = BASE_DIR / "config" / "config.yaml"
 PROFILES_PATH = BASE_DIR / "config" / "profiles.yaml"
