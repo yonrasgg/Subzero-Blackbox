@@ -10,6 +10,14 @@
   </ul>
 </div>
 
+<!-- AI Dialogue Widget -->
+<div class="notification is-dark cyberpunk-mini-terminal" id="dashboard-dialogue">
+  <div class="mini-terminal-header">
+    <span class="mini-terminal-icon">⚡</span>
+    <span class="mini-terminal-text" id="dashboard-dialogue-text">Initializing AI dialogue...</span>
+  </div>
+</div>
+
 <!-- Physical Device Observability -->
 <div class="section">
   <h2 class="title is-4">Physical Device Observability</h2>
@@ -38,19 +46,19 @@
     <div class="box">
       <h3 class="title is-5">Quick audits</h3>
 
-      <form method="post" action="/ui/jobs/start/wifi">
+      <form method="post" action="/ui/jobs/start/wifi" onsubmit="showJobDialogue('wifi_audit')">
         <button class="button is-link is-fullwidth" type="submit">
           Start Wi-Fi Audit
         </button>
       </form>
       <br>
-      <form method="post" action="/ui/jobs/start/bt">
+      <form method="post" action="/ui/jobs/start/bt" onsubmit="showJobDialogue('bt_audit')">
         <button class="button is-info is-fullwidth" type="submit">
           Start BT Audit
         </button>
       </form>
       <br>
-      <form method="post" action="/ui/jobs/start/usb_hid">
+      <form method="post" action="/ui/jobs/start/usb_hid" onsubmit="showJobDialogue('usb_audit')">
         <button class="button is-warning is-fullwidth" type="submit">
           Start USB HID Audit
         </button>
@@ -249,6 +257,145 @@
   setInterval(updateCharts, 5000);
   // Update immediately
   updateCharts();
+
+  // Dashboard dialogue system
+  class DashboardDialogue {
+    constructor() {
+      this.lastContext = 'idle';
+      this.init();
+    }
+
+    init() {
+      this.updateDialogue();
+      // Update dialogue every 15 seconds
+      setInterval(() => this.updateDialogue(), 15000);
+    }
+
+    async updateDialogue() {
+      try {
+        // Determine context based on current system state
+        const context = await this.determineContext();
+        if (context !== this.lastContext) {
+          const response = await fetch(`/api/ai/dialogue?context=${context}`);
+          const data = await response.json();
+
+          if (data.dialogue) {
+            this.displayDialogue(data.dialogue);
+            this.lastContext = context;
+          }
+        }
+      } catch (error) {
+        console.error('Error updating dashboard dialogue:', error);
+      }
+    }
+
+    async determineContext() {
+      try {
+        // Check hardware status
+        const hardwareResponse = await fetch('/api/hardware');
+        const hardware = await hardwareResponse.json();
+
+        if (hardware.cpu_percent > 80) return 'system';
+        if (hardware.memory_percent > 80) return 'error';
+
+        // Check for recent jobs
+        const jobsResponse = await fetch('/api/jobs');
+        const jobs = await jobsResponse.json();
+
+        const runningJobs = jobs.filter(job => job.status === 'running').length;
+        const errorJobs = jobs.filter(job => job.status === 'error').length;
+
+        if (errorJobs > 0) return 'error';
+        if (runningJobs > 0) return 'notification';
+
+        return 'idle';
+      } catch (error) {
+        return 'idle';
+      }
+    }
+
+    displayDialogue(dialogue) {
+      const textElement = document.getElementById('dashboard-dialogue-text');
+      const iconElement = document.querySelector('.mini-terminal-icon');
+
+      textElement.textContent = `${dialogue.speaker.toUpperCase()}: ${dialogue.text}`;
+
+      // Update icon based on speaker
+      if (dialogue.speaker === 'subzero') {
+        iconElement.textContent = '❄️';
+      } else if (dialogue.speaker === 'rayden') {
+        iconElement.textContent = '⚡';
+      } else {
+        iconElement.textContent = '🤖';
+      }
+
+      // Add brief highlight effect
+      const terminal = document.getElementById('dashboard-dialogue');
+      terminal.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.5)';
+      setTimeout(() => {
+        terminal.style.boxShadow = 'none';
+      }, 1000);
+    }
+  }
+
+  // Initialize dashboard dialogue
+  const dashboardDialogue = new DashboardDialogue();
+
+  // Job dialogue function
+  async function showJobDialogue(context) {
+    try {
+      const response = await fetch(`/api/ai/dialogue?context=${context}&speaker=subzero`);
+      const data = await response.json();
+
+      if (data.dialogue) {
+        const textElement = document.getElementById('dashboard-dialogue-text');
+        const iconElement = document.querySelector('.mini-terminal-icon');
+
+        textElement.textContent = `${data.dialogue.speaker.toUpperCase()}: ${data.dialogue.text}`;
+        iconElement.textContent = '❄️';
+
+        // Add highlight effect
+        const terminal = document.getElementById('dashboard-dialogue');
+        terminal.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.8)';
+        setTimeout(() => {
+          terminal.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.2)';
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error showing job dialogue:', error);
+    }
+  }
 </script>
+
+<style>
+  .cyberpunk-mini-terminal {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+    border: 1px solid #00ffff;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    font-family: 'Courier New', monospace;
+    position: relative;
+  }
+
+  .mini-terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mini-terminal-icon {
+    font-size: 1.2em;
+    filter: drop-shadow(0 0 3px currentColor);
+  }
+
+  .mini-terminal-text {
+    color: #00ff00;
+    font-size: 0.9em;
+    text-shadow: 0 0 3px #00ff00;
+    flex: 1;
+  }
+</style>
 
 {% endblock %}

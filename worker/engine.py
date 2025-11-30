@@ -222,6 +222,19 @@ def process_job(session: Session, job: Job) -> None:
         job.status = "finished"
         session.commit()
 
+        # 4.1) AI Processing: Enrich findings with offline intelligence
+        try:
+            from ai.pipeline import process_job_completion
+            ai_success = process_job_completion(job.id, session)
+            if ai_success:
+                logger.info("AI processing completed for job id=%s", job.id)
+            else:
+                logger.warning("AI processing failed for job id=%s", job.id)
+        except ImportError:
+            logger.debug("AI pipeline not available, skipping AI processing")
+        except Exception as ai_exc:
+            logger.warning("AI processing error for job id=%s: %s", job.id, ai_exc)
+
     except Exception as exc:
         # 5) En caso de error, registrar Run con exit_code != 0
         logger.exception("Error processing job id=%s: %s", job.id, exc)

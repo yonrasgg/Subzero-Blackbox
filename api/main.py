@@ -39,7 +39,6 @@ from modules.cve_lookup import CVELookup
 
 logger = logging.getLogger(__name__)
 
-
 # --- Paths and templates ---
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -214,27 +213,55 @@ def get_hardware() -> Dict[str, Any]:
 @app.get("/api/ai_assistant")
 def get_ai_assistant() -> Dict[str, Any]:
     """Get AI assistant state: Rayden level, messages."""
-    # Calculate level based on API usage and jobs
-    api_calls = load_api_usage()
-    # Simple level calculation
-    level = min(10, api_calls // 10 + 1)  # Level up every 10 API calls
-    size_percent = (level / 10) * 100  # Size of Rayden inside cube
+    try:
+        from ai.dialogue import get_dialogue
 
-    # Generate message (simple for now, can integrate Gemini later)
-    messages = [
-        "Rayden: ¡Hola! Estoy aprendiendo sobre redes Wi-Fi vulnerables.",
-        "Subzero: Keep security high, or I'll freeze more.",
-        "Rayden: I detected a correlation: open networks are risky.",
-        "Subzero: Absorbing energy... Keep auditing!",
-    ]
-    message = messages[level % len(messages)]
+        # Calculate level based on API usage and jobs
+        api_calls = load_api_usage()
+        # Simple level calculation
+        level = min(10, api_calls // 10 + 1)  # Level up every 10 API calls
+        size_percent = (level / 10) * 100  # Size of Rayden inside cube
 
-    return {
-        "level": level,
-        "rayden_size": size_percent,
-        "message": message,
-        "absorbing": api_calls < 5  # If low activity, absorbing
-    }
+        # Get contextual dialogue based on system state
+        context = "idle"  # Default context
+        if api_calls < 5:
+            context = "boot"  # Early stage
+        elif api_calls > 50:
+            context = "success"  # Experienced system
+
+        dialogue = get_dialogue(context=context)
+        message = dialogue["text"] if dialogue else "Sistema operativo. Modo de espera activado."
+
+        return {
+            "level": level,
+            "rayden_size": size_percent,
+            "message": message,
+            "character": dialogue.get("speaker", "system") if dialogue else "system",
+            "emotion": dialogue.get("emotion", "neutral") if dialogue else "neutral",
+            "absorbing": api_calls < 5  # If low activity, absorbing
+        }
+
+    except Exception as e:
+        logger.error(f"Error getting AI assistant state: {e}")
+        # Fallback to original implementation
+        api_calls = load_api_usage()
+        level = min(10, api_calls // 10 + 1)
+        size_percent = (level / 10) * 100
+
+        messages = [
+            "Rayden: ¡Hola! Estoy aprendiendo sobre redes Wi-Fi vulnerables.",
+            "Subzero: Keep security high, or I'll freeze more.",
+            "Rayden: I detected a correlation: open networks are risky.",
+            "Subzero: Absorbing energy... Keep auditing!",
+        ]
+        message = messages[level % len(messages)]
+
+        return {
+            "level": level,
+            "rayden_size": size_percent,
+            "message": message,
+            "absorbing": api_calls < 5
+        }
 
 
 @app.get("/api/api_usage")
@@ -315,6 +342,254 @@ def parse_embedded(content: str, content_type: str = "html") -> Dict[str, Any]:
     correlations = cve_lookup.correlate_vulnerabilities(parsed, "general")  # Can specify audit_type later
     increment_api_usage()
     return {"parsed_data": parsed, "correlations": correlations}
+
+
+@app.get("/api/ai/stats")
+def get_ai_stats(db: Session = Depends(get_db)) -> Dict[str, Any]:
+    """Get AI system statistics and status."""
+    try:
+        from ai.pipeline import get_ai_stats
+        stats = get_ai_stats(db)
+        increment_api_usage()
+        return stats
+    except ImportError:
+        return {
+            "error": "AI modules not available",
+            "pipeline_status": {"embeddings_available": False, "classification_available": False}
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.post("/api/ai/search")
+def ai_search_similar(
+    query: str,
+    top_k: int = 5,
+    object_types: Optional[List[str]] = None,
+    db: Session = Depends(get_db)
+) -> Dict[str, Any]:
+    """Search for similar findings using AI embeddings."""
+    try:
+        from ai.embeddings import search_similar
+        results = search_similar(query, top_k=top_k, object_types=object_types, session=db)
+        increment_api_usage()
+        return {"query": query, "results": results}
+    except ImportError:
+        raise HTTPException(status_code=503, detail="AI embeddings not available")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI search failed: {str(e)}")
+
+
+@app.post("/api/ai/chat")
+def ai_chat(
+    question: str,
+    context_limit: int = 3,
+    include_dialogue: bool = True,
+    db: Session = Depends(get_db)
+) -> Dict[str, Any]:
+    """AI-powered chat with audit context using offline intelligence."""
+    try:
+        from ai.pipeline import build_context_for_question, ai_pipeline
+
+        # Build context from offline AI
+        context = build_context_for_question(question, db, top_k=context_limit)
+
+        # Determine dialogue context based on question content
+        dialogue_context = "system"  # default
+        question_lower = question.lower()
+
+        if any(word in question_lower for word in ["wifi", "red", "inalámbrica", "network"]):
+            dialogue_context = "wifi_audit"
+        elif any(word in question_lower for word in ["bluetooth", "bt", "bluetooth"]):
+            dialogue_context = "bt_audit"
+        elif any(word in question_lower for word in ["usb", "hid", "dispositivo"]):
+            dialogue_context = "usb_audit"
+        elif any(word in question_lower for word in ["hash", "contraseña", "password", "crack"]):
+            dialogue_context = "hashing"
+        elif any(word in question_lower for word in ["error", "fallo", "problema"]):
+            dialogue_context = "error"
+        elif any(word in question_lower for word in ["éxito", "completado", "terminado", "success"]):
+            dialogue_context = "success"
+        elif any(word in question_lower for word in ["job", "trabajo", "tarea"]):
+            dialogue_context = "notification"
+
+        # For now, return offline response
+        # In the future, this could enhance with Google Gen AI if available
+        response = {
+            "question": question,
+            "offline_response": True,
+            "context_summary": context.get("context_summary", "No relevant context found"),
+            "similar_findings_count": len(context.get("similar_findings", [])),
+            "ai_available": context.get("ai_available", {}),
+            "dialogue_context": dialogue_context
+        }
+
+        # Add dialogue enhancement if requested
+        if include_dialogue:
+            enhanced_response = ai_pipeline.enhance_response_with_dialogue(response.copy(), dialogue_context)
+            response.update({
+                "dialogue": enhanced_response.get("dialogue"),
+                "character_response": enhanced_response.get("character_response"),
+                "character_speaker": enhanced_response.get("character_speaker"),
+                "character_emotion": enhanced_response.get("character_emotion"),
+                "personality": enhanced_response.get("personality"),
+                "style": enhanced_response.get("style")
+            })
+
+        # Try to enhance with Google Gen AI if available
+        try:
+            from modules.report_generator import _get_google_api_key
+            api_key = _get_google_api_key()
+            if api_key:
+                import google.generativeai as genai
+                genai.configure(api_key=api_key)
+
+                # Determine which character to use for the AI response
+                character_name = response.get("character_speaker", "Rayden")
+                personality_desc = "an electric, energetic AI" if character_name == "rayden" else "a cold, precise AI"
+
+                # Build enhanced prompt with offline context and character personality
+                enhanced_prompt = f"""
+You are {character_name}, {personality_desc} cybersecurity assistant in Subzero-Blackbox.
+
+User Question: {question}
+
+Offline AI Context (from local audit database):
+{context.get('context_summary', 'No context available')}
+
+Similar findings: {len(context.get('similar_findings', []))} found
+
+Character Style: {response.get('style', 'professional')}
+Personality: {response.get('personality', 'helpful')}
+
+Please provide a helpful, security-focused response in character. If you have specific recommendations based on the context, include them.
+Keep your response concise but informative, and stay in character.
+"""
+
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                gemini_response = model.generate_content(enhanced_prompt)
+
+                response["online_response"] = True
+                response["enhanced_answer"] = gemini_response.text
+                increment_api_usage()  # Count as API usage
+
+        except Exception as gemini_error:
+            logger.debug(f"Google Gen AI enhancement failed: {gemini_error}")
+            response["online_response"] = False
+            response["enhancement_error"] = "Online AI enhancement unavailable"
+
+        return response
+
+    except ImportError:
+        raise HTTPException(status_code=503, detail="AI pipeline not available")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI chat failed: {str(e)}")
+
+
+@app.post("/api/ai/classify")
+def ai_classify_text(
+    text: str,
+    classification_types: Optional[List[str]] = None,
+    db: Session = Depends(get_db)
+) -> Dict[str, Any]:
+    """Classify text using offline AI classifiers."""
+    try:
+        from ai.classifier import classify_vulnerability
+
+        if not classification_types:
+            classification_types = ["vuln_type", "attack_family", "domain", "severity"]
+
+        # For vulnerability-like text, use specialized classification
+        if any(keyword in text.lower() for keyword in ["vulnerable", "exploit", "attack", "security", "risk"]):
+            classifications = classify_vulnerability(text)
+        else:
+            # Use general classifiers
+            from ai.classifier import classifier_manager
+            classifications = {}
+            for clf_type in classification_types:
+                result = classifier_manager.classify_text(text, clf_type)
+                if result:
+                    classifications[clf_type] = result
+
+        increment_api_usage()
+        return {
+            "text_preview": text[:100] + "..." if len(text) > 100 else text,
+            "classifications": classifications
+        }
+
+    except ImportError:
+        raise HTTPException(status_code=503, detail="AI classification not available")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI classification failed: {str(e)}")
+
+
+@app.get("/api/ai/dialogue")
+def get_ai_dialogue(
+    context: Optional[str] = None,
+    speaker: Optional[str] = None,
+    emotion: Optional[str] = None
+) -> Dict[str, Any]:
+    """Get a contextual dialogue from Subzero or Rayden."""
+    try:
+        from ai.pipeline import ai_pipeline
+        dialogue = ai_pipeline.generate_dialogue_response(context, emotion, speaker)
+
+        if not dialogue:
+            raise HTTPException(status_code=404, detail="No dialogue found for the given criteria")
+
+        increment_api_usage()
+        return {
+            "dialogue": dialogue,
+            "context": context,
+            "filters": {"speaker": speaker, "emotion": emotion}
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Dialogue generation failed: {str(e)}")
+
+
+@app.get("/api/ai/conversation")
+def get_ai_conversation(
+    context: str,
+    length: int = 2
+) -> Dict[str, Any]:
+    """Get a conversation sequence between Subzero and Rayden."""
+    try:
+        from ai.pipeline import ai_pipeline
+
+        if length < 1 or length > 10:
+            raise HTTPException(status_code=400, detail="Conversation length must be between 1 and 10")
+
+        conversation = ai_pipeline.generate_conversation(context, length)
+
+        if not conversation:
+            raise HTTPException(status_code=404, detail=f"No conversation found for context: {context}")
+
+        increment_api_usage()
+        return {
+            "conversation": conversation,
+            "context": context,
+            "length": len(conversation)
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Conversation generation failed: {str(e)}")
+
+
+@app.get("/api/ai/dialogue/stats")
+def get_dialogue_stats() -> Dict[str, Any]:
+    """Get dialogue system statistics."""
+    try:
+        from ai.dialogue import dialogue_manager
+        stats = dialogue_manager.get_stats()
+        increment_api_usage()
+        return stats
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get dialogue stats: {str(e)}")
 
 
 @app.post("/jobs", response_model=JobOut)

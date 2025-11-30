@@ -9,7 +9,7 @@ Performs USB-based attacks using HID emulation:
 - Mouse simulation.
 - Mass storage emulation.
 - Camera/webcam access (if supported).
-- Optimized for Raspberry Pi Zero 2W with USB gadget support.
+- Optimized for lowspec computing cards or boards with USB gadget support.
 - Aims to gain internet access from host devices (Linux/Windows).
 """
 
