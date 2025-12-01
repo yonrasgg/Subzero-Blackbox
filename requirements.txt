@@ -13,5 +13,7 @@ beautifulsoup4==4.14.2
 python-multipart==0.0.20
 scikit-learn==1.5.2
 sentence-transformers==3.1.1
+# Transformers >= 4.53.0 required for security fixes
 transformers>=4.53.0
+# Torch >= 2.6.0 required for Python 3.13 / Raspberry Pi (aarch64) support
 torch>=2.6.0
