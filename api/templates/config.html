@@ -30,31 +30,31 @@
     <div class="field">
       <label class="label">Google API Key (for AI Assistant)</label>
       <div class="control">
-        <input class="input" type="text" name="google_api_key" value="{{ config.google_api_key or '' }}">
+        <input class="input" type="text" name="google_api_key" value="{{ config.apis.google_api_key or '' }}">
       </div>
     </div>
     <div class="field">
       <label class="label">OnlineHashCrack API Key</label>
       <div class="control">
-        <input class="input" type="text" name="onlinehashcrack_api_key" value="{{ config.onlinehashcrack_api_key or '' }}">
+        <input class="input" type="text" name="onlinehashcrack_api_key" value="{{ config.apis.onlinehashcrack_api_key or '' }}">
       </div>
     </div>
     <div class="field">
       <label class="label">WPASEC API Key</label>
       <div class="control">
-        <input class="input" type="text" name="wpasec_api_key" value="{{ config.wpasec_api_key or '' }}">
+        <input class="input" type="text" name="wpasec_api_key" value="{{ config.apis.wpasec_api_key or '' }}">
       </div>
     </div>
     <div class="field">
       <label class="label">Wigle API Name</label>
       <div class="control">
-        <input class="input" type="text" name="wigle_api_name" value="{{ config.wigle_api_name or '' }}">
+        <input class="input" type="text" name="wigle_api_name" value="{{ config.apis.wigle_api_name or '' }}">
       </div>
     </div>
     <div class="field">
       <label class="label">Wigle API Token</label>
       <div class="control">
-        <input class="input" type="text" name="wigle_api_token" value="{{ config.wigle_api_token or '' }}">
+        <input class="input" type="text" name="wigle_api_token" value="{{ config.apis.wigle_api_token or '' }}">
       </div>
     </div>
   </div>

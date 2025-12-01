@@ -1,0 +1,755 @@
+[INFO] Switching profile: bluetooth_audit -> wifi_audit
+[INFO] Profile switch completed.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:1: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 1, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:1: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 1, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:1: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 1, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:1: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 1, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=1
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:2: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 2, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:2: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 2, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:2: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 2, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:2: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 2, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=2
+[INFO] Switching profile: wifi_audit -> bluetooth_audit
+[INFO] Profile switch completed.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:3: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 3, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:3: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 3, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:3: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 3, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:3: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 3, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=3
+[INFO] Switching profile: bluetooth_audit -> usb_audit
+[INFO] Profile switch completed.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:4: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 4, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:4: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 4, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:4: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 4, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:4: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 4, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=4
+[INFO] Profile usb_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:5: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 5, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:5: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 5, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:5: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 5, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:5: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 5, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=5
+[INFO] Switching profile: usb_audit -> wifi_audit
+[INFO] Profile switch completed.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:6: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 6, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:6: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 6, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:6: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 6, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:6: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 6, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=6
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:7: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 7, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:7: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 7, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:7: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 7, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:7: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 7, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=7
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:8: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 8, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:8: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 8, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:8: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 8, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:8: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 8, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=8
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:9: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 9, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:9: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 9, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:9: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 9, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:9: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 9, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=9
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:10: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 10, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:10: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 10, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:10: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 10, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:10: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 10, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=10
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:11: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 11, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:11: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 11, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:11: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 11, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:11: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 11, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=11
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:12: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 12, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:12: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 12, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:12: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 12, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:12: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 12, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=12
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:13: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 13, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:13: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 13, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:13: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 13, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:13: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 13, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=13
+[INFO] Profile wifi_audit is already active; nothing to do.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:14: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 14, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:14: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 14, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:14: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 14, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:14: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 14, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=14
+[INFO] Switching profile: wifi_audit -> bluetooth_audit
+[INFO] Profile switch completed.
+/home/n11v0/GitHub/Subzero-Blackbox/worker/engine.py:209: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  finished_at = datetime.utcnow()
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/n11v0/GitHub/Subzero-Blackbox/venv/lib/python3.12/site-packages/transformers/pipelines/text_classification.py:106: UserWarning: `return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.
+  warnings.warn(
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for job:15: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 15, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for job:15: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('job', 15, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Some weights of AlbertForSequenceClassification were not initialized from the model checkpoint at albert-base-v2 and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+❌ Failed to store labels for run:15: (sqlite3.OperationalError) no such table: ai_labels
+[SQL: SELECT ai_labels.id AS ai_labels_id, ai_labels.object_type AS ai_labels_object_type, ai_labels.object_id AS ai_labels_object_id, ai_labels.label_type AS ai_labels_label_type, ai_labels.label_value AS ai_labels_label_value, ai_labels.score AS ai_labels_score, ai_labels.model_name AS ai_labels_model_name, ai_labels.classification_metadata AS ai_labels_classification_metadata, ai_labels.created_at AS ai_labels_created_at 
+FROM ai_labels 
+WHERE ai_labels.object_type = ? AND ai_labels.object_id = ? AND ai_labels.label_type = ? AND ai_labels.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 15, 'vuln_type', 'albert-base-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+❌ Failed to store embedding for run:15: (sqlite3.OperationalError) no such table: ai_embeddings
+[SQL: SELECT ai_embeddings.id AS ai_embeddings_id, ai_embeddings.object_type AS ai_embeddings_object_type, ai_embeddings.object_id AS ai_embeddings_object_id, ai_embeddings.model_name AS ai_embeddings_model_name, ai_embeddings.vector AS ai_embeddings_vector, ai_embeddings.content_hash AS ai_embeddings_content_hash, ai_embeddings.created_at AS ai_embeddings_created_at 
+FROM ai_embeddings 
+WHERE ai_embeddings.object_type = ? AND ai_embeddings.object_id = ? AND ai_embeddings.model_name = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('run', 15, 'all-MiniLM-L6-v2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+AI processing failed for job id=15

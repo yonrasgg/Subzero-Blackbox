@@ -112,6 +112,13 @@ def analyze_vulnerabilities(networks: List[Dict[str, Any]]) -> List[Dict[str, An
                         "cves": cves,
                         "severity": "medium"
                     })
+        
+        # Phase 1: OSINT (WiGLE)
+        # If configured, query WiGLE for geolocation/info
+        if config.get("hash_services", {}).get("wigle", {}).get("enabled", False):
+            # This would be an API call to WiGLE
+            # Placeholder for now as we don't want to block too long
+            pass
 
         if "exposed_services" in wifi_audits.get("captured_data_analysis", {}):
             # If open network, try to scan for open ports (placeholder, requires IP)
@@ -174,40 +181,102 @@ def _run_command(cmd: List[str], timeout: int = 30) -> str:
 
 
 def scan_networks(interface: str = "wlan0") -> List[Dict[str, Any]]:
-    """Scan Wi-Fi networks using iwlist (passive, no monitor mode)."""
-    logger.info("Scanning Wi-Fi networks on interface %s", interface)
-    cmd = ["sudo", "iwlist", interface, "scan"]
-    output = _run_command(cmd)
-    if not output:
+    """
+    Scan Wi-Fi networks using airodump-ng (passive, monitor mode).
+    Phase 1: Passive Recon.
+    """
+    logger.info("Scanning Wi-Fi networks on interface %s using airodump-ng", interface)
+    
+    # Ensure monitor mode (simple check, assuming profile switcher handled it or we do it here)
+    # For now, assume interface is already in monitor mode or we use a helper
+    # But airodump-ng needs monitor mode.
+    # Let's try to use the 'wifi_audit' profile assumption that wlan1 is monitor or wlan0 is free.
+    # Actually, let's use a temporary csv file.
+    
+    import tempfile
+    import csv
+    import os
+    
+    # Create temp file prefix
+    with tempfile.NamedTemporaryFile(delete=False) as tmp:
+        temp_prefix = tmp.name
+    
+    # Run airodump-ng for a short duration
+    # sudo airodump-ng --write-interval 1 --output-format csv -w /tmp/recon interface
+    cmd = [
+        "sudo", "airodump-ng",
+        "--write-interval", "1",
+        "--output-format", "csv",
+        "-w", temp_prefix,
+        interface
+    ]
+    
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        time.sleep(15) # Scan for 15 seconds
+        proc.terminate()
+        try:
+            proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            
+        # Parse CSV
+        csv_file = f"{temp_prefix}-01.csv"
+        if not os.path.exists(csv_file):
+            logger.error("No CSV output found from airodump-ng")
+            return []
+            
+        networks = []
+        with open(csv_file, 'r', encoding='utf-8', errors='replace') as f:
+            reader = csv.reader(f)
+            section = "AP"
+            for row in reader:
+                if not row or len(row) < 2:
+                    continue
+                
+                if row[0].strip() == "Station MAC":
+                    section = "CLIENT"
+                    continue
+                    
+                if section == "AP":
+                    # BSSID, First time seen, Last time seen, channel, Speed, Privacy, Cipher, Authentication, Power, # beacons, # IV, LAN IP, ID-length, ESSID, Key
+                    if len(row) < 14:
+                        continue
+                    bssid = row[0].strip()
+                    if bssid == "BSSID":
+                        continue  # Header
+                    
+                    channel = row[3].strip()
+                    privacy = row[5].strip()
+                    cipher = row[6].strip()
+                    auth = row[7].strip()
+                    power = row[8].strip()
+                    essid = row[13].strip()
+                    
+                    networks.append({
+                        "bssid": bssid,
+                        "ssid": essid,
+                        "channel": int(channel) if channel.isdigit() else 0,
+                        "encrypted": "WEP" in privacy or "WPA" in privacy,
+                        "encryption_type": f"{privacy}/{cipher}/{auth}",
+                        "signal": int(power) if power.lstrip('-').isdigit() else -100,
+                        "clients": [] # To be populated if we parse clients
+                    })
+
+        # Cleanup
+        for ext in ["-01.csv", "-01.kismet.csv", "-01.kismet.netxml", "-01.log.csv"]:
+            f = f"{temp_prefix}{ext}"
+            if os.path.exists(f):
+                os.remove(f)
+        if os.path.exists(temp_prefix):
+            os.remove(temp_prefix)
+            
+        logger.info("Found %d networks via airodump-ng", len(networks))
+        return networks
+
+    except Exception as e:
+        logger.error("Error running airodump-ng: %s", e)
         return []
-
-    networks = []
-    current = {}
-    for line in output.splitlines():
-        line = line.strip()
-        if line.startswith("Cell "):
-            if current:
-                networks.append(current)
-            current = {"cell": line.split()[1]}
-        elif "Address:" in line:
-            current["bssid"] = line.split("Address:")[1].strip()
-        elif "ESSID:" in line:
-            current["ssid"] = line.split("ESSID:")[1].strip('"')
-        elif "Channel:" in line:
-            current["channel"] = int(line.split("Channel:")[1])
-        elif "Encryption key:" in line:
-            current["encrypted"] = "on" in line
-        elif "Quality=" in line:
-            # Parse quality
-            qual = line.split("Quality=")[1].split()[0]
-            current["quality"] = qual
-
-    if current:
-        networks.append(current)
-
-    logger.info("Found %d networks", len(networks))
-    return networks
-
 
 def save_results(networks: List[Dict[str, Any]], job_id: int) -> None:
     """Save scan results to database."""
@@ -267,3 +336,4 @@ def run(job) -> None:
             logger.warning("No networks found for job %s", job.id)
     except Exception as e:
         logger.error("Error in Wi-Fi recon for job %s: %s", job.id, e)
+REQUIRED_PROFILE = "wifi_audit"

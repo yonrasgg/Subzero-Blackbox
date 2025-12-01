@@ -1,394 +1,274 @@
 """
-ai/pipeline.py
+ai/pipeline.py (OPTIMIZADO)
 
-AI pipeline orchestration for offline-first intelligence in Subzero-Blackbox.
-Coordinates embeddings, classification, and optional online AI enhancement.
+AI Pipeline orchestration with sequential processing for memory optimization.
+Optimized for Raspberry Pi Zero 2W (464 MB RAM).
 """
 
 from __future__ import annotations
 
 import logging
+import gc
+import time
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
-
 from sqlalchemy.orm import Session
 
-from .embeddings import embedding_manager, index_object as embed_object, search_similar
-from .classifier import classifier_manager, label_object as classify_object, get_labels_for_object
-from .dialogue import dialogue_manager, get_dialogue, get_conversation
-from worker.db import Vulnerability, AuditData, Job, Run
+from ai.classifier import classifier_manager
+from ai.embeddings import embedding_manager
+from ai.dialogue import dialogue_manager
+from worker.db import SessionLocal, Job
 
 logger = logging.getLogger(__name__)
 
-
-@dataclass
-class AIContext:
-    """Structured context for AI operations."""
-    object_type: str
-    object_id: int
-    text_content: str
-    embeddings: Optional[List[float]] = None
-    labels: Optional[List[Dict[str, Any]]] = None
-    similar_objects: Optional[List[Dict[str, Any]]] = None
-    metadata: Optional[Dict[str, Any]] = None
-
-
 class AIPipeline:
     """
-    Orchestrates AI operations for offline intelligence and online enhancement.
+    Orchestrates AI tasks (classification, embedding) sequentially to minimize memory usage.
+    Ensures only one model is loaded at a time.
     """
 
     def __init__(self):
-        """Initialize the AI pipeline."""
-        self.embeddings_available = embedding_manager.is_available()
-        self.classification_available = len(classifier_manager.classifiers) > 0
+        self.classifier = classifier_manager
+        self.embedder = embedding_manager
+        logger.info("AIPipeline initialized (sequential processing enabled)")
 
-        logger.info(f"AI Pipeline initialized - Embeddings: {self.embeddings_available}, "
-                   f"Classification: {self.classification_available}")
-
-    def generate_dialogue_response(self, context: str, emotion: Optional[str] = None,
-                                 speaker: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    def process_object(self, object_type: str, object_id: int, text: str, session: Session = None) -> Dict[str, bool]:
         """
-        Generate a dialogue response in Subzero/Rayden style.
-
+        Process an object through the full AI pipeline (classify then embed).
+        Ensures sequential execution and memory cleanup between steps.
+        
         Args:
-            context: Context for the dialogue (e.g., 'wifi_audit', 'success', 'error')
-            emotion: Specific emotion to use, or None for context-appropriate
-            speaker: Specific speaker ('subzero' or 'rayden'), or None for random
-
+            object_type: Type of object ("job", "run", "vulnerability", "audit_data")
+            object_id: ID of the object
+            text: Text content to process
+            session: Database session (optional)
+        
         Returns:
-            Dialogue dict with speaker, emotion, text, etc.
+            Dictionary with status of each step
         """
-        try:
-            dialogue = get_dialogue(context=context, speaker=speaker, emotion=emotion)
-            if dialogue:
-                logger.debug(f"Generated dialogue: {dialogue['speaker']} - {dialogue['emotion']} - {context}")
-            return dialogue
-        except Exception as e:
-            logger.error(f"Error generating dialogue response: {e}")
-            return None
+        if not text or not text.strip():
+            logger.warning(f"Skipping empty text for {object_type}:{object_id}")
+            return {'classification': False, 'embedding': False}
 
-    def generate_conversation(self, context: str, length: int = 2) -> List[Dict[str, Any]]:
-        """
-        Generate a conversation sequence for a context.
+        use_local_session = session is None
+        if use_local_session:
+            session = SessionLocal()
 
-        Args:
-            context: Context for the conversation
-            length: Number of dialogue exchanges
-
-        Returns:
-            List of dialogue dicts forming a conversation
-        """
-        try:
-            conversation = get_conversation(context, length)
-            logger.debug(f"Generated conversation with {len(conversation)} exchanges for context: {context}")
-            return conversation
-        except Exception as e:
-            logger.error(f"Error generating conversation: {e}")
-            return []
-
-    def enhance_response_with_dialogue(self, response: Dict[str, Any], context: str) -> Dict[str, Any]:
-        """
-        Enhance an AI response with contextual dialogue from Subzero/Rayden.
-
-        Args:
-            response: Original response dict
-            context: Context for dialogue generation
-
-        Returns:
-            Enhanced response with dialogue elements
-        """
-        try:
-            # Generate a contextual dialogue
-            dialogue = self.generate_dialogue_response(context)
-
-            if dialogue:
-                response['dialogue'] = dialogue
-                response['character_response'] = dialogue['text']
-                response['character_speaker'] = dialogue['speaker']
-                response['character_emotion'] = dialogue['emotion']
-
-                # Add some personality based on speaker
-                if dialogue['speaker'] == 'subzero':
-                    response['personality'] = 'cold_precision'
-                    response['style'] = 'methodical'
-                elif dialogue['speaker'] == 'rayden':
-                    response['personality'] = 'electric_energy'
-                    response['style'] = 'dynamic'
-
-            return response
-
-        except Exception as e:
-            logger.error(f"Error enhancing response with dialogue: {e}")
-            return response
-
-    def enrich_finding_offline(self, finding: Any, session: Session) -> bool:
-        """
-        Enrich a finding with offline AI processing.
-
-        Args:
-            finding: Vulnerability, AuditData, or similar object
-            session: Database session
-
-        Returns:
-            True if successfully enriched, False otherwise
-        """
-        try:
-            # Determine object type and extract text content
-            if isinstance(finding, Vulnerability):
-                object_type = "vulnerability"
-                object_id = finding.id
-                text_content = finding.description or ""
-                if finding.details:
-                    # Add technical details if available
-                    import json
-                    try:
-                        details_str = json.dumps(finding.details)
-                        text_content += f" {details_str}"
-                    except (TypeError, ValueError):
-                        pass
-
-            elif isinstance(finding, AuditData):
-                object_type = "audit_data"
-                object_id = finding.id
-                text_content = ""
-                if finding.data:
-                    # Convert data dict to searchable text
-                    import json
-                    try:
-                        text_content = json.dumps(finding.data)
-                    except (TypeError, ValueError):
-                        text_content = str(finding.data)
-
-            elif isinstance(finding, Job):
-                object_type = "job"
-                object_id = finding.id
-                text_content = f"{finding.type} {finding.profile or ''} {finding.params or ''}"
-
-            elif isinstance(finding, Run):
-                object_type = "run"
-                object_id = finding.id
-                text_content = f"{finding.module} {finding.stdout or ''} {finding.stderr or ''}"
-
-            else:
-                logger.warning(f"Unsupported finding type: {type(finding)}")
-                return False
-
-            if not text_content.strip():
-                logger.warning(f"No text content found for {object_type}:{object_id}")
-                return False
-
-            # Generate embeddings
-            if self.embeddings_available:
-                embed_success = embed_object(object_type, object_id, text_content, session)
-                if not embed_success:
-                    logger.warning(f"Failed to generate embeddings for {object_type}:{object_id}")
-
-            # Generate classifications
-            if self.classification_available:
-                classify_success = classify_object(object_type, object_id, text_content, session)
-                if not classify_success:
-                    logger.warning(f"Failed to generate labels for {object_type}:{object_id}")
-
-            logger.info(f"Successfully enriched {object_type}:{object_id} with offline AI")
-            return True
-
-        except Exception as e:
-            logger.error(f"Error enriching finding {type(finding)}:{getattr(finding, 'id', 'unknown')}: {e}")
-            return False
-
-    def build_context_for_question(self, question: str, session: Session,
-                                 top_k: int = 5, object_types: Optional[List[str]] = None) -> Dict[str, Any]:
-        """
-        Build AI context for answering a question using offline intelligence.
-
-        Args:
-            question: User's question
-            session: Database session
-            top_k: Number of similar objects to retrieve
-            object_types: Types of objects to search in
-
-        Returns:
-            Dictionary with context information
-        """
-        context = {
-            'question': question,
-            'similar_findings': [],
-            'labels_summary': {},
-            'ai_available': {
-                'embeddings': self.embeddings_available,
-                'classification': self.classification_available
-            }
+        results = {
+            'classification': False,
+            'embedding': False
         }
 
-        if not self.embeddings_available:
-            logger.warning("Embeddings not available for context building")
-            return context
-
         try:
-            # Find similar objects using embeddings
-            similar_objects = search_similar(
-                question,
-                top_k=top_k,
-                object_types=object_types or ['vulnerability', 'audit_data', 'job'],
-                session=session
+            logger.info(f"🚀 Starting AI pipeline for {object_type}:{object_id}")
+            
+            # STEP 1: Classification
+            # This will load classifiers one by one and unload them
+            logger.info(f"Step 1/2: Classification for {object_type}:{object_id}")
+            results['classification'] = self.classifier.label_object(
+                object_type, object_id, text, session
             )
-
-            context['similar_findings'] = similar_objects
-
-            # Get labels for the most similar objects
-            labels_summary = {}
-            for obj in similar_objects[:3]:  # Get labels for top 3 results
-                labels = get_labels_for_object(obj['object_type'], obj['object_id'], session)
-                if labels:
-                    key = f"{obj['object_type']}:{obj['object_id']}"
-                    labels_summary[key] = labels
-
-            context['labels_summary'] = labels_summary
-
-            # Build a structured context summary
-            context['context_summary'] = self._build_context_summary(similar_objects, labels_summary)
-
+            
+            # Explicit cleanup between steps
+            gc.collect()
+            time.sleep(0.1)  # Brief pause to let system settle
+            
+            # STEP 2: Embedding
+            # This will load embedding model and unload it
+            logger.info(f"Step 2/2: Embedding for {object_type}:{object_id}")
+            results['embedding'] = self.embedder.embed_object(
+                object_type, object_id, text, session
+            )
+            
+            # Final cleanup
+            gc.collect()
+            
+            logger.info(f"✅ AI pipeline completed for {object_type}:{object_id}: {results}")
+            return results
+            
         except Exception as e:
-            logger.error(f"Error building context for question: {e}")
-            context['error'] = str(e)
+            logger.error(f"❌ AI pipeline failed for {object_type}:{object_id}: {e}")
+            return results
+        finally:
+            if use_local_session:
+                session.close()
 
-        return context
-
-    def _build_context_summary(self, similar_objects: List[Dict[str, Any]],
-                              labels_summary: Dict[str, List[Dict[str, Any]]]) -> str:
+    def process_batch(self, items: List[Dict[str, Any]]) -> Dict[str, int]:
         """
-        Build a human-readable context summary.
-
+        Process a batch of items sequentially.
         Args:
-            similar_objects: List of similar objects from embedding search
-            labels_summary: Labels for the similar objects
-
+            items: List of dicts with keys 'object_type', 'object_id', 'text'
         Returns:
-            Formatted context summary string
+            Statistics of processing
         """
-        if not similar_objects:
-            return "No similar findings found in the audit database."
-
-        summary_parts = ["Similar findings from audit database:"]
-
-        for obj in similar_objects:
-            obj_type = obj['object_type']
-            obj_id = obj['object_id']
-            similarity = obj['similarity']
-
-            summary_parts.append(f"- {obj_type.upper()} #{obj_id} (similarity: {similarity:.2f})")
-
-            # Add labels if available
-            labels_key = f"{obj_type}:{obj_id}"
-            if labels_key in labels_summary:
-                labels = labels_summary[labels_key]
-                for label in labels:
-                    if label['score'] > 0.5:  # Only include high-confidence labels
-                        summary_parts.append(f"  • {label['label_type']}: {label['label_value']} "
-                                           f"(confidence: {label['score']:.2f})")
-
-        return "\n".join(summary_parts)
-
-    def get_ai_stats(self, session: Session = None) -> Dict[str, Any]:
-        """
-        Get comprehensive AI statistics.
-
-        Args:
-            session: Database session
-
-        Returns:
-            Dictionary with AI system statistics
-        """
-        from .embeddings import get_embedding_stats
-        from .classifier import get_classifier_stats
-
         stats = {
-            'pipeline_status': {
-                'embeddings_available': self.embeddings_available,
-                'classification_available': self.classification_available,
-                'dialogue_available': True  # Dialogue system is always available
-            }
+            'total': len(items),
+            'success': 0,
+            'failed': 0,
+            'classification_success': 0,
+            'embedding_success': 0
         }
-
-        # Get embedding stats
-        if self.embeddings_available:
-            stats['embeddings'] = get_embedding_stats(session)
-
-        # Get classifier stats
-        if self.classification_available:
-            stats['classification'] = get_classifier_stats(session)
-
-        # Get dialogue stats
-        stats['dialogue'] = dialogue_manager.get_stats()
-
+        
+        logger.info(f"📦 Processing batch of {len(items)} items...")
+        
+        session = SessionLocal()
+        try:
+            for i, item in enumerate(items):
+                logger.info(f"Processing item {i+1}/{len(items)}")
+                
+                result = self.process_object(
+                    item['object_type'], 
+                    item['object_id'], 
+                    item['text'], 
+                    session
+                )
+                
+                if result['classification'] or result['embedding']:
+                    stats['success'] += 1
+                else:
+                    stats['failed'] += 1
+                    
+                if result['classification']:
+                    stats['classification_success'] += 1
+                if result['embedding']:
+                    stats['embedding_success'] += 1
+                    
+                # Commit periodically if needed, though process_object handles its own commits
+                
+        finally:
+            session.close()
+            
+        logger.info(f"✅ Batch processing completed: {stats}")
         return stats
 
-    def process_job_completion(self, job_id: int, session: Session) -> bool:
+    def optimize_memory(self):
+        """Force unload all models and run garbage collection."""
+        self.classifier.unload_all_classifiers()
+        self.embedder.unload_model()
+        gc.collect()
+        logger.info("🧹 Memory optimization completed")
+
+    def generate_dialogue_response(
+        self,
+        context: Optional[str] = None,
+        emotion: Optional[str] = None,
+        speaker: Optional[str] = None
+    ) -> Optional[Dict[str, Any]]:
         """
-        Process AI enrichment when a job is completed.
-
-        Args:
-            job_id: ID of the completed job
-            session: Database session
-
-        Returns:
-            True if processing successful, False otherwise
+        Generate a dialogue response based on context.
+        Delegates to dialogue_manager.
         """
-        try:
-            # Get the job
-            job = session.query(Job).filter(Job.id == job_id).first()
-            if not job:
-                logger.error(f"Job {job_id} not found for AI processing")
-                return False
+        return dialogue_manager.get_dialogue(context, speaker, emotion)
 
-            # Enrich the job itself
-            self.enrich_finding_offline(job, session)
+    def generate_conversation(
+        self,
+        context: str,
+        length: int = 2
+    ) -> List[Dict[str, Any]]:
+        """
+        Generate a conversation sequence.
+        Delegates to dialogue_manager.
+        """
+        return dialogue_manager.get_conversation(context, length)
 
-            # Enrich related runs
-            runs = session.query(Run).filter(Run.job_id == job_id).all()
-            for run in runs:
-                self.enrich_finding_offline(run, session)
-
-            # Enrich related vulnerabilities
-            vulnerabilities = session.query(Vulnerability).filter(Vulnerability.job_id == job_id).all()
-            for vuln in vulnerabilities:
-                self.enrich_finding_offline(vuln, session)
-
-            # Enrich related audit data
-            audit_data = session.query(AuditData).filter(AuditData.job_id == job_id).all()
-            for data in audit_data:
-                self.enrich_finding_offline(data, session)
-
-            logger.info(f"Completed AI processing for job {job_id}")
-            return True
-
-        except Exception as e:
-            logger.error(f"Error processing job {job_id} completion: {e}")
-            return False
-
+    def enhance_response_with_dialogue(
+        self,
+        response: Dict[str, Any],
+        context: str
+    ) -> Dict[str, Any]:
+        """
+        Enhance an AI response with a character dialogue.
+        """
+        # Determine emotion based on content if possible
+        emotion = "neutral"
+        if response.get("similar_findings_count", 0) > 0:
+            emotion = "analytical"
+        
+        # Get a dialogue
+        dialogue = self.generate_dialogue_response(context=context, emotion=emotion)
+        
+        if dialogue:
+            response["dialogue"] = dialogue["text"]
+            response["character_response"] = True
+            response["character_speaker"] = dialogue["speaker"]
+            response["character_emotion"] = dialogue["emotion"]
+            
+            # Add personality traits
+            if dialogue["speaker"] == "subzero":
+                response["personality"] = "Cold, precise, warning-focused"
+                response["style"] = "Cyberpunk, analytical, serious"
+            else:
+                response["personality"] = "Energetic, sarcastic, dynamic"
+                response["style"] = "Cyberpunk, rebellious, fast-paced"
+                
+        return response
 
 # Global instance
 ai_pipeline = AIPipeline()
 
-
-# Convenience functions
-def enrich_finding_offline(finding: Any, session: Session) -> bool:
-    """Enrich a finding with offline AI processing."""
-    return ai_pipeline.enrich_finding_offline(finding, session)
-
-
-def build_context_for_question(question: str, session: Session,
-                             top_k: int = 5, object_types: Optional[List[str]] = None) -> Dict[str, Any]:
-    """Build AI context for answering questions."""
-    return ai_pipeline.build_context_for_question(question, session, top_k, object_types)
-
+# Convenience function
+def process_ai_tasks(object_type: str, object_id: int, text: str):
+    return ai_pipeline.process_object(object_type, object_id, text)
 
 def process_job_completion(job_id: int, session: Session) -> bool:
-    """Process AI enrichment for completed jobs."""
-    return ai_pipeline.process_job_completion(job_id, session)
+    """
+    Process a completed job and its related data through the AI pipeline.
+    Extracts text from Job, Runs, Vulnerabilities, and AuditData.
+    """
+    job = session.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        logger.error(f"Job {job_id} not found")
+        return False
 
+    success = True
+    
+    # 1. Process Job itself (using params or type as text)
+    job_text = f"Job Type: {job.type}. Profile: {job.profile}. Params: {job.params}"
+    res = ai_pipeline.process_object("job", job.id, job_text, session)
+    if not (res['classification'] or res['embedding']):
+        success = False
 
-def get_ai_stats(session: Session = None) -> Dict[str, Any]:
-    """Get AI system statistics."""
-    return ai_pipeline.get_ai_stats(session)
+    # 2. Process Runs (stdout/stderr)
+    for run in job.runs:
+        run_text = f"Module: {run.module}. Exit Code: {run.exit_code}.\nStdout: {run.stdout}\nStderr: {run.stderr}"
+        # Truncate to avoid token limit issues (simple truncation)
+        run_text = run_text[:2000] 
+        ai_pipeline.process_object("run", run.id, run_text, session)
+
+    # 3. Process Vulnerabilities
+    for vuln in job.vulnerabilities:
+        vuln_text = f"{vuln.vuln_type} ({vuln.severity}): {vuln.description}. {vuln.details}"
+        ai_pipeline.process_object("vulnerability", vuln.id, vuln_text, session)
+
+    # 4. Process AuditData
+    for audit in job.audit_data:
+        audit_text = f"{audit.data_type}: {audit.data}"
+        audit_text = audit_text[:2000]
+        ai_pipeline.process_object("audit_data", audit.id, audit_text, session)
+
+    return success
+
+# Backward compatibility aliases
+def enrich_finding_offline(object_type: str, object_id: int, text: str):
+    """Alias for process_ai_tasks for backward compatibility."""
+    return process_ai_tasks(object_type, object_id, text)
+
+def build_context_for_question(question: str, limit: int = 5) -> str:
+    """
+    Build context for a question using semantic search.
+    """
+    results = embedding_manager.find_similar(question, limit=limit)
+    context = []
+    for res in results:
+        # In a real implementation, we would fetch the actual text content from the DB
+        # based on object_type and object_id.
+        # For now, we'll just return the metadata.
+        context.append(f"Related {res['object_type']} (ID: {res['object_id']}) - Score: {res['score']:.2f}")
+    
+    return "\n".join(context)
+
+def get_ai_stats() -> Dict[str, Any]:
+    """Get statistics about the AI pipeline."""
+    return {
+        'classifier_memory': classifier_manager.get_memory_status(),
+        'embedding_loaded': embedding_manager.is_loaded()
+    }

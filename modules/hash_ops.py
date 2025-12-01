@@ -250,6 +250,44 @@ def _call_leakcheck_public(
     return data
 
 
+# ---------------------------------------------------------------------------
+# WPA-Sec (https://wpa-sec.stanev.org)
+# ---------------------------------------------------------------------------
+
+def upload_to_wpasec(file_path: Path) -> bool:
+    """
+    Uploads a capture file to wpa-sec.stanev.org.
+    """
+    cfg = _load_hash_services_config()
+    service_name = "wpa_sec"
+    service_cfg = cfg.get(service_name, {})
+    
+    if not service_cfg.get("enabled", False):
+        logger.info("%s is disabled in config.yaml", service_name)
+        return False
+
+    api_key = _get_api_key(service_name)
+    if not api_key:
+        logger.warning("No API key for wpa-sec")
+        return False
+
+    url = "https://wpa-sec.stanev.org/?api&upload"
+    timeout = service_cfg.get("timeout", 30)
+
+    logger.info("Uploading %s to wpa-sec...", file_path.name)
+
+    try:
+        with open(file_path, 'rb') as f:
+            files = {'file': f}
+            cookies = {'key': api_key}
+            resp = requests.post(url, files=files, cookies=cookies, timeout=timeout)
+            resp.raise_for_status()
+            logger.info("Upload successful: %s", resp.text)
+            return True
+    except Exception as e:
+        logger.error("Failed to upload to wpa-sec: %s", e)
+        return False
+
 
 # ---------------------------------------------------------------------------
 # Main orchestrator: run_hash_lookup

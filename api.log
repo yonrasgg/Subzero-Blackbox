@@ -1,0 +1,892 @@
+INFO:     Will watch for changes in these directories: ['/home/n11v0/GitHub/Subzero-Blackbox']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [1098216] using WatchFiles
+INFO:     Started server process [1098219]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:38562 - "GET / HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:38562 - "GET /ui/home HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:35380 - "GET /ui/home HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42104 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42104 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:42104 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35380 - "GET /api/ai/dialogue?context=boot HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:46608 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41652 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44010 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46608 - "GET /ui/audits_config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33322 - "GET /ui/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49522 - "GET /ui/jobs/13/attack HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36340 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36340 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36340 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36340 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36346 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36346 - "GET /ui/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45456 - "GET /ui/logs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50754 - "GET /ui/jobs/13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "GET /ui/home HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50760 - "GET /api/ai/dialogue?context=boot HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:45302 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45302 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56360 - "GET /api/ai/dialogue?context=idle HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56360 - "GET /api/ai/conversation?context=system&length=4 HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:39620 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39628 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55510 - "GET /api/ai/dialogue?context=idle HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:55510 - "GET /api/ai/dialogue?context=idle HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:44158 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44160 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52006 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52008 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38284 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38294 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44996 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44980 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50356 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50350 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58080 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58072 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42698 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42696 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38220 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38236 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36712 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36728 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58048 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50618 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50630 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53620 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53632 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45148 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45134 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36500 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36484 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53630 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53614 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57296 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57292 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57502 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42194 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42204 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46536 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46542 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58546 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58558 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43118 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43102 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45610 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45606 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33292 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33288 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56248 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56250 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36352 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36350 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'ai/pipeline.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1098219]
+INFO:     Started server process [1099326]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:47772 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47786 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'ai/pipeline.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1099326]
+INFO:     Started server process [1099508]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai/pipeline.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1099508]
+INFO:     Started server process [1099519]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:50890 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50906 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50906 - "GET /ui/home HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50906 - "GET /api/ai/dialogue?context=boot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50918 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50918 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'ai/pipeline.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1099519]
+INFO:     Started server process [1099601]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:39040 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39046 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36132 - "GET /api/ai/dialogue?context=boot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51814 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51804 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46006 - "GET /api/ai/conversation?context=system&length=4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54650 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54638 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55114 - "GET /ui/jobs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42046 - "GET /ui/jobs/13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56316 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52252 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54376 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47070 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43922 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38928 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39862 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51198 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54772 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57990 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43400 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49934 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40788 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34268 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35286 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59492 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58462 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/jobs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "POST /ui/jobs/start/wifi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52138 - "HEAD /ui/dashboard HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57828 - "GET /ui/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "POST /ui/jobs/start/bt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45432 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47652 - "GET /ui/audits_config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42270 - "GET /ui/home HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42270 - "GET /api/ai/dialogue?context=boot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42272 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42282 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56926 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56910 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35280 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35274 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49836 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49824 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55496 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55484 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48412 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48428 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45602 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45606 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54128 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54140 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48532 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48544 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39388 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39394 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36378 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36366 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60818 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60830 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57016 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57010 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35728 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35740 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60972 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60956 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53540 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53552 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46260 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46256 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48950 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/bt_recon.py', 'modules/wifi_recon.py', 'modules/attacks/wifi_active.py', 'modules/bt_recon.py', 'modules/bt_active.py', 'modules/audits/wifi_recon.py', 'modules/wifi_active.py', 'modules/attacks/bt_active.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:     127.0.0.1:48934 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1099601]
+INFO:     Started server process [1100522]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:33676 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33670 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60082 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60070 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100522]
+INFO:     Started server process [1100609]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100609]
+INFO:     Started server process [1100622]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:39190 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39206 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_executor.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100622]
+INFO:     Started server process [1100646]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_executor.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100646]
+INFO:     Started server process [1100659]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:50008 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50002 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100659]
+WARNING:  WatchFiles detected changes in 'modules/audits/__init__.py'. Reloading...
+INFO:     Started server process [1100690]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1100702]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/attacks/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     127.0.0.1:34854 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:     127.0.0.1:34852 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100702]
+WARNING:  WatchFiles detected changes in 'modules/attacks/__init__.py'. Reloading...
+INFO:     Started server process [1100722]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1100730]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100730]
+WARNING:  WatchFiles detected changes in 'modules/core/__init__.py'. Reloading...
+INFO:     Started server process [1100746]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1100764]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:44204 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44212 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57662 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57654 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48134 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48146 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52104 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52114 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51210 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51214 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48346 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48342 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51590 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51602 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41808 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41820 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/usb_hid_audit.py', 'modules/usb_hid.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100764]
+INFO:     Started server process [1100841]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:42232 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42224 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_executor.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100841]
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Started server process [1100921]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1100933]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/audits/hash_lookup.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100933]
+WARNING:  WatchFiles detected changes in 'modules/audits/hash_lookup.py'. Reloading...
+INFO:     Started server process [1100946]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1100954]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53400 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53414 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100954]
+INFO:     Started server process [1100976]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:48404 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48416 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1100976]
+INFO:     Started server process [1101003]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:47216 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47208 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/bt_recon.py', 'modules/audits/usb_hid_audit.py', 'modules/attacks/wifi_active.py', 'modules/audits/wifi_recon.py', 'modules/attacks/bt_active.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101003]
+INFO:     Started server process [1101029]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:39172 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39188 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34542 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34534 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'worker/engine.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101029]
+INFO:     Started server process [1101132]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:41180 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41168 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101132]
+INFO:     Started server process [1101154]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:47842 - "GET /ui/home HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47856 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47856 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47842 - "GET /api/ai/dialogue?context=boot HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/hash_lookup.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101154]
+WARNING:  WatchFiles detected changes in 'worker/engine.py'. Reloading...
+INFO:     Started server process [1101174]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1101188]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101188]
+INFO:     Started server process [1101204]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:58804 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58792 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101204]
+INFO:     Started server process [1101224]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:48960 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48970 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56282 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56272 - "GET /api/hardware HTTP/1.1" 200 OK
+❌ Error loading plugin usb_hid_audit: invalid syntax (usb_hid_audit.py, line 175)
+INFO:     127.0.0.1:41224 - "GET /api/plugins HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46086 - "GET /ui/home HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46086 - "GET /api/ai/dialogue?context=boot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46090 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46090 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101224]
+INFO:     Started server process [1101421]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:45482 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/usb_hid_audit.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:     127.0.0.1:45498 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101421]
+INFO:     Started server process [1101447]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:46300 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46292 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46516 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46522 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45838 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45834 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40312 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40320 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57058 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57060 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39288 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39282 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33002 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32988 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37244 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37230 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49152 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49148 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48574 - "GET /api/plugins HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54362 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54354 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59666 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59652 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53510 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53496 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60756 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60746 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47344 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47342 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51460 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51454 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58336 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58344 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45560 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45544 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60340 - "GET /api/ai_assistant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60334 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38756 - "GET /ui/logs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45718 - "GET /ui/jobs/15 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35826 - "GET /ui/jobs/15/report HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/usb_hid_audit.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101447]
+INFO:     Started server process [1101877]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:50526 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50526 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50526 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50526 - "GET /ui/audits_config HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'modules/audits/web_recon.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101877]
+WARNING:  WatchFiles detected changes in 'modules/audits/web_recon.py'. Reloading...
+INFO:     Started server process [1101947]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1101959]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/attacks/web_attack.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101959]
+WARNING:  WatchFiles detected changes in 'modules/attacks/web_attack.py'. Reloading...
+INFO:     Started server process [1101971]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1101983]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101983]
+INFO:     Started server process [1101995]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1101995]
+INFO:     Started server process [1102011]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102011]
+INFO:     Started server process [1102027]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102027]
+INFO:     Started server process [1102043]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'worker/engine.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102043]
+INFO:     Started server process [1102087]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'worker/engine.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102087]
+INFO:     Started server process [1102105]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102105]
+INFO:     Started server process [1102132]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57932 - "GET /ui/audits_config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57932 - "GET /api/plugins HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46204 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46204 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46204 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57440 - "GET /ui/audits_config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57440 - "GET /api/plugins HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46204 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54908 - "POST /api/plugins/attacks/web_attack/disable HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54908 - "POST /api/plugins/attacks/web_attack/enable HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /ui/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/api_usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56650 - "GET /api/hardware HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102132]
+WARNING:  WatchFiles detected changes in 'worker/engine.py'. Reloading...
+INFO:     Started server process [1102240]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/core/plugin_manager.py'. Reloading...
+INFO:     Started server process [1102252]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/audits/web_recon.py'. Reloading...
+INFO:     Started server process [1102263]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'modules/attacks/web_attack.py'. Reloading...
+INFO:     Started server process [1102276]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [1102284]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102284]
+INFO:     Started server process [1102369]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1102369]
+INFO:     Started server process [1102381]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.

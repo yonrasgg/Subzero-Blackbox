@@ -5,7 +5,6 @@ Example of how to integrate the English dialogue system into your GUI.
 This shows how to use the dialogue system for cyberpunk terminal interfaces.
 """
 
-import json
 from ai.dialogue import get_dialogue, get_conversation, dialogue_manager
 
 def display_dialogue_in_terminal(speaker: str, text: str, emotion: str = "neutral"):
@@ -30,8 +29,7 @@ def display_dialogue_in_terminal(speaker: str, text: str, emotion: str = "neutra
         'sarcastic': '◆',
         'calm': '●',
         'warning': '△',
-        'debug': '□',
-        'sarcastic': '◇'
+        'debug': '□'
     }
 
     color = colors.get(speaker, '\033[97m')  # White default

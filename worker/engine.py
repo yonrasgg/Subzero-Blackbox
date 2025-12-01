@@ -4,6 +4,7 @@ import sys
 import time
 import contextlib
 import logging
+import gc
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, Any
@@ -14,7 +15,7 @@ import subprocess
 from sqlalchemy.orm import Session
 
 from worker.db import SessionLocal, Job, Run
-from modules import wifi_recon, wifi_active, bt_recon, bt_active, hash_ops, usb_hid
+from modules.core.plugin_manager import get_plugin_manager
 
 logger = logging.getLogger(__name__)
 
@@ -24,32 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 CONFIG_PATH = BASE_DIR / "config" / "config.yaml"
 PROFILES_PATH = BASE_DIR / "config" / "profiles.yaml"
 PROFILE_SWITCHER = BASE_DIR / "scripts" / "profile_switcher.py"
-
-# --- 3.1 Map job type → required profile ---
-
-JOB_PROFILE_MAP: Dict[str, Optional[str]] = {
-    # Wi-Fi jobs use the wifi_audit profile
-    "wifi_recon": "wifi_audit",
-    "wifi_active": "wifi_audit",
-
-    # Bluetooth jobs use the bluetooth_audit profile
-    "bt_recon": "bluetooth_audit",
-    "bt_active": "bluetooth_audit",
-
-    # USB HID jobs use the usb_audit profile
-    "usb_hid_audit": "usb_audit",
-
-    # Hashing/external intelligence jobs DO NOT require profile change
-    # (hash_lookup only calls remote services/APIs).
-    "hash_lookup": None,
-
-    # Future types (web / LAN). Not used in the UI yet,
-    # but the map is ready for when you add new modules.
-    "web_recon": "stealth_recon",
-    "web_attack": "aggressive_recon",
-    "lan_recon": "stealth_recon",
-    "lan_attack": "aggressive_recon",
-}
 
 # --- Utilities to read config/profiles ---
 
@@ -89,33 +64,15 @@ def get_active_profile() -> Optional[str]:
     return active
 
 
-def get_profile_for_job(job_type: str) -> Optional[str]:
-    """
-    Uses JOB_PROFILE_MAP as the single source of truth to know which profile
-    should be active for a given job type.
-
-    Examples:
-        job_type="wifi_recon"   -> "wifi_audit"
-        job_type="bt_recon"     -> "bluetooth_audit"
-        job_type="hash_lookup"  -> None (does not require profile change)
-        unknown job_type        -> None
-    """
-    profile = JOB_PROFILE_MAP.get(job_type)
-    logger.debug("Profile for job type %s -> %s", job_type, profile)
-    return profile
-
-
-def ensure_profile_for_job(job: Job) -> None:
+def ensure_profile_for_job(job: Job, required_profile: Optional[str]) -> None:
     """
     Ensures that the correct profile is active before executing a job.
 
-    - If JOB_PROFILE_MAP[job.type] is None → does nothing.
+    - If required_profile is None → does nothing.
     - If it has a profile name → invokes profile_switcher.py set <profile>.
     - Idempotency (not changing if already active, not changing if there are running jobs)
       is handled by profile_switcher itself.
     """
-    required_profile = JOB_PROFILE_MAP.get(job.type)
-
     if not required_profile:
         # No profile change necessary for this job type
         return
@@ -139,15 +96,42 @@ def process_job(session: Session, job: Job) -> None:
     Processes a job from the queue.
 
     High-level flow:
-    1. Ensure correct profile according to job.type (profile_switcher).
-    2. Mark job as running.
-    3. Execute associated module (wifi_recon, bt_recon, hash_lookup, etc.)
-       capturing stdout/stderr.
-    4. Create a Run record with stdout, stderr, exit_code, started_at, finished_at.
-    5. Update job status (finished/error).
+    1. Find plugin for job.type.
+    2. Ensure correct profile according to plugin metadata.
+    3. Mark job as running.
+    4. Execute plugin capturing stdout/stderr.
+    5. Create a Run record with stdout, stderr, exit_code, started_at, finished_at.
+    6. Update job status (finished/error).
     """
+    plugin_manager = get_plugin_manager()
+    
+    # Find plugin
+    plugin = None
+    for category in plugin_manager.plugins:
+        if job.type in plugin_manager.plugins[category]:
+            plugin = plugin_manager.plugins[category][job.type]
+            break
+            
+    if not plugin:
+        logger.warning("Unknown job type %s (id=%s)", job.type, job.id)
+        # Also create a Run for the unknown type
+        finished_at = datetime.now(timezone.utc)
+        run = Run(
+            job_id=job.id,
+            module=job.type,
+            stdout="",
+            stderr=f"Unknown job type: {job.type}",
+            exit_code=1,
+            started_at=datetime.now(timezone.utc),
+            finished_at=finished_at,
+        )
+        session.add(run)
+        job.status = "error"
+        session.commit()
+        return
+
     # 1) Ensure correct profile
-    ensure_profile_for_job(job)
+    ensure_profile_for_job(job, plugin.metadata.required_profile)
 
     # 2) Mark as running
     job.status = "running"
@@ -160,50 +144,10 @@ def process_job(session: Session, job: Job) -> None:
     exit_code = 0
 
     try:
-        # 3) Execute module according to job.type capturing stdout/stderr
+        # 3) Execute plugin capturing stdout/stderr
         with contextlib.redirect_stdout(stdout_buf), contextlib.redirect_stderr(stderr_buf):
-            if job.type == "wifi_recon":
-                logger.info("Executing wifi_recon for job id=%s", job.id)
-                wifi_recon.run(job)
-
-            elif job.type == "wifi_active":
-                logger.info("Executing wifi_active for job id=%s", job.id)
-                wifi_active.run(job)
-
-            elif job.type == "bt_recon":
-                logger.info("Executing bt_recon for job id=%s", job.id)
-                bt_recon.run(job)
-
-            elif job.type == "bt_active":
-                logger.info("Executing bt_active for job id=%s", job.id)
-                bt_active.run(job)
-
-            elif job.type == "hash_lookup":
-                logger.info("Executing hash_lookup for job id=%s", job.id)
-                hash_ops.run_hash_lookup(session, job)
-
-            elif job.type == "usb_hid_audit":
-                logger.info("Executing usb_hid_audit for job id=%s", job.id)
-                usb_hid.run(job)
-
-            else:
-                logger.warning("Unknown job type %s (id=%s)", job.type, job.id)
-                exit_code = 1
-                # Also create a Run for the unknown type
-                finished_at = datetime.now(timezone.utc)
-                run = Run(
-                    job_id=job.id,
-                    module=job.type,
-                    stdout=stdout_buf.getvalue(),
-                    stderr=stderr_buf.getvalue() or f"Unknown job type: {job.type}",
-                    exit_code=exit_code,
-                    started_at=started_at,
-                    finished_at=finished_at,
-                )
-                session.add(run)
-                job.status = "error"
-                session.commit()
-                return
+            logger.info(f"Executing plugin {plugin.name} for job id={job.id}")
+            plugin.run(job)
 
         # 4) If we get here without exceptions: mark as finished
         finished_at = datetime.utcnow()
@@ -254,6 +198,12 @@ def process_job(session: Session, job: Job) -> None:
 
         job.status = "error"
         session.commit()
+
+    finally:
+        # Optimization #5: Memory Cleanup
+        # Force garbage collection after each job to free up resources
+        # This is critical for resource-constrained environments (e.g., Pi Zero)
+        gc.collect()
 
 
 class WorkerEngine:
