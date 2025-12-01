@@ -134,7 +134,7 @@ git clone https://github.com/yonrasgg/subzero-blackbox.git
 cd subzero-blackbox
 
 # Run installation script
-sudo ./scripts/install.sh
+./scripts/install.sh
 ```
 
 The script will:
