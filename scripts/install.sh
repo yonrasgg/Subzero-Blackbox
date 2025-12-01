@@ -99,7 +99,6 @@ install_system_dependencies() {
         bluetooth \
         bluez-tools \
         aircrack-ng \
-        bluez-deprecated \
         usbutils \
         net-tools \
         sqlite3
