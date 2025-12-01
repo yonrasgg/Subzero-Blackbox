@@ -173,3 +173,5 @@ def run(job) -> None:
         logger.info("USB HID audit completed for job %s", job.id)
     except Exception as e:
         logger.error("Error in USB HID audit for job %s: %s", job.id, e)
+
+REQUIRED_PROFILE = "usb_audit"

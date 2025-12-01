@@ -1,24 +1,23 @@
 """
-ai/embeddings.py
+ai/embeddings.py (OPTIMIZADO)
 
-MiniLM-L6 embeddings module for offline semantic search and similarity matching.
-Provides vector embeddings for jobs, vulnerabilities, and audit data.
+MiniLM-L6 embedding module with lazy loading for memory optimization.
+Optimized for Raspberry Pi Zero 2W (464 MB RAM).
 """
 
 from __future__ import annotations
 
-import hashlib
 import logging
-from typing import List, Optional, Any, Dict
+import gc
+import json
 import numpy as np
-
+from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
 
 from worker.db import AIEmbedding, SessionLocal
 
 logger = logging.getLogger(__name__)
 
-# Try to import sentence-transformers, fallback gracefully if not available
 try:
     from sentence_transformers import SentenceTransformer
     SENTENCE_TRANSFORMERS_AVAILABLE = True
@@ -26,152 +25,177 @@ except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
     logger.warning("sentence-transformers not available. Install with: pip install sentence-transformers")
 
-
 class EmbeddingManager:
     """
-    Manages MiniLM-L6 embeddings for semantic search and similarity matching.
+    Manages MiniLM-L6 embedding model with lazy loading for memory optimization.
+    Model is loaded on-demand and can be unloaded to free memory.
     """
 
-    def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
-        """
-        Initialize the embedding manager.
-
-        Args:
-            model_name: HuggingFace model name for embeddings
-        """
-        self.model_name = model_name
+    def __init__(self):
+        """Initialize the embedding manager (no model loaded yet)."""
         self.model = None
-        self._load_model()
+        self.model_name = 'all-MiniLM-L6-v2'
+        self._is_loaded = False
+        logger.info("EmbeddingManager initialized (lazy loading enabled)")
 
-    def _load_model(self) -> None:
-        """Load the MiniLM model if available."""
+    def _load_model(self) -> bool:
+        """
+        Load the embedding model on-demand (lazy loading).
+        Returns:
+            True if loaded successfully, False otherwise
+        """
+        if self._is_loaded and self.model is not None:
+            logger.debug("Embedding model already loaded")
+            return True
+
         if not SENTENCE_TRANSFORMERS_AVAILABLE:
             logger.error("Cannot load embedding model: sentence-transformers not installed")
-            return
+            return False
 
         try:
-            # Load quantized version for efficiency on lowspec hardware
+            logger.info(f"🔄 Loading embedding model {self.model_name}...")
+            
+            # Load model on CPU
             self.model = SentenceTransformer(self.model_name, device='cpu')
-            logger.info(f"Loaded embedding model: {self.model_name}")
+            
+            self._is_loaded = True
+            logger.info(f"✅ Embedding model {self.model_name} loaded successfully")
+            return True
         except Exception as e:
-            logger.error(f"Failed to load embedding model {self.model_name}: {e}")
-            self.model = None
+            logger.error(f"❌ Failed to load embedding model {self.model_name}: {e}")
+            return False
 
-    def is_available(self) -> bool:
-        """Check if the embedding model is available and loaded."""
-        return self.model is not None
-
-    def embed_text(self, text: str) -> Optional[List[float]]:
+    def unload_model(self) -> bool:
         """
-        Generate embeddings for a text string.
-
-        Args:
-            text: Input text to embed
-
+        Unload the embedding model to free memory.
         Returns:
-            List of float values representing the embedding vector, or None if failed
+            True if unloaded successfully, False otherwise
         """
-        if not self.is_available():
-            logger.warning("Embedding model not available")
-            return None
+        if not self._is_loaded:
+            logger.debug("Embedding model not loaded, nothing to unload")
+            return True
 
+        try:
+            logger.info("🗑️ Unloading embedding model...")
+            
+            # Delete the model
+            del self.model
+            self.model = None
+            self._is_loaded = False
+            
+            # Force garbage collection
+            gc.collect()
+            logger.info("✅ Embedding model unloaded, memory freed")
+            return True
+        except Exception as e:
+            logger.error(f"❌ Failed to unload embedding model: {e}")
+            return False
+
+    def is_loaded(self) -> bool:
+        """Check if the embedding model is currently loaded in memory."""
+        return self._is_loaded
+
+    def generate_embedding(self, text: str, auto_unload: bool = True) -> Optional[List[float]]:
+        """
+        Generate embedding for a text (with lazy loading).
+        Args:
+            text: Text to embed
+            auto_unload: If True, unload model after use to free memory
+        Returns:
+            List of floats representing the embedding, or None if failed
+        """
         if not text or not text.strip():
             logger.warning("Empty text provided for embedding")
             return None
 
+        # Load model if not already loaded (lazy loading)
+        if not self.is_loaded():
+            if not self._load_model():
+                return None
+
         try:
             # Generate embedding
-            embedding = self.model.encode(text, convert_to_numpy=True)
+            embedding = self.model.encode(text)
+            
             # Convert to list for JSON serialization
-            return embedding.tolist()
+            if isinstance(embedding, np.ndarray):
+                embedding_list = embedding.tolist()
+            else:
+                embedding_list = list(embedding)
+            
+            # Auto-unload to free memory if requested
+            if auto_unload:
+                self.unload_model()
+                
+            return embedding_list
         except Exception as e:
-            logger.error(f"Failed to generate embedding for text: {e}")
+            logger.error(f"Failed to generate embedding: {e}")
+            # Unload on error to free memory
+            if auto_unload:
+                self.unload_model()
             return None
 
-    def index_object(self, object_type: str, object_id: int, text: str, session: Session) -> bool:
+    def embed_object(self, object_type: str, object_id: int, text: str, session: Session) -> bool:
         """
-        Index an object by generating and storing its embedding.
-
+        Generate and store embedding for an object.
         Args:
             object_type: Type of object ("job", "run", "vulnerability", "audit_data")
             object_id: ID of the object in its source table
             text: Text content to embed
             session: Database session
-
         Returns:
-            True if successfully indexed, False otherwise
+            True if successfully embedded, False otherwise
         """
-        if not self.is_available():
-            logger.warning("Embedding model not available for indexing")
+        if not text or not text.strip():
+            logger.warning("Empty text provided for embedding")
             return False
 
-        # Generate content hash for deduplication
-        content_hash = hashlib.sha256(text.encode('utf-8')).hexdigest()
-
-        # Check if this object is already indexed
-        existing = session.query(AIEmbedding).filter(
-            AIEmbedding.object_type == object_type,
-            AIEmbedding.object_id == object_id,
-            AIEmbedding.model_name == self.model_name
-        ).first()
-
-        if existing:
-            # Check if content changed
-            if existing.content_hash == content_hash:
-                logger.debug(f"Object {object_type}:{object_id} already indexed with same content")
-                return True
-            else:
-                # Update existing embedding
-                embedding_vector = self.embed_text(text)
-                if embedding_vector:
-                    existing.vector = embedding_vector
-                    existing.content_hash = content_hash
-                    session.commit()
-                    logger.info(f"Updated embedding for {object_type}:{object_id}")
-                    return True
-                else:
-                    logger.error(f"Failed to generate embedding for {object_type}:{object_id}")
-                    return False
-
-        # Create new embedding
-        embedding_vector = self.embed_text(text)
+        # Generate embedding (model loaded/unloaded automatically)
+        embedding_vector = self.generate_embedding(text, auto_unload=True)
+        
         if not embedding_vector:
-            logger.error(f"Failed to generate embedding for {object_type}:{object_id}")
+            logger.warning(f"No embedding generated for {object_type}:{object_id}")
             return False
 
-        embedding = AIEmbedding(
-            object_type=object_type,
-            object_id=object_id,
-            model_name=self.model_name,
-            vector=embedding_vector,
-            content_hash=content_hash
-        )
+        # Store embedding in database
+        try:
+            existing = session.query(AIEmbedding).filter(
+                AIEmbedding.object_type == object_type,
+                AIEmbedding.object_id == object_id,
+                AIEmbedding.model_name == self.model_name
+            ).first()
 
-        session.add(embedding)
-        session.commit()
-        logger.info(f"Indexed {object_type}:{object_id} with embedding")
-        return True
+            if existing:
+                existing.vector = json.dumps(embedding_vector)
+            else:
+                embedding = AIEmbedding(
+                    object_type=object_type,
+                    object_id=object_id,
+                    model_name=self.model_name,
+                    vector=json.dumps(embedding_vector)
+                )
+                session.add(embedding)
+            
+            session.commit()
+            logger.info(f"✅ Embedded {object_type}:{object_id}")
+            return True
+        except Exception as e:
+            session.rollback()
+            logger.error(f"❌ Failed to store embedding for {object_type}:{object_id}: {e}")
+            return False
 
-    def search_similar(self, query_text: str, top_k: int = 5, object_types: Optional[List[str]] = None,
-                      session: Session = None) -> List[Dict[str, Any]]:
+    def find_similar(self, text: str, object_type: Optional[str] = None, limit: int = 5, session: Session = None) -> List[Dict[str, Any]]:
         """
-        Search for objects similar to the query text using embeddings.
-
+        Find similar objects using vector similarity.
         Args:
-            query_text: Query text to search for
-            top_k: Number of top results to return
-            object_types: Optional list of object types to search in
-            session: Database session (creates one if not provided)
-
+            text: Query text
+            object_type: Optional filter by object type
+            limit: Max number of results
+            session: Database session
         Returns:
-            List of dictionaries with object info and similarity scores
+            List of similar objects with scores
         """
-        if not self.is_available():
-            logger.warning("Embedding model not available for search")
-            return []
-
-        # Create session if not provided
-        if session is None:
+        if not session:
             session = SessionLocal()
             close_session = True
         else:
@@ -179,119 +203,69 @@ class EmbeddingManager:
 
         try:
             # Generate query embedding
-            query_embedding = self.embed_text(query_text)
+            query_embedding = self.generate_embedding(text, auto_unload=True)
             if not query_embedding:
-                logger.error("Failed to generate embedding for query")
                 return []
 
-            # Build query
-            q = session.query(AIEmbedding)
-            if object_types:
-                q = q.filter(AIEmbedding.object_type.in_(object_types))
-
-            # Get all embeddings
-            embeddings = q.all()
-
-            if not embeddings:
-                logger.info("No embeddings found in database")
-                return []
-
-            # Calculate similarities
+            # Fetch all embeddings (naive implementation, inefficient for large DBs)
+            # For Pi Zero with small DB, this is acceptable. For larger DBs, use pgvector or similar.
+            query = session.query(AIEmbedding)
+            if object_type:
+                query = query.filter(AIEmbedding.object_type == object_type)
+            
+            stored_embeddings = query.all()
+            
             results = []
             query_vec = np.array(query_embedding)
-
-            for emb in embeddings:
-                emb_vec = np.array(emb.vector)
-                # Cosine similarity
-                similarity = np.dot(query_vec, emb_vec) / (np.linalg.norm(query_vec) * np.linalg.norm(emb_vec))
-
-                results.append({
-                    'object_type': emb.object_type,
-                    'object_id': emb.object_id,
-                    'similarity': float(similarity),
-                    'model_name': emb.model_name,
-                    'created_at': emb.created_at
-                })
-
-            # Sort by similarity (descending) and return top_k
-            results.sort(key=lambda x: x['similarity'], reverse=True)
-            return results[:top_k]
-
-        except Exception as e:
-            logger.error(f"Error during similarity search: {e}")
-            return []
+            
+            for item in stored_embeddings:
+                try:
+                    item_vec = np.array(json.loads(item.vector))
+                    
+                    # Cosine similarity
+                    similarity = np.dot(query_vec, item_vec) / (np.linalg.norm(query_vec) * np.linalg.norm(item_vec))
+                    
+                    results.append({
+                        'object_type': item.object_type,
+                        'object_id': item.object_id,
+                        'score': float(similarity),
+                        'model_name': item.model_name
+                    })
+                except Exception as e:
+                    logger.warning(f"Error calculating similarity for {item.id}: {e}")
+                    continue
+            
+            # Sort by similarity (descending)
+            results.sort(key=lambda x: x['score'], reverse=True)
+            
+            return results[:limit]
         finally:
             if close_session:
                 session.close()
-
-    def get_embedding_stats(self, session: Session = None) -> Dict[str, Any]:
-        """
-        Get statistics about stored embeddings.
-
-        Args:
-            session: Database session (creates one if not provided)
-
-        Returns:
-            Dictionary with embedding statistics
-        """
-        if session is None:
-            session = SessionLocal()
-            close_session = True
-        else:
-            close_session = False
-
-        try:
-            total_embeddings = session.query(AIEmbedding).count()
-
-            # Count by object type
-            from sqlalchemy import func
-            type_counts = session.query(
-                AIEmbedding.object_type,
-                func.count(AIEmbedding.id).label('count')
-            ).group_by(AIEmbedding.object_type).all()
-
-            # Count by model
-            model_counts = session.query(
-                AIEmbedding.model_name,
-                func.count(AIEmbedding.id).label('count')
-            ).group_by(AIEmbedding.model_name).all()
-
-            return {
-                'total_embeddings': total_embeddings,
-                'by_object_type': {row.object_type: row.count for row in type_counts},
-                'by_model': {row.model_name: row.count for row in model_counts},
-                'model_available': self.is_available(),
-                'current_model': self.model_name if self.is_available() else None
-            }
-
-        except Exception as e:
-            logger.error(f"Error getting embedding stats: {e}")
-            return {'error': str(e)}
-        finally:
-            if close_session:
-                session.close()
-
 
 # Global instance
 embedding_manager = EmbeddingManager()
 
+# Convenience functions (backward compatible)
+def generate_embedding(text: str) -> Optional[List[float]]:
+    return embedding_manager.generate_embedding(text)
 
+# Backward compatibility aliases
 def embed_text(text: str) -> Optional[List[float]]:
-    """Convenience function to generate embeddings."""
-    return embedding_manager.embed_text(text)
-
+    """Generate embedding for text."""
+    return embedding_manager.generate_embedding(text)
 
 def index_object(object_type: str, object_id: int, text: str, session: Session) -> bool:
-    """Convenience function to index objects."""
-    return embedding_manager.index_object(object_type, object_id, text, session)
+    """Generate and store embedding for an object."""
+    return embedding_manager.embed_object(object_type, object_id, text, session)
 
+def search_similar(text: str, object_type: Optional[str] = None, limit: int = 5, session: Session = None) -> List[Dict[str, Any]]:
+    """Find similar objects."""
+    return embedding_manager.find_similar(text, object_type, limit, session)
 
-def search_similar(query_text: str, top_k: int = 5, object_types: Optional[List[str]] = None,
-                  session: Session = None) -> List[Dict[str, Any]]:
-    """Convenience function for similarity search."""
-    return embedding_manager.search_similar(query_text, top_k, object_types, session)
-
-
-def get_embedding_stats(session: Session = None) -> Dict[str, Any]:
-    """Convenience function to get embedding statistics."""
-    return embedding_manager.get_embedding_stats(session)
+def get_embedding_stats() -> Dict[str, Any]:
+    """Get statistics about the embedding model."""
+    return {
+        'is_loaded': embedding_manager.is_loaded(),
+        'model_name': embedding_manager.model_name
+    }

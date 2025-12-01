@@ -27,7 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov ruff bandit httpx jinja2
+          pip install pytest pytest-cov ruff bandit safety
           pip check
 
       - name: Lint (Ruff)
@@ -36,7 +36,11 @@ jobs:
 
       - name: Security scan (Bandit)
         run: |
-          bandit -r . || true
+          bandit -r . -x tests,scripts/test_gemini.py -ll
+
+      - name: Dependency Security Scan (Safety)
+        run: |
+          safety check --full-report || true
 
       - name: Debug info
         run: |

@@ -23,6 +23,10 @@ CONFIG_DIR="$PROD_DIR/config"
 SCRIPTS_DIR="$PROD_DIR/scripts"
 EXAMPLES_DIR="$PROD_DIR/examples"
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
 # Get current user
 CURRENT_USER=$(whoami)
 
@@ -94,6 +98,8 @@ install_system_dependencies() {
         iw \
         bluetooth \
         bluez-tools \
+        aircrack-ng \
+        bluez-deprecated \
         usbutils \
         net-tools \
         sqlite3
@@ -137,9 +143,13 @@ install_python_dependencies() {
     source "$VENV_DIR/bin/activate"
 
     # Install requirements
-    pip install -r requirements.txt
-
-    print_success "Python dependencies installed"
+    if [ -f "$PROJECT_ROOT/requirements.txt" ]; then
+        pip install -r "$PROJECT_ROOT/requirements.txt"
+        print_success "Python dependencies installed"
+    else
+        print_error "requirements.txt not found at $PROJECT_ROOT/requirements.txt"
+        exit 1
+    fi
 }
 
 download_ai_models() {
@@ -171,10 +181,6 @@ print('✅ ALBERT-tiny model downloaded')
 
 copy_project_files() {
     print_step "Copying project files to production directory..."
-
-    # Get the directory where this script is located
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
     # Copy files excluding development artifacts
     rsync -av \
@@ -277,8 +283,11 @@ EOF
 create_config_files() {
     print_step "Creating configuration files..."
 
-    # Create secrets.yaml template with new structure
-    cat > "$CONFIG_DIR/secrets.yaml" << 'EOF'
+    if [ -f "$CONFIG_DIR/secrets.yaml" ]; then
+        print_warning "$CONFIG_DIR/secrets.yaml already exists. Skipping creation to preserve keys."
+    else
+        # Create secrets.yaml template with new structure
+        cat > "$CONFIG_DIR/secrets.yaml" << 'EOF'
 # Subzero-Blackbox API Keys Configuration
 # Please fill in your API keys below
 
@@ -298,7 +307,8 @@ wigle_api_token: "your_wigle_api_token"
 wpasec_api_key: "your_wpasec_api_key_here"
 EOF
 
-    print_warning "Created $CONFIG_DIR/secrets.yaml - You MUST edit this file with your API keys!"
+        print_warning "Created $CONFIG_DIR/secrets.yaml - You MUST edit this file with your API keys!"
+    fi
 }
 
 start_services() {

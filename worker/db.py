@@ -23,6 +23,7 @@ from sqlalchemy import (
     Float,
     JSON,
     func,
+    Table,
 )
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 
@@ -294,6 +295,53 @@ class AuditData(Base):
         return f"<AuditData id={self.id} job_id={self.job_id} type={self.data_type}>"
 
 
+# Association table for Many-to-Many relationship between Vulnerabilities and Exploits
+vulnerability_exploits = Table('vulnerability_exploits', Base.metadata,
+    Column('vulnerability_id', Integer, ForeignKey('vulnerabilities.id')),
+    Column('exploit_id', Integer, ForeignKey('exploits.id'))
+)
+
+
+class Exploit(Base):
+    """
+    exploits table:
+    - Stores available exploit scripts and their metadata.
+    """
+    __tablename__ = "exploits"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), unique=True, index=True)
+    description = Column(Text, nullable=True)
+
+    # Type of service/protocol targeted: bluetooth, wifi, http, etc.
+    target_service = Column(String(50), nullable=False, index=True)
+
+    # Linked CVE ID if applicable
+    cve_id = Column(String(20), nullable=True, index=True)
+
+    # The actual script content or path
+    script_content = Column(Text, nullable=True)
+    script_path = Column(String(255), nullable=True)
+
+    # Language: python, bash, ruby, etc.
+    language = Column(String(20), nullable=False, default="python")
+
+    # JSON schema or list of required arguments
+    required_args = Column(JSON, nullable=True)
+
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationship to vulnerabilities
+    vulnerabilities = relationship("Vulnerability", secondary=vulnerability_exploits, back_populates="exploits")
+
+    def __repr__(self) -> str:
+        return f"<Exploit id={self.id} name={self.name} service={self.target_service}>"
+
+
 class Vulnerability(Base):
     """
     vulnerabilities table:
@@ -325,6 +373,9 @@ class Vulnerability(Base):
     )
 
     job = relationship("Job", backref="vulnerabilities")
+
+    # Relationship to exploits
+    exploits = relationship("Exploit", secondary=vulnerability_exploits, back_populates="vulnerabilities")
 
     def __repr__(self) -> str:
         return f"<Vulnerability id={self.id} job_id={self.job_id} type={self.vuln_type} severity={self.severity}>"

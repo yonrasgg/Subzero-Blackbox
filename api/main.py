@@ -8,17 +8,22 @@ FastAPI app for Blackbox:
 
 from __future__ import annotations
 
+import json
+import logging
 import secrets
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import psutil
+import yaml
 from fastapi import (
     Depends,
     FastAPI,
+    Form,
     HTTPException,
     Request,
     status,
-    Form,
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -26,16 +31,16 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy.orm import Session
-import yaml
-import psutil
-import json
-import logging
 
+# Add project root to sys.path to allow imports from worker/modules
+BASE_DIR = Path(__file__).resolve().parent.parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
 
-from worker.db import SessionLocal, Job, Run  # Usa los modelos del Step 2
-from worker.db import Vulnerability, AuditData, ProfileLog
-from modules import report_generator
-from modules.cve_lookup import CVELookup
+from modules import report_generator  # noqa: E402
+from modules.core.plugin_manager import get_plugin_manager  # noqa: E402
+from modules.cve_lookup import CVELookup  # noqa: E402
+from worker.db import AuditData, Job, ProfileLog, Run, SessionLocal, Vulnerability  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +49,6 @@ logger = logging.getLogger(__name__)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load security environment variables for AI libraries
-import os
 security_env_path = BASE_DIR / "config" / "security.env"
 if security_env_path.exists():
     from dotenv import load_dotenv
@@ -466,7 +470,7 @@ Please provide a helpful, security-focused response in character. If you have sp
 Keep your response concise but informative, and stay in character.
 """
 
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-2.0-flash')
                 gemini_response = model.generate_content(enhanced_prompt)
 
                 response["online_response"] = True
@@ -614,6 +618,38 @@ def create_job(job_in: JobCreate, db: Session = Depends(get_db)) -> JobOut:
 def list_jobs(db: Session = Depends(get_db)) -> List[JobOut]:
     jobs = db.query(Job).order_by(Job.created_at.desc()).all()
     return jobs
+
+# --- Plugin API ---
+
+@app.get("/api/plugins")
+def list_plugins(category: Optional[str] = None) -> Dict[str, Any]:
+    """List available plugins."""
+    plugin_manager = get_plugin_manager()
+    info = plugin_manager.get_plugin_info(category)
+    return {"plugins": info}
+
+@app.post("/api/plugins/reload")
+def reload_plugins() -> Dict[str, str]:
+    """Reload all plugins from disk."""
+    plugin_manager = get_plugin_manager()
+    plugin_manager.discover_plugins()
+    return {"status": "success", "message": "Plugins reloaded"}
+
+@app.post("/api/plugins/{category}/{plugin_name}/enable")
+def enable_plugin(category: str, plugin_name: str) -> Dict[str, str]:
+    """Enable a plugin."""
+    plugin_manager = get_plugin_manager()
+    if plugin_manager.enable_plugin(category, plugin_name):
+        return {"status": "success", "message": f"Plugin {plugin_name} enabled"}
+    raise HTTPException(status_code=404, detail="Plugin not found")
+
+@app.post("/api/plugins/{category}/{plugin_name}/disable")
+def disable_plugin(category: str, plugin_name: str) -> Dict[str, str]:
+    """Disable a plugin."""
+    plugin_manager = get_plugin_manager()
+    if plugin_manager.disable_plugin(category, plugin_name):
+        return {"status": "success", "message": f"Plugin {plugin_name} disabled"}
+    raise HTTPException(status_code=404, detail="Plugin not found")
 
 # --- UI: HTML routes ---
 
@@ -807,19 +843,40 @@ def ui_save_config(
     wigle_api_name: str = Form(...),
     wigle_api_token: str = Form(...),
 ) -> HTMLResponse:
-    config = _load_yaml(CONFIG_PATH)
-    config["ui"] = {"username": ui_username, "password": ui_password}
-    config["apis"] = {
+    # 1. Save secrets to secrets.yaml
+    secrets_path = CONFIG_PATH.parent / "secrets.yaml"
+    secrets = {}
+    if secrets_path.is_file():
+        try:
+            secrets = yaml.safe_load(secrets_path.read_text(encoding="utf-8")) or {}
+        except Exception:
+            secrets = {}
+    
+    if "apis" not in secrets:
+        secrets["apis"] = {}
+        
+    secrets["apis"].update({
         "google_api_key": google_api_key,
         "onlinehashcrack_api_key": onlinehashcrack_api_key,
         "wpasec_api_key": wpasec_api_key,
         "wigle_api_name": wigle_api_name,
         "wigle_api_token": wigle_api_token,
-    }
-    # Save to file
-    import yaml
+    })
+    
+    with open(secrets_path, 'w') as f:
+        yaml.dump(secrets, f)
+
+    # 2. Save UI config to config.yaml
+    config = _load_yaml(CONFIG_PATH)
+    config["ui"] = {"username": ui_username, "password": ui_password}
+    
+    # We don't need to save apis to config.yaml as they are in secrets.yaml
+    # But we can keep them there as empty placeholders if we want, or just rely on secrets.yaml
+    # For now, let's just save the UI config to config.yaml
+    
     with open(CONFIG_PATH, 'w') as f:
         yaml.dump(config, f)
+        
     # Reload and return
     info = get_active_profile_info()
     config = _load_yaml(CONFIG_PATH)
@@ -1132,6 +1189,165 @@ def ui_start_usb_hid_job(
     return templates.TemplateResponse("dashboard.html", context)
 
 
+@app.post("/ui/jobs/start/wifi_attack")
+def ui_start_wifi_attack(
+    request: Request,
+    username: str = Depends(verify_credentials),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    """
+    Creates a Wi-Fi Attack job.
+    type=wifi_active, profile=wifi_audit.
+    """
+    job = Job(
+        type="wifi_active",
+        profile="wifi_audit",
+        params={"source": "ui"},
+        status="queued",
+    )
+    db.add(job)
+    db.commit()
+    db.refresh(job)
+
+    total_jobs = db.query(Job).count()
+    queued = db.query(Job).filter(Job.status == "queued").count()
+    running = db.query(Job).filter(Job.status == "running").count()
+    finished = db.query(Job).filter(Job.status == "finished").count()
+    error = db.query(Job).filter(Job.status == "error").count()
+    last_jobs = (
+        db.query(Job)
+        .order_by(Job.created_at.desc())
+        .limit(10)
+        .all()
+    )
+
+    profile_info = get_active_profile_info()
+
+    context = {
+        "request": request,
+        "user": username,
+        "stats": {
+            "total_jobs": total_jobs,
+            "queued": queued,
+            "running": running,
+            "finished": finished,
+            "error": error,
+        },
+        "jobs": last_jobs,
+        "active_profile": profile_info["active_profile"],
+        "internet_via": profile_info["internet_via"],
+        "modules_enabled": profile_info["modules_enabled"],
+        "message": f"Wi-Fi attack job queued with id={job.id}",
+    }
+    return templates.TemplateResponse("dashboard.html", context)
+
+
+@app.post("/ui/jobs/start/bt_attack")
+def ui_start_bt_attack(
+    request: Request,
+    username: str = Depends(verify_credentials),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    """
+    Creates a Bluetooth Attack job.
+    type=bt_active, profile=bluetooth_audit.
+    """
+    job = Job(
+        type="bt_active",
+        profile="bluetooth_audit",
+        params={"source": "ui"},
+        status="queued",
+    )
+    db.add(job)
+    db.commit()
+    db.refresh(job)
+
+    total_jobs = db.query(Job).count()
+    queued = db.query(Job).filter(Job.status == "queued").count()
+    running = db.query(Job).filter(Job.status == "running").count()
+    finished = db.query(Job).filter(Job.status == "finished").count()
+    error = db.query(Job).filter(Job.status == "error").count()
+    last_jobs = (
+        db.query(Job)
+        .order_by(Job.created_at.desc())
+        .limit(10)
+        .all()
+    )
+
+    profile_info = get_active_profile_info()
+
+    context = {
+        "request": request,
+        "user": username,
+        "stats": {
+            "total_jobs": total_jobs,
+            "queued": queued,
+            "running": running,
+            "finished": finished,
+            "error": error,
+        },
+        "jobs": last_jobs,
+        "active_profile": profile_info["active_profile"],
+        "internet_via": profile_info["internet_via"],
+        "modules_enabled": profile_info["modules_enabled"],
+        "message": f"BT attack job queued with id={job.id}",
+    }
+    return templates.TemplateResponse("dashboard.html", context)
+
+
+@app.post("/ui/jobs/start/web_attack")
+def ui_start_web_attack(
+    request: Request,
+    username: str = Depends(verify_credentials),
+    db: Session = Depends(get_db),
+) -> HTMLResponse:
+    """
+    Creates a Web Attack job.
+    type=web_attack, profile=stealth_recon.
+    """
+    job = Job(
+        type="web_attack",
+        profile="stealth_recon",
+        params={"source": "ui"},
+        status="queued",
+    )
+    db.add(job)
+    db.commit()
+    db.refresh(job)
+
+    total_jobs = db.query(Job).count()
+    queued = db.query(Job).filter(Job.status == "queued").count()
+    running = db.query(Job).filter(Job.status == "running").count()
+    finished = db.query(Job).filter(Job.status == "finished").count()
+    error = db.query(Job).filter(Job.status == "error").count()
+    last_jobs = (
+        db.query(Job)
+        .order_by(Job.created_at.desc())
+        .limit(10)
+        .all()
+    )
+
+    profile_info = get_active_profile_info()
+
+    context = {
+        "request": request,
+        "user": username,
+        "stats": {
+            "total_jobs": total_jobs,
+            "queued": queued,
+            "running": running,
+            "finished": finished,
+            "error": error,
+        },
+        "jobs": last_jobs,
+        "active_profile": profile_info["active_profile"],
+        "internet_via": profile_info["internet_via"],
+        "modules_enabled": profile_info["modules_enabled"],
+        "message": f"Web attack job queued with id={job.id}",
+    }
+    return templates.TemplateResponse("dashboard.html", context)
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)  # nosec B104

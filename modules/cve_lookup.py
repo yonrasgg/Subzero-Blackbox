@@ -30,7 +30,7 @@ class CVELookup:
             params['cvss'] = cvss
         params['page'] = 1  # Start with page 1
 
-        response = requests.get(url, auth=(self.opencve_username, self.opencve_password), params=params)
+        response = requests.get(url, auth=(self.opencve_username, self.opencve_password), params=params, timeout=30)
         response.raise_for_status()
         data = response.json()
         results = data.get('results', [])[:limit]
@@ -49,7 +49,7 @@ class CVELookup:
         if cvss_severity:
             params['cvssV3Severity'] = cvss_severity.upper()
 
-        response = requests.get(self.nvd_base_url, params=params)
+        response = requests.get(self.nvd_base_url, params=params, timeout=30)
         response.raise_for_status()
         data = response.json()
         vulnerabilities = data.get('vulnerabilities', [])[:limit]
@@ -66,7 +66,7 @@ class CVELookup:
         else:
             url = f"{self.cve_search_base_url}/last"  # Last 30 CVEs
 
-        response = requests.get(url)
+        response = requests.get(url, timeout=30)
         response.raise_for_status()
         return response.json()
 

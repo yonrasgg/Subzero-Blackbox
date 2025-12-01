@@ -128,7 +128,7 @@ def _load_hash_results(session: Session, job_id: int) -> list:
 def generate_report(session: Session, job_type: str, job_id: int, run_stdout: str = "", run_stderr: str = "") -> str:
     """Generate an AI-powered report for the audit job using Google Gemini."""
     api_key = _get_google_api_key()
-    if not api_key:
+    if not api_key or api_key == "your_google_api_key_here":
         return """# AI Report Generation Unavailable
 
 **Configuration Required:**
@@ -138,7 +138,7 @@ To enable AI-powered report generation, you need to configure a Google Gemini AP
 2. **Configure**: Add to `config/secrets.yaml`:
    ```yaml
    apis:
-     google_api_key: "your_api_key_here"
+     google_api_key: "your_actual_api_key_here"
    ```
 3. **Alternative**: Set environment variable `GOOGLE_AI_API_KEY`
 
@@ -151,7 +151,7 @@ Even without AI reports, you can analyze the raw audit data manually through the
         
         # Test the API key with a simple request first
         client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents="Test connection"
         )
         
@@ -219,7 +219,7 @@ Output a JSON object with keys: "executive_summary", "detailed_findings", "recom
         increment_api_usage()
 
         response = client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents=prompt
         )
         content = response.text
