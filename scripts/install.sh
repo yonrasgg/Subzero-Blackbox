@@ -143,8 +143,19 @@ install_python_dependencies() {
 
     # Install requirements
     if [ -f "$PROJECT_ROOT/requirements.txt" ]; then
-        pip install -r "$PROJECT_ROOT/requirements.txt"
-        print_success "Python dependencies installed"
+        # Create temp dir on disk to avoid /tmp (tmpfs) overflow
+        export TMPDIR="$PROD_DIR/pip_tmp"
+        mkdir -p "$TMPDIR"
+        echo "Using $TMPDIR for temporary installation files..."
+
+        if pip install --no-cache-dir -r "$PROJECT_ROOT/requirements.txt"; then
+            print_success "Python dependencies installed"
+        else
+            print_error "Failed to install dependencies"
+            rm -rf "$TMPDIR"
+            exit 1
+        fi
+        rm -rf "$TMPDIR"
     else
         print_error "requirements.txt not found at $PROJECT_ROOT/requirements.txt"
         exit 1
