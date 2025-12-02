@@ -9,12 +9,17 @@ from __future__ import annotations
 
 import logging
 import gc
+import psutil
 from typing import Dict, List, Optional, Any
 from sqlalchemy.orm import Session
 
 from worker.db import AILabel
 
 logger = logging.getLogger(__name__)
+
+# Minimum RAM required to load the model (in bytes)
+# 250 MB safe margin for Pi Zero 2 W
+MIN_RAM_REQUIRED = 250 * 1024 * 1024
 
 try:
     from transformers import pipeline
@@ -60,6 +65,18 @@ class ClassifierManager:
         }
         logger.info("ClassifierManager initialized (lazy loading enabled)")
 
+    def _check_memory(self) -> bool:
+        """Check if there is enough free memory to load the model."""
+        available_ram = psutil.virtual_memory().available
+        if available_ram < MIN_RAM_REQUIRED:
+            logger.warning(
+                f"⚠️ Not enough RAM to load classifier. "
+                f"Available: {available_ram / 1024 / 1024:.2f} MB, "
+                f"Required: {MIN_RAM_REQUIRED / 1024 / 1024:.2f} MB"
+            )
+            return False
+        return True
+
     def _load_classifier(self, classifier_type: str) -> bool:
         """
         Load a specific classifier on-demand (lazy loading).
@@ -78,6 +95,9 @@ class ClassifierManager:
 
         if classifier_type not in self.classifier_configs:
             logger.error(f"Unknown classifier type: {classifier_type}")
+            return False
+
+        if not self._check_memory():
             return False
 
         try:

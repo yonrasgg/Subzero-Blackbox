@@ -340,11 +340,24 @@ start_services() {
 verify_installation() {
     print_step "Verifying installation..."
 
-    # Check if services are running
-    if sudo systemctl is-active --quiet blackbox-api.service; then
+    # Wait for service to start (up to 60 seconds)
+    print_step "Waiting for API service to start..."
+    local service_started=false
+    for i in {1..30}; do
+        if curl -s http://127.0.0.1:8010/health > /dev/null; then
+            service_started=true
+            break
+        fi
+        echo -n "."
+        sleep 2
+    done
+    echo ""
+
+    if [ "$service_started" = true ]; then
         print_success "API service is running"
     else
-        print_error "API service failed to start"
+        print_error "API service failed to start within 60 seconds"
+        print_warning "Check logs with: sudo journalctl -u blackbox-api -n 50"
         return 1
     fi
 
@@ -355,7 +368,7 @@ verify_installation() {
         return 1
     fi
 
-    # Test API health
+    # Test API health (already done above, but double check)
     if curl -s http://127.0.0.1:8010/health > /dev/null; then
         print_success "API health check passed"
     else

@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 import gc
 import json
+import psutil
 import numpy as np
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
@@ -17,6 +18,10 @@ from sqlalchemy.orm import Session
 from worker.db import AIEmbedding, SessionLocal
 
 logger = logging.getLogger(__name__)
+
+# Minimum RAM required to load the model (in bytes)
+# 250 MB safe margin for Pi Zero 2 W
+MIN_RAM_REQUIRED = 250 * 1024 * 1024 
 
 try:
     from sentence_transformers import SentenceTransformer
@@ -38,6 +43,18 @@ class EmbeddingManager:
         self._is_loaded = False
         logger.info("EmbeddingManager initialized (lazy loading enabled)")
 
+    def _check_memory(self) -> bool:
+        """Check if there is enough free memory to load the model."""
+        available_ram = psutil.virtual_memory().available
+        if available_ram < MIN_RAM_REQUIRED:
+            logger.warning(
+                f"⚠️ Not enough RAM to load embedding model. "
+                f"Available: {available_ram / 1024 / 1024:.2f} MB, "
+                f"Required: {MIN_RAM_REQUIRED / 1024 / 1024:.2f} MB"
+            )
+            return False
+        return True
+
     def _load_model(self) -> bool:
         """
         Load the embedding model on-demand (lazy loading).
@@ -50,6 +67,9 @@ class EmbeddingManager:
 
         if not SENTENCE_TRANSFORMERS_AVAILABLE:
             logger.error("Cannot load embedding model: sentence-transformers not installed")
+            return False
+
+        if not self._check_memory():
             return False
 
         try:
